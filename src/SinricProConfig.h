@@ -1,0 +1,64 @@
+/****************************************************************************************************************************
+  SinricProConfig.h - Sinric Pro Library for boards
+  
+  Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
+  to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
+  
+  Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
+  Licensed under MIT license
+  Version: 2.4.0
+
+  Copyright (c) 2019 Sinric. All rights reserved.
+  Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
+
+  This file is part of the Sinric Pro (https://github.com/sinricpro/)
+ 
+  Version Modified By   Date      Comments
+ ------- -----------  ---------- -----------
+  2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
+                                  Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
+ *****************************************************************************************************************************/
+ 
+#ifndef __SINRICPRO_CONFIG_H__
+#define __SINRICPRO_CONFIG_H__
+/* 
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!                                                 !!
+ * !!             WARNING: DON'T TOUCH !              !!
+ * !!             ======================              !!
+ * !! PLEASE DO NOT MODIFY ANY OF THESE SETTINGS HERE !!
+ * !!     THIS IS FOR INTERNAL CONFIGURATION ONLY     !!
+ * !!   SINRIC PRO MIGHT NOT WORK IF YOU MODIFY THIS  !!
+ * !!                                                 !!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+#define STR_HELPER(x) #x
+#define STR(x) STR_HELPER(x)
+
+// Version Configuration
+#define SINRICPRO_VERSION_MAJOR     2
+#define SINRICPRO_VERSION_MINOR     4
+#define SINRICPRO_VERSION_REVISION  0
+#define SINRICPRO_VERSION STR(SINRICPRO_VERSION_MAJOR) "." STR(SINRICPRO_VERSION_MINOR) "." STR(SINRICPRO_VERSION_REVISION)
+
+// Server Configuration
+#define SINRICPRO_SERVER_URL "ws.sinric.pro"
+#define SINRICPRO_SERVER_PORT 80
+#define SINRICPRO_SERVER_SSL_PORT   443
+
+// UDP Configuration
+#define UDP_MULTICAST_IP IPAddress(224,9,9,9)
+#define UDP_MULTICAST_PORT 3333
+
+// WebSocket Configuration
+#define WEBSOCKET_PING_INTERVAL 300000
+#define WEBSOCKET_PING_TIMEOUT 10000
+#define WEBSOCKET_RETRY_COUNT 2
+
+// LeakyBucket Configuration
+#define BUCKET_SIZE 10
+#define DROP_OUT_TIME 60000
+#define DROP_IN_TIME 1000u
+
+#endif

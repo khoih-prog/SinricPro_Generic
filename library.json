@@ -1,0 +1,26 @@
+{
+  "name": "SinricPro_Generic",
+  "version": "2.4.0",
+  "keywords": "ethernet, websockets, sinric, sinric pro, alexa, iot, esp8266, esp32, samd, samd21, samd51, nRF52, stm32, teensy, sam due",
+  "description": "Library for https://sinric.pro - simple way to connect your device to alexa",
+  "authors": [
+    {
+      "name": "Boris Jaeger",
+      "email": "sivar2311@gmail.com",
+    }
+    {
+      "name":  "Khoi Hoang",
+      "url":   "https://github.com/khoih-prog",
+      "email": "khoih.prog@gmail.com",
+      "maintainer": true,
+    }  
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khoih-prog/SinricPro_Generic"
+  },  
+  "frameworks": "*",
+  "platforms": "*",
+  "examples": "examples/*/*/*.ino",
+  "license": "CC-BY-SA-4.0"
+}
