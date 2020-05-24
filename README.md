@@ -63,7 +63,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 ---
 
-#### Important notes
+### Important notes
 
 1. To be able to compile and run on nRF52840 boards, you have to copy the whole [nRF52 0.20.1](https://github.com/khoih-prog/SinricPro_Generic/tree/master/Packages_Patches/adafruit/hardware/nrf52/0.20.1) directory into Adafruit nRF52 directory (./packages/adafruit/hardware/nrf52/0.20.1). 
 
@@ -393,6 +393,62 @@ void loop()
   SinricPro.handle();
 }
 
+```
+
+#### Debug terminal output when running [SAMD_WiFiNINA_TV](examples/Generic/TV/SAMD_WiFiNINA_TV) on NANO_33_IOT
+
+```
+Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
+12 channels configured
+
+[Wifi]: Connecting
+WiFi-begin: return1 = 3
+WiFi-begin: return2 = 3
+
+[WiFi]: IP-Address is 192.168.2.46
+Connected to SinricPro
+TV turned off
+TV turned on
+Volume set to:  50
+TV volume is unmuted
+TV volume is muted
+TV turned on
+Volume set to:  65
+TV turned on
+MediaControl: play
+MediaControl: pause
+TV turned off
+TV turned on
+TV turned on
+TV volume is unmuted
+TV turned off
+```
+
+#### Debug terminal output when running [SAMD_WiFiNINA_Light](examples/Generic/Light/SAMD_WiFiNINA_Light) on NANO_33_IOT
+
+```
+Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
+Setup color temperature lookup table
+colorTemperatureIndex[2200] = 0
+colorTemperatureIndex[2700] = 1
+colorTemperatureIndex[4000] = 2
+colorTemperatureIndex[5500] = 3
+colorTemperatureIndex[7000] = 4
+
+[Wifi]: ConnectingWiFi-begin: return1 = 3
+WiFi-begin: return2 = 3
+[WiFi]: IP-Address is 192.168.2.46
+Connected to SinricPro
+Device **** turned on (via SinricPro)
+Device **** turn off (via SinricPro)
+Device **** brightness level changed to 70
+Device **** brightness level changed to 25
+Device **** color changed to 160, 112, 112(RGB)
+Device **** color changed to 218, 23, 23(RGB)
+Device **** color changed to 236, 214, 214(RGB)
+Device **** turn off (via SinricPro)
+Device **** turned on (via SinricPro)
+Device**** brightness level changed to 65
 ```
 
 ---
