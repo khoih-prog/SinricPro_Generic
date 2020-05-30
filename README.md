@@ -31,7 +31,7 @@
  6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M0/M4, etc.)
  7. [`Adafruit nRF52 v0.20.1 or later`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
  8. [ArduinoJson Version 6.15.0 or later](https://github.com/bblanchon/ArduinoJson)
- 9. [WebSockets_Generic Version 2.2.1 or later](https://github.com/khoih/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/WebSockets_Generic)
+ 9. [WebSockets_Generic Version 2.2.1 or later](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/WebSockets_Generic)
 10. Depending on which Ethernet card you're using:
    - [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) for W5200 and W5500
    - [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library)
