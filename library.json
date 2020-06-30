@@ -7,12 +7,12 @@
     {
       "name": "Boris Jaeger",
       "email": "sivar2311@gmail.com",
-    }
+    },
     {
       "name":  "Khoi Hoang",
       "url":   "https://github.com/khoih-prog",
       "email": "khoih.prog@gmail.com",
-      "maintainer": true,
+      "maintainer": true
     }  
   ],
   "repository": {
