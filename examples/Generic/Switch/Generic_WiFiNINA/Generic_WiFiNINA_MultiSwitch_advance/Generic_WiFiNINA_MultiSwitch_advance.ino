@@ -7,61 +7,29 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
-  ADVANCED example for: how to use up to N SinricPro Switch devices on one ESP module
-  - setup N SinricPro switch devices
-  - setup N relays
-  - setup N flipSwitches to control relays manually
-    (flipSwitch can be a tactile button or a toggle switch and is setup in line #52)
-
-  - handle request using just one callback to switch relay
-  - handle flipSwitches to switch relays manually and send event to sinricPro server
-
-  - SinricPro deviceId and PIN configuration for relays and buttins is done in std::map<String, deviceConfig_t> devices
-
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
- *****************************************************************************************************************************/
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+ **********************************************************************************************************************************/
 
 // STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
 // SAM DUE
 // Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0
 
-
-#if defined(ESP8266) || defined(ESP32)
-#error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
-#endif
-
-// Uncomment the following line to enable serial debug output
-#define ENABLE_DEBUG    true   
-
-#if ENABLE_DEBUG
-  #define DEBUG_PORT Serial
-  #define NODEBUG_WEBSOCKETS
-  #define NDEBUG
-#endif
-
-#define WEBSOCKETS_NETWORK_TYPE   NETWORK_WIFININA
+#include "defines.h"
 
 #include "SinricPro_Generic.h"
 #include "SinricProSwitch.h"
-
-#include <map>
-
-// comment the following line if you use a toggle switches instead of tactile buttons
-#define TACTILE_BUTTON 1
-
-#define BAUD_RATE   115200
-
-#define DEBOUNCE_TIME 250
 
 typedef struct 
 {      
@@ -69,17 +37,6 @@ typedef struct
   int relayPIN;
   int flipSwitchPIN;
 } deviceConfig_t;
-
-#define WIFI_SSID         "YOUR-WIFI-SSID"
-#define WIFI_PASS         "YOUR-WIFI-PASSWORD"
-
-#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-
-#define SWITCH_ID_1       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-#define SWITCH_ID_2       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-#define SWITCH_ID_3       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-#define SWITCH_ID_4       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 
 // this is the main configuration
 // please put in your deviceId, the PIN for Relay and PIN for flipSwitch
@@ -131,7 +88,7 @@ void setupFlipSwitches()
     int flipSwitchPIN = device.second.flipSwitchPIN;  // get the flipSwitchPIN
 
     flipSwitches[flipSwitchPIN] = flipSwitchConfig;   // save the flipSwitch config to flipSwitches map
-    pinMode(flipSwitchPIN, OUTPUT);                   // set the flipSwitch pin to OUTPUT
+    pinMode(flipSwitchPIN, INPUT);                    // set the flipSwitch pin to INPUT
   }
 }
 
@@ -219,7 +176,7 @@ void setup()
   Serial.begin(BAUD_RATE); 
   while (!Serial);
   
-  Serial.println("\nStarting Generic_WiFiNINA_MultiSwitch_advance");
+  Serial.println("\nStarting Generic_WiFiNINA_MultiSwitch_advance on " + String(BOARD_NAME));
 
   setupRelays();
   setupFlipSwitches();
