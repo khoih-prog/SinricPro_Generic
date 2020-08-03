@@ -54,8 +54,8 @@
 10. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
 11. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. To install go to Arduino IDE, select Boards Manager, search for ***`STM32`***
  8. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
- 9. [ArduinoJson Version 6.16.0+](https://github.com/bblanchon/ArduinoJson)
-10. [SinricPro_Generic Version 2.2.3+](https://github.com/khoih-prog/SinricPro_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/SinricPro_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+ 9. [`ArduinoJson Version 6.16.0+`](https://github.com/bblanchon/ArduinoJson)
+10. [`WebSockets_Generic Version 2.2.3+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 11. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500. ***Ready*** from v1.0.1.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library).
@@ -63,7 +63,7 @@
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`UIPEthernet library v2.0.8+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60.
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet LAN8742A on (Nucleo-144, Discovery). To be used with [`STM32duino_LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP).
-12. [`WiFiNINA_Generic library v1.6.1+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+12. [`WiFiNINA_Generic library v1.6.2+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
 
 ---
 
@@ -205,8 +205,8 @@ theses files must be copied into the corresponding directory:
 - [Ethernet2.cpp](LibraryPatches/Ethernet2/src/Ethernet2.cpp)
 
 5. To fix [`Ethernet3 library`](https://github.com/sstaub/Ethernet3), just copy these following files into the [`Ethernet3 library`](https://github.com/sstaub/Ethernet3) directory to overwrite the old files:
-- [Ethernet3.h](LibraryPatches/Ethernet2/src/Ethernet3.h)
-- [Ethernet3.cpp](LibraryPatches/Ethernet2/src/Ethernet3.cpp)
+- [Ethernet3.h](LibraryPatches/Ethernet3/src/Ethernet3.h)
+- [Ethernet3.cpp](LibraryPatches/Ethernet3/src/Ethernet3.cpp)
 
 6. ***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
