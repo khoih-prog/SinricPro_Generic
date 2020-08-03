@@ -1,4 +1,4 @@
-/****************************************************************************************************************************
+/*********************************************************************************************************************************
   SinricPro.h - Sinric Pro Library for boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -17,7 +17,9 @@
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
- *****************************************************************************************************************************/
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+ **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_H_
 #define _SINRIC_PRO_H_
@@ -38,6 +40,14 @@ class SinricProClass : public SinricProInterface
 {
   public:
     void begin(String socketAuthToken, String signingKey, String serverURL = SINRICPRO_SERVER_URL);
+
+#if 0    
+    // KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
+    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress, String serverURL = SINRICPRO_SERVER_URL);
+    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress, String serverURL = SINRICPRO_SERVER_URL);
+    //////
+#endif
+    
     template <typename DeviceType>
     DeviceType& add(const char* deviceId, unsigned long eventWaitTime = 1000);
 
@@ -92,7 +102,7 @@ class SinricProClass : public SinricProInterface
        @brief operator[] is used tor create a new device instance or get an existing device instance
 
        If the device is unknown to SinricProClass it will create a new device instance
-       @param deviceId a String containing deviceId for device that have to been created or retreived
+       @param deviceId a String containing deviceId for device that have to been created or retrieved
        @return returns a proxy object representing the reference to a device derrivered from SinricProDevice
        @section Syntax
        `<DeviceType> &reference = SinricPro[<DEVICE_ID>];`
@@ -140,12 +150,12 @@ class SinricProClass : public SinricProInterface
 
     void onConnect()
     {
-      DEBUG_SINRIC("[SinricPro]: Connected to \"%s\"!]\r\n", serverURL.c_str());
+      SRP_LOGDEBUG1("Connected to ", serverURL);
     }
 
     void onDisconnect()
     {
-      DEBUG_SINRIC("[SinricPro]: Disconnect\r\n");
+      SRP_LOGDEBUG("Disconnect");
     }
 
     bool verifyDeviceId(const char* id);
@@ -172,6 +182,12 @@ class SinricProClass : public SinricProInterface
 
     bool _begin = false;
     String responseMessageStr = "";
+    
+    // KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
+    // Init with invalid value
+    IPAddress _deviceIP     = IPAddress(0,0,0,0);
+    String    _macAddress   = "00:00:00:00:00:00";
+    //////
 };
 
 SinricProDeviceInterface* SinricProClass::getDevice(String deviceId)
@@ -191,12 +207,12 @@ DeviceType& SinricProClass::getDeviceInstance(String deviceId)
   if (tmp_device)
     return *tmp_device;
 
-  DEBUG_SINRIC("[SinricPro]: Device \"%s\" does not exist. Creating new device\r\n", deviceId.c_str());
+  SRP_LOGDEBUG1("Creating new device. No Device= ", deviceId);
   DeviceType& tmp_deviceInstance = add<DeviceType>(deviceId.c_str());
 
   if (isConnected())
   {
-    DEBUG_SINRIC("[SinricPro]: Reconnecting to server.\r\n");
+    SRP_LOGDEBUG("Reconnecting to server");
     reconnect();
   }
 
@@ -225,13 +241,13 @@ void SinricProClass::begin(String socketAuthToken, String signingKey, String ser
 
   if (!verifyAppKey(socketAuthToken.c_str()))
   {
-    DEBUG_SINRIC("[SinricPro:begin()]: App-Key \"%s\" is invalid!! Please check your app-key!! SinricPro will not work!\r\n", socketAuthToken.c_str());
+    SRP_LOGDEBUG1("begin(): Invalid App-Key= ", socketAuthToken);
     success = false;
   }
 
   if (!verifyAppSecret(signingKey.c_str()))
   {
-    DEBUG_SINRIC("[SinricPro:begin()]: App-Secret \"%s\" is invalid!! Please check your app-secret!! SinricPro will not work!\r\n", signingKey.c_str());
+    SRP_LOGDEBUG1("begin(): Invalid App-Secret= ", signingKey);
     success = false;
     return;
   }
@@ -249,6 +265,35 @@ void SinricProClass::begin(String socketAuthToken, String signingKey, String ser
   _udpListener.begin(&receiveQueue);
 }
 
+#if 0
+// KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
+void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress, String serverURL = SINRICPRO_SERVER_URL)
+{
+  // Convert byte* macAddress to String. Store to _deviceIP and _macAddress.
+  // Then call begin()
+  char macAddressStr[18] = { 0 };
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
+            macAddress[3], macAddress[4], macAddress[5]);
+   
+  _deviceIP     = deviceIP;
+  _macAddress   = String(macAddressStr);
+  
+  this->begin();
+}
+    
+    
+void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress, String serverURL = SINRICPRO_SERVER_URL)
+{
+  // Store to _deviceIP and _macAddress.
+  // Then call begin()
+  _deviceIP     = deviceIP;
+  _macAddress   = macAddress;
+  
+  this->begin();
+}
+//////
+#endif
+
 template <typename DeviceType>
 DeviceType& SinricProClass::add(const char* deviceId, unsigned long eventWaitTime)
 {
@@ -256,7 +301,7 @@ DeviceType& SinricProClass::add(const char* deviceId, unsigned long eventWaitTim
 
   if (verifyDeviceId(deviceId))
   {
-    DEBUG_SINRIC("[SinricPro:add()]: Adding device with id \"%s\".\r\n", deviceId);
+    SRP_LOGDEBUG1("add(): Adding device with id= ", deviceId);
     newDevice->begin(this);
 
     if (verifyAppKey(socketAuthToken.c_str()) && verifyAppSecret(signingKey.c_str()))
@@ -264,7 +309,7 @@ DeviceType& SinricProClass::add(const char* deviceId, unsigned long eventWaitTim
   }
   else
   {
-    DEBUG_SINRIC("[SinricPro:add()]: DeviceId \"%s\" is invalid!! Device will be ignored and will NOT WORK!\r\n", deviceId);
+    SRP_LOGDEBUG1("add(): Invalid DeviceId= ", deviceId);
   }
   devices.push_back(newDevice);
   return *newDevice;
@@ -314,9 +359,9 @@ void SinricProClass::handle()
     if (!begin_error)
     {
       // print this only once!
-      DEBUG_SINRIC("[SinricPro:handle()]: ERROR! SinricPro.begin() failed or was not called prior to event handler\r\n");
-      DEBUG_SINRIC("[SinricPro:handle()]:    -Reasons include an invalid app-key, invalid app-secret or no valid deviceIds)\r\n");
-      DEBUG_SINRIC("[SinricPro:handle()]:    -SinricPro is disabled! Check earlier log messages for details.\r\n");
+      SRP_LOGDEBUG("handle(): ERROR! begin() failed or was not called prior to event handler");
+      SRP_LOGDEBUG("-Reasons: Invalid app-key, app-secret or deviceIds");
+      SRP_LOGDEBUG("-SinricPro is disabled! Check earlier log messages for details.");
       begin_error = true;
     }
     return;
@@ -351,19 +396,21 @@ DynamicJsonDocument SinricProClass::prepareRequest(const char* deviceId, const c
 
 void SinricProClass::handleResponse(DynamicJsonDocument& responseMessage) 
 {
-  DEBUG_SINRIC("[SinricPro.handleResponse()]:\r\n");
+  SRP_LOGDEBUG("handleResponse():");
 
 #ifndef NODEBUG_SINRIC
-  serializeJsonPretty(responseMessage, DEBUG_ESP_PORT);
-  Serial.println();
+  serializeJsonPretty(responseMessage, SRP_DEBUG_OUTPUT);
+  SRP_LOGDEBUG("");
 #endif
 }
 
 void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interface_t Interface) 
 {
-  DEBUG_SINRIC("[SinricPro.handleRequest()]: handling request\r\n");
+  SRP_LOGDEBUG("handleRequest(): handling request");
+  
 #ifndef NODEBUG_SINRIC
-  serializeJsonPretty(requestMessage, DEBUG_ESP_PORT);
+  serializeJsonPretty(requestMessage, SRP_DEBUG_OUTPUT);
+  SRP_LOGDEBUG("");
 #endif
 
   DynamicJsonDocument responseMessage = prepareResponse(requestMessage);
@@ -407,7 +454,7 @@ void SinricProClass::handleReceiveQueue()
   if (receiveQueue.count() == 0) 
     return;
 
-  DEBUG_SINRIC("[SinricPro.handleReceiveQueue()]: %i message(s) in receiveQueue\r\n", receiveQueue.count());
+  SRP_LOGDEBUG1("handleReceiveQueue(): Message(s) in receiveQueue= ", receiveQueue.count());
   
   while (receiveQueue.count() > 0) 
   {
@@ -431,7 +478,7 @@ void SinricProClass::handleReceiveQueue()
     if (sigMatch) 
     { 
       // signature is valid process message
-      DEBUG_SINRIC("[SinricPro.handleReceiveQueue()]: Signature is valid. Processing message...\r\n");
+      SRP_LOGDEBUG("handleReceiveQueue(): Valid Signature. Processing message...");
       extractTimestamp(jsonMessage);
       
       if (messageType == "response") 
@@ -442,8 +489,9 @@ void SinricProClass::handleReceiveQueue()
     } 
     else 
     {
-      DEBUG_SINRIC("[SinricPro.handleReceiveQueue()]: Signature is invalid! Sending messsage to [dev/null] ;)\r\n");
+      SRP_LOGDEBUG("handleReceiveQueue(): Invalid Signature! Sending messsage to [dev/null] ;)");
     }
+    
     delete rawMessage;
   }
 }
@@ -458,8 +506,7 @@ void SinricProClass::handleSendQueue()
     
   while (sendQueue.count() > 0) 
   {
-    DEBUG_SINRIC("[SinricPro:handleSendQueue()]: %i message(s) in sendQueue\r\n", sendQueue.count());
-    DEBUG_SINRIC("[SinricPro:handleSendQueue()]: Sending message...\r\n");
+    SRP_LOGDEBUG1("handleSendQueue(): Sending Number of Message(s) in sendQueue= ", sendQueue.count());
 
     SinricProMessage* rawMessage = sendQueue.pop();
 
@@ -472,18 +519,27 @@ void SinricProClass::handleSendQueue()
 
     serializeJson(jsonMessage, messageStr);
 #ifndef NODEBUG_SINRIC
-    serializeJsonPretty(jsonMessage, DEBUG_ESP_PORT);
+    serializeJsonPretty(jsonMessage, SRP_DEBUG_OUTPUT);
     Serial.println();
 #endif
 
     switch (rawMessage->getInterface()) 
     {
-      case IF_WEBSOCKET: DEBUG_SINRIC("[SinricPro:handleSendQueue]: Sending to websocket\r\n"); _websocketListener.sendMessage(messageStr); break;
-      case IF_UDP:       DEBUG_SINRIC("[SinricPro:handleSendQueue]: Sending to UDP\r\n"); _udpListener.sendMessage(messageStr); break;
-      default:           break;
+      case IF_WEBSOCKET:
+        SRP_LOGDEBUG("handleSendQueue: Sending to websocket"); 
+        _websocketListener.sendMessage(messageStr); 
+        break;
+      case IF_UDP:
+        SRP_LOGDEBUG("handleSendQueue: Sending to UDP"); 
+        _udpListener.sendMessage(messageStr); 
+        break;
+      default:
+        break;
     }
+    
     delete rawMessage;
-    DEBUG_SINRIC("[SinricPro:handleSendQueue()]: message sent.\r\n");
+    
+    SRP_LOGDEBUG("handleSendQueue(): Message sent.");
   }
 }
 
@@ -510,7 +566,7 @@ void SinricProClass::connect()
   { 
     // no device have been added! -> do not connect!
     _begin = false;
-    DEBUG_SINRIC("[SinricPro]: ERROR! No valid devices available. Please add a valid device first!\r\n");
+    SRP_LOGDEBUG("ERROR! No valid devices available. Please add a valid device first!");
     return;
   }
 
@@ -520,7 +576,7 @@ void SinricProClass::connect()
 
 void SinricProClass::stop() 
 {
-  DEBUG_SINRIC("[SinricPro:stop()\r\n");
+  SRP_LOGDEBUG("stop()");
   _websocketListener.stop();
 }
 
@@ -560,9 +616,9 @@ void SinricProClass::onDisconnected(DisconnectedCallbackHandler cb)
 
 void SinricProClass::reconnect() 
 {
-  DEBUG_SINRIC("SinricPro:reconnect(): disconnecting\r\n");
+  SRP_LOGDEBUG("reconnect(): disconnecting");
   stop();
-  DEBUG_SINRIC("SinricPro:reconnect(): connecting\r\n");
+  SRP_LOGDEBUG("reconnect(): connecting");
   connect();
 }
 
@@ -607,7 +663,7 @@ void SinricProClass::extractTimestamp(JsonDocument &message)
   if (tempTimestamp) 
   {
     baseTimestamp = tempTimestamp - (millis() / 1000);
-    DEBUG_SINRIC("[SinricPro:extractTimestamp(): Got Timestamp %lu\r\n", tempTimestamp);
+    SRP_LOGDEBUG1("extractTimestamp(): Got Timestamp= ", tempTimestamp);
     return;
   }
 
@@ -616,7 +672,7 @@ void SinricProClass::extractTimestamp(JsonDocument &message)
   
   if (tempTimestamp) 
   {
-    DEBUG_SINRIC("[SinricPro:extractTimestamp(): Got Timestamp %lu\r\n", tempTimestamp);
+    SRP_LOGDEBUG1("extractTimestamp(): Got Timestamp= ", tempTimestamp);
     baseTimestamp = tempTimestamp - (millis() / 1000);
     return;
   }
@@ -625,7 +681,13 @@ void SinricProClass::extractTimestamp(JsonDocument &message)
 
 void SinricProClass::sendMessage(JsonDocument& jsonMessage) 
 {
-  DEBUG_SINRIC("[SinricPro:sendMessage()]: pushing message into sendQueue\r\n");
+  if (!isConnected()) 
+  {
+    SRP_LOGDEBUG("sendMessage(): Device is offline, message dropped");
+    return;
+  }
+  
+  SRP_LOGDEBUG("sendMessage(): pushing message into sendQueue");
   String messageString;
   serializeJson(jsonMessage, messageString);
   sendQueue.push(new SinricProMessage(IF_WEBSOCKET, messageString.c_str()));

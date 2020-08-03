@@ -53,8 +53,7 @@ namespace std
   unsigned __exidx_end;
 
   // This is defined so that calling a std::function<void()> can compile when
-  // size optimization is enabled. Teensy LC has "Smallest Code" set by default,
-  // for example.
+  // size optimization is enabled.
   __attribute__((weak))
   void __throw_bad_function_call()
   {

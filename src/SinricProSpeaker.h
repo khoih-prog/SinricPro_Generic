@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -17,12 +17,21 @@
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera.
  *****************************************************************************************************************************/
 
 #ifndef _SINRICSPEAKER_H_
 #define _SINRICSPEAKER_H_
 
 #include "SinricProDevice.h"
+
+#define SPEAKER_MIN_VOLUME_LEVEL      0
+#define SPEAKER_MAX_VOLUME_LEVEL      100
+
+#define SPEAKER_MIN_BANDS_LEVEL       0
+#define SPEAKER_MAX_BANDS_LEVEL       100
+
 
 /**
    @class SinricProSpeaker
@@ -47,6 +56,14 @@ class SinricProSpeaker :  public SinricProDevice
 {
   public:
     SinricProSpeaker(const char* deviceId, unsigned long eventWaitTime = 100);
+    
+    // From v2.5.1
+    String getProductType() 
+    {
+      return SinricProDevice::getProductType() + String("SPEAKER"); 
+    }
+    //////
+    
     // callbacks
 
     /**
@@ -112,6 +129,24 @@ class SinricProSpeaker :  public SinricProDevice
        @snippet callbacks.cpp onMediaControl
      **/
     typedef std::function<bool(const String&, String&)> MediaControlCallback;
+    
+    // From v2.5.1
+    /**
+     * @brief Callback definition for onSelectInput function
+     * 
+     * Gets called when device receive a `selectInput` request \n
+     * @param[in]   deviceId    String which contains the ID of device
+     * @param[in]   input       String with input name device is requested to switch to \n `AUX 1`..`AUX 7`, `BLURAY`, `CABLE`, `CD`, `COAX 1`,`COAX 2`, `COMPOSITE 1`, `DVD`, `GAME`, `HD RADIO`, `HDMI 1`.. `HDMI 10`, `HDMI ARC`, `INPUT 1`..`INPUT 10`, `IPOD`, `LINE 1`..`LINE 7`, `MEDIA PLAYER`, `OPTICAL 1`, `OPTICAL 2`, `PHONO`, `PLAYSTATION`, `PLAYSTATION 3`, `PLAYSTATION 4`, `SATELLITE`, `SMARTCAST`, `TUNER`, `TV`, `USB DAC`, `VIDEO 1`..`VIDEO 3`, `XBOX`
+     * @param[out]  input       String with input name device has switchted to \n `AUX 1`..`AUX 7`, `BLURAY`, `CABLE`, `CD`, `COAX 1`,`COAX 2`, `COMPOSITE 1`, `DVD`, `GAME`, `HD RADIO`, `HDMI 1`.. `HDMI 10`, `HDMI ARC`, `INPUT 1`..`INPUT 10`, `IPOD`, `LINE 1`..`LINE 7`, `MEDIA PLAYER`, `OPTICAL 1`, `OPTICAL 2`, `PHONO`, `PLAYSTATION`, `PLAYSTATION 3`, `PLAYSTATION 4`, `SATELLITE`, `SMARTCAST`, `TUNER`, `TV`, `USB DAC`, `VIDEO 1`..`VIDEO 3`, `XBOX`
+     * @return      the success of the request
+     * @retval      true        request handled properly
+     * @retval      false       request was not handled properly because of some error
+     * 
+     * @section SelectInput Example-Code
+     * @snippet callbacks.cpp onSelectInput
+     **/
+    typedef std::function<bool(const String&, String&)> SelectInputCallback;
+    //////
 
     /**
        @brief Callback definition for onSetBands function
@@ -185,6 +220,9 @@ class SinricProSpeaker :  public SinricProDevice
     void onAdjustVolume(AdjustVolumeCallback cb);
     void onMute(MuteCallback cb);
     void onMediaControl(MediaControlCallback cb);
+    // From v2.5.1
+    void onSelectInput(SelectInputCallback cb);
+    //////
     void onSetBands(SetBandsCallback cb);
     void onAdjustBands(AdjustBandsCallback cb);
     void onResetBands(ResetBandsCallback cb);
@@ -194,15 +232,22 @@ class SinricProSpeaker :  public SinricProDevice
     bool sendVolumeEvent(int volume, String cause = "PHYSICAL_INTERACTION");
     bool sendMuteEvent(bool mute, String cause = "PHYSICAL_INTERACTION");
     bool sendMediaControlEvent(String mediaControl, String cause = "PHYSICAL_INTERACTION");
+    // From v2.5.1
+    bool sendSelectInputEvent(String intput, String cause = "PHYSICAL_INTERACTION");
+    //////
     bool sendBandsEvent(String bands, int level, String cause = "PHYSICAL_INTERACTION");
     bool sendModeEvent(String mode, String cause = "PHYSICAL_INTERACTION");
     // handle
     bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    
   private:
     SetVolumeCallback volumeCallback;
     AdjustVolumeCallback adjustVolumeCallback;
     MuteCallback muteCallback;
     MediaControlCallback mediaControlCallback;
+    // From v2.5.1
+    SelectInputCallback selectInputCallback;
+    //////
     SetBandsCallback setBandsCallback;
     AdjustBandsCallback adjustBandsCallback;
     ResetBandsCallback resetBandsCallback;
@@ -237,7 +282,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
   {
     int volume = request_value["volume"];
     success = volumeCallback(String(deviceId), volume);
-    response_value["volume"] = volume;
+    // From v2.5.1
+    response_value["volume"] = limitValue(volume, SPEAKER_MIN_VOLUME_LEVEL, SPEAKER_MAX_VOLUME_LEVEL);
+    //////
     return success;
   }
 
@@ -245,7 +292,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
   {
     int volume = request_value["volume"];
     success = adjustVolumeCallback(String(deviceId), volume);
-    response_value["volume"] = volume;
+    // From v2.5.1
+    response_value["volume"] = limitValue(volume, SPEAKER_MIN_VOLUME_LEVEL, SPEAKER_MAX_VOLUME_LEVEL);
+    //////
     return success;
   }
 
@@ -272,6 +321,16 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
     response_value["control"] = mediaControl;
     return success;
   }
+  
+  // From v2.5.1
+  if (selectInputCallback && actionString == "selectInput") 
+  {
+    String input = request_value["input"];
+    success = selectInputCallback(String(deviceId), input);
+    response_value["input"] = input;
+    return success;
+  }
+  //////
 
   if (setBandsCallback && actionString == "setBands")
   {
@@ -285,7 +344,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
       success = setBandsCallback(deviceId, bandsName, level);
       JsonObject response_value_bands_i = response_value_bands.createNestedObject();
       response_value_bands_i["name"] = bandsName;
-      response_value_bands_i["level"] = level;
+      // From v2.5.1
+      response_value_bands_i["level"] = limitValue(level, SPEAKER_MIN_BANDS_LEVEL, SPEAKER_MAX_BANDS_LEVEL);
+      //////
     }
 
     return success;
@@ -308,7 +369,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
       success = adjustBandsCallback(deviceId, bandsName, levelDelta);
       JsonObject response_value_bands_i = response_value_bands.createNestedObject();
       response_value_bands_i["name"] = bandsName;
-      response_value_bands_i["level"] = levelDelta;
+      // From v2.5.1
+      response_value_bands_i["level"] = limitValue(levelDelta, SPEAKER_MIN_BANDS_LEVEL, SPEAKER_MAX_BANDS_LEVEL);
+      //////
     }
     return success;
   }
@@ -325,7 +388,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
       success = adjustBandsCallback(deviceId, bandsName, level);
       JsonObject response_value_bands_i = response_value_bands.createNestedObject();
       response_value_bands_i["name"] = bandsName;
-      response_value_bands_i["level"] = level;
+      // From v2.5.1
+      response_value_bands_i["level"] = limitValue(level, 0, 100);
+      //////
     }
     return success;
   }
@@ -380,6 +445,20 @@ void SinricProSpeaker::onMediaControl(MediaControlCallback cb)
 {
   mediaControlCallback = cb;
 }
+
+// From v2.5.1
+/**
+ * @brief Set callback function for `selectInput` request
+ * 
+ * @param cb Function pointer to a `SelectInputCallback` function
+ * @return void
+ * @see SelectInputCallback
+ **/
+void SinricProSpeaker::onSelectInput(SelectInputCallback cb) 
+{ 
+  selectInputCallback = cb; 
+}
+//////
 
 /**
    @brief Set callback function for `setBands` request

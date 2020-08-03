@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -17,6 +17,8 @@
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
  *****************************************************************************************************************************/
 
 #ifndef __SINRIC_PRO_UDP_H__
@@ -31,11 +33,21 @@
 
 // KH
 #if (WEBSOCKETS_NETWORK_TYPE == NETWORK_WIFININA)
-#warning Use NETWORK_WIFININA WiFiUdp_Generic in SinricProUDP
-#include <WiFiUdp_Generic.h>
+  #warning Use NETWORK_WIFININA WiFiUdp_Generic in SinricProUDP
+  #include <WiFiUdp_Generic.h>
 #elif (WEBSOCKETS_NETWORK_TYPE == NETWORK_W5100)
-#warning Use NETWORK_W5100 EthernetUdp in SinricProUDP
-#include <EthernetUdp.h>
+  // KH, add in v2.5.1 to support Ethernet2, Ethernet3 and EthernetLarge libraries
+  #if (USE_ETHERNET || USE_ETHERNET_LARGE)
+    #include <EthernetUdp.h>
+    #warning Use NETWORK_W5100 EthernetUdp in SinricProUDP
+  #elif USE_ETHERNET2
+    #include <EthernetUdp2.h>
+    #warning Use NETWORK_W5100 EthernetUdp2 in SinricProUDP
+  #elif USE_ETHERNET3
+    #include <EthernetUdp3.h>
+    #warning Use NETWORK_W5100 EthernetUdp3 in SinricProUDP
+  #endif
+  //////
 #elif (WEBSOCKETS_NETWORK_TYPE == NETWORK_ENC28J60)
 #warning Use NETWORK_ENC28J60 UIPUdp in SinricProUDP
 #include <UIPUdp.h>
@@ -91,7 +103,7 @@ void udpListener::handle()
     int n = _udp.read(buffer, 1024);
     buffer[n] = 0;
     SinricProMessage* request = new SinricProMessage(IF_UDP, buffer);
-    DEBUG_SINRIC("[SinricPro:UDP]: receiving request\r\n");
+    SRP_LOGDEBUG("SinricPro:UDP: receiving request");
     receiveQueue->push(request);
   }
 }

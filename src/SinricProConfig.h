@@ -1,4 +1,4 @@
-/****************************************************************************************************************************
+/*********************************************************************************************************************************
   SinricProConfig.h - Sinric Pro Library for boards
   
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -6,18 +6,20 @@
   
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
- 
+
   Version Modified By   Date      Comments
- ------- -----------  ---------- -----------
+  ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
- *****************************************************************************************************************************/
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+ **********************************************************************************************************************************/
  
 #ifndef __SINRICPRO_CONFIG_H__
 #define __SINRICPRO_CONFIG_H__
@@ -38,8 +40,8 @@
 
 // Version Configuration
 #define SINRICPRO_VERSION_MAJOR     2
-#define SINRICPRO_VERSION_MINOR     4
-#define SINRICPRO_VERSION_REVISION  0
+#define SINRICPRO_VERSION_MINOR     5
+#define SINRICPRO_VERSION_REVISION  1
 #define SINRICPRO_VERSION STR(SINRICPRO_VERSION_MAJOR) "." STR(SINRICPRO_VERSION_MINOR) "." STR(SINRICPRO_VERSION_REVISION)
 
 // Server Configuration

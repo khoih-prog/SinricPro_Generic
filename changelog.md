@@ -1,20 +1,11 @@
-# Changelog for SinricPro_Generic library
-
-## Version 2.4.0
+# Changelog
+## Version 2.5.1
 New:
-- Board Support
-  - Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
-  - Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.) boards 
-  - Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) boards
-  - Adafruit nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.) boards
-  - Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0 boards
-  - STM32 (Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.) boards
-  - SAM DUE
+- added IP and MAC address to header
 
-- Examples
-  -  Many examples to support new boards.
-
-# Changelog for SinricPro library
+## Version 2.5.0
+New:
+- Speaker device supports SelectInput
 
 ## Version 2.4.0
 New:

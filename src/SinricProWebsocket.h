@@ -1,4 +1,4 @@
-/****************************************************************************************************************************
+/*********************************************************************************************************************************
   SinricProWebSockets.h - Sinric Pro Library for boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -17,7 +17,9 @@
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
- *****************************************************************************************************************************/
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+ **********************************************************************************************************************************/
 
 #ifndef _SINRICPRO_WEBSOCKET_H__
 #define _SINRICPRO_WEBSOCKET_H__
@@ -33,6 +35,10 @@
 #include <WebSocketsClient_Generic.h>
 
 #include <ArduinoJson.h>
+
+// KH add v2.5.1
+#include "SinricPro.h"
+
 #include "SinricProDebug.h"
 #include "SinricProConfig.h"
 #include "SinricProQueue.h"
@@ -99,14 +105,60 @@ void websocketListener::setExtraHeaders()
   String headers  = "appkey:" + socketAuthToken + "\r\n";
   headers += "deviceids:" + deviceIds + "\r\n";
   headers += "restoredevicestates:" + String(restoreDeviceStates ? "true" : "false") + "\r\n";
-#ifdef ESP8266
+
+// From v2.5.1 to add mac and IP address at startup
+// To add for Ethernet / WiFiNINA, etc.
+#if (ESP8266 || ESP32)
+  headers += "ip:" + WiFi.localIP().toString() + "\r\n";
+  headers += "mac:" + WiFi.macAddress() + "\r\n";
+#elif ( SINRIC_PRO_USING_ETHERNET || SINRIC_PRO_USING_ETHERNET_LARGE || SINRIC_PRO_USING_ETHERNET2 \
+     || SINRIC_PRO_USING_ETHERNET3 || SINRIC_PRO_USING_ENC28J60 )
+  // Other boards using Ethernet with Ethernet.localIP() and Ethernet.MACAddress(uint8_t *mac_address) functions
+  // Ethernet2, Ethernet3 and UIPthernet don't support Ethernet.MACAddress() => to be modified to use enhanced header
+  // Use the Library Patches to fix the issue
+  // Here we can use both _deviceIP and _macAddress
+  #warning Very good. Using IP and macAddress for WebSockets header
+  #warning If you have error here, Use the Library Patches to fix the issue
+  
+  headers += "ip:" + String(Ethernet.localIP()) + "\r\n";
+  
+  uint8_t macAddress[6];
+  char macAddressStr[18] = { 0 };
+  
+  Ethernet.MACAddress(macAddress);
+  
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
+            macAddress[3], macAddress[4], macAddress[5]);
+            
+  headers += "mac:" + String(macAddressStr) + "\r\n";
+
+#else
+  #warning Using no IP and macAddress for WebSockets header
+  
+#endif
+//////
+  
+#if (ESP8266)
   headers += "platform:ESP8266\r\n";
-#endif
-#ifdef ESP32
+#elif (ESP32)
   headers += "platform:ESP32\r\n";
+#elif defined(BOARD_NAME)
+  #warning Using BOARD_NAME for WebSockets header
+  headers += "platform:";
+  headers += BOARD_NAME;
+  headers += "\r\n";
+#elif defined(BOARD_TYPE)
+  #warning Using BOARD_TYPE for WebSockets header
+  headers += "platform:";
+  headers += BOARD_TYPE;
+  headers += "\r\n";  
 #endif
+
+// KH, from v2.5.1, using BOARD_NAME or BOARD_TYPE if defined
+
+
   headers += "version:" + String(SINRICPRO_VERSION);
-  DEBUG_SINRIC("[SinricPro:Websocket]: headers: \r\n%s\r\n", headers.c_str());
+  SRP_LOGDEBUG1("Websocket: headers:\n", headers);
   webSocket.setExtraHeaders(headers.c_str());
 }
 
@@ -129,9 +181,9 @@ void websocketListener::begin(String server, String socketAuthToken, String devi
   this->deviceIds = deviceIds;
 
 #ifdef WEBSOCKET_SSL
-  DEBUG_SINRIC("[SinricPro:Websocket]: Connecting to WebSocket Server using SSL (%s)\r\n", server.c_str());
+  SRP_LOGDEBUG1("Websocket: Connecting SSL to WebSocket Server: ", server);
 #else
-  DEBUG_SINRIC("[SinricPro:Websocket]: Connecting to WebSocket Server (%s)\r\n", server.c_str());
+  SRP_LOGDEBUG1("Websocket: Connecting to WebSocket Server: ", server);
 #endif
 
   if (_isConnected)
@@ -183,14 +235,14 @@ void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t 
     case WStype_DISCONNECTED:
       if (_isConnected)
       {
-        DEBUG_SINRIC("[SinricPro:Websocket]: disconnected\r\n");
+        SRP_LOGDEBUG("Websocket: disconnected");
         if (_wsDisconnectedCb) _wsDisconnectedCb();
         _isConnected = false;
       }
       break;
     case WStype_CONNECTED:
       _isConnected = true;
-      DEBUG_SINRIC("[SinricPro:Websocket]: connected\r\n");
+      SRP_LOGDEBUG("Websocket: connected");
 
       if (_wsConnectedCb)
         _wsConnectedCb();
@@ -204,7 +256,7 @@ void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t 
     case WStype_TEXT:
       {
         SinricProMessage* request = new SinricProMessage(IF_WEBSOCKET, (char*)payload);
-        DEBUG_SINRIC("[SinricPro:Websocket]: receiving data\r\n");
+        SRP_LOGDEBUG("Websocket: receiving data");
         receiveQueue->push(request);
         break;
       }
