@@ -7,71 +7,29 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.4.0
+  Version: 2.5.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
-  Example for how to use SinricPro Temperaturesensor device:
-   - setup a temperature sensor device
-   - send temperature event to SinricPro server when temperature has changed
-
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
- *****************************************************************************************************************************/
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+ **********************************************************************************************************************************/
 
 // STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
 // SAM DUE
 // Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0
 
-
-#if defined(ESP8266) || defined(ESP32)
-#error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
-#endif
-
-// Uncomment the following line to enable serial debug output
-#define ENABLE_DEBUG    true   
-
-#if ENABLE_DEBUG
-  #define DEBUG_PORT Serial
-  #define NODEBUG_WEBSOCKETS
-  #define NDEBUG
-#endif
-
-#define WEBSOCKETS_NETWORK_TYPE   NETWORK_WIFININA
+#include "defines.h"
 
 #include "SinricPro_Generic.h"
 #include "SinricProTemperaturesensor.h"
-
-#include "DHT.h"                              // https://github.com/adafruit/DHT-sensor-library
-
-#define WIFI_SSID         "YOUR-WIFI-SSID"
-#define WIFI_PASS         "YOUR-WIFI-PASSWORD"
-
-#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-
-#define TEMP_SENSOR_ID    "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-
-#define BAUD_RATE         115200              // Change baudrate to your need
-
-#define EVENT_WAIT_TIME   60000               // send event every 60 seconds
-
-// Connect pin 1 (on the left) of the sensor to +5V
-// NOTE: If using a board with 3.3V logic, connect pin 1 to 3.3V instead of 5V!
-// Connect pin 2 of the sensor to whatever your DHT_PIN is
-// Connect pin 4 (on the right) of the sensor to GROUND
-// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
-#define DHT_PIN           5
-
-// Uncomment whatever type you're using!
-//#define DHT_TYPE      DHT11   // DHT 11
-#define DHT_TYPE        DHT22   // DHT 22  (AM2302), AM2321
-//#define DHT_TYPE      DHT21   // DHT 21 (AM2301)
 
 // Initialize DHT sensor.
 // Note that older versions of this library took an optional third parameter to
@@ -208,7 +166,7 @@ void setup()
   Serial.begin(BAUD_RATE);
   while (!Serial);
 
-  Serial.println("\nStarting Generic_WiFiNINA_TemperatureSensor");
+  Serial.println("\nStarting Generic_WiFiNINA_TemperatureSensor on " + String(BOARD_NAME));
 
   dht.begin();
 
