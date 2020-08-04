@@ -20,7 +20,7 @@
   - ***W5x00's Ethernet2, Ethernet3, EthernetLarge Libraries.***
   
 3. Add sample Packages_Patches for ***STM32 stm32*** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8)
-4. Add Ethernet Library Patches to support ***new WobSockets headers.***
+4. Add Ethernet Library Patches to support ***new WebSockets headers.***
 5. Add more Packages' Patches.
 6. Bump up to sync with v2.5.1 of original SinricPro library to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
@@ -682,7 +682,7 @@ Connected to SinricPro
   - ***W5x00's Ethernet2, Ethernet3, EthernetLarge Libraries.***
   
 3. Add sample Packages_Patches for ***STM32 stm32*** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8)
-4. Add Ethernet Library Patches to support ***new WobSockets headers.***
+4. Add Ethernet Library Patches to support ***new WebSockets headers.***
 5. Add more Packages' Patches.
 6. Bump up to sync with v2.5.1 of original SinricPro library to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
