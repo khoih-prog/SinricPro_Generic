@@ -504,6 +504,7 @@ TV turned on
 TV volume is unmuted
 TV turned off
 ```
+---
 
 #### Debug terminal output when running [SAMD_WiFiNINA_Light](examples/Generic/Light/SAMD_WiFiNINA_Light) on NANO_33_IOT
 
@@ -530,6 +531,78 @@ Device **** color changed to 236, 214, 214(RGB)
 Device **** turn off (via SinricPro)
 Device **** turned on (via SinricPro)
 Device**** brightness level changed to 65
+```
+
+---
+
+#### Debug terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on nRD52 NRF52840_ITSYBITSY with W5500 Ethernet using "fixed" Ethernet2 Library
+
+```
+Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
+[SRP] =========== USE_ETHERNET2 ===========
+[SRP] Default SPI pinout:
+[SRP] MOSI: 24
+[SRP] MISO: 23
+[SRP] SCK: 25
+[SRP] SS: 5
+[SRP] =========================
+[SRP] Use default CS/SS pin :  10
+Index = 0
+Ethernet Connected!. IP-Address is: 192.168.2.165
+[SRP] Creating new device. No Device=  _deviceID
+[SRP] add(): Adding device with id=  _deviceID
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+[SRP] Websocket: headers:
+ appkey:APP_KEY
+deviceids:_deviceID
+restoredevicestates:false
+ip:192.168.2.165
+mac:DE:AD:BE:EF:FE:01
+platform:NRF52840_ITSYBITSY
+version:2.5.1
+[SRP] Websocket: connected
+Connected to SinricPro
+[SRP] Websocket: receiving data
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue=  1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp=  1596497923
+```
+
+---
+
+#### Debug terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on Seeeduino SEEED_XIAO_M0 with W5500 Ethernet using "fixed" Ethernet3 Library
+
+```
+Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
+[SRP] =========== USE_ETHERNET3 ===========
+[SRP] Default SPI pinout:
+[SRP] MOSI: 10
+[SRP] MISO: 9
+[SRP] SCK: 8
+[SRP] SS: 4
+[SRP] =========================
+[SRP] Use default CS/SS pin :  1
+Index = 11
+
+Ethernet3 W5500 init, using SPI_CS = 1, number of sockets = 4
+Ethernet Connected!. IP-Address is: 192.168.2.164
+[SRP] Creating new device. No Device=  _deviceID
+[SRP] add(): Adding device with id=  _deviceID
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+[SRP] Websocket: headers:
+ appkey:APP_KEY
+deviceids:_deviceID
+restoredevicestates:false
+ip:192.168.2.164
+mac:DE:AD:BE:EF:BE:0C
+platform:SEEED_XIAO_M0
+version:2.5.1
+[SRP] Websocket: connected
+Connected to SinricPro
+[SRP] Websocket: receiving data
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue=  1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp=  1596499807
 ```
 
 ---
