@@ -24,12 +24,14 @@
 5. Add more Packages' Patches.
 6. Bump up to sync with v2.5.1 of original SinricPro library to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
+8. Add Packages' Patches for Arduino SAMD21 to fix compiler error issue for Nano-33-IoT, ZERO, MKR, etc.
+9. Fix Teensy compiler issue for [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html)
 
 ### Releases v2.4.0
 
 1. Add support to :
 
-  - ***Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)***.
+  - ***Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)***.
   - ***Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)***.
   - ***Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
   - ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox etc.***.
@@ -135,16 +137,27 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
- 4. ***To be able to automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the file [Arduino SAMD platform.txt](Packages_Patches/arduino/hardware/samd/1.8.6) into Arduino samd directory (~/.arduino15/packages/arduino/hardware/samd/1.8.6). 
+ 4. ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.7](Packages_Patches/arduino/hardware/samd/1.8.7) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.7).
+ 
+Supposing the Arduino SAMD version is 1.8.7. These files must be copied into the directory:
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.7/platform.txt`
+- ***`~/.arduino15/packages/arduino/hardware/samd/1.8.7/cores/arduino/Arduino.h`***
 
-Supposing the Arduino SAMD core version is 1.8.6. This file must be copied into the directory:
+Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.6/platform.txt`
+These files must be copied into the directory:
 
-Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+- `~/.arduino15/packages/arduino/hardware/samd/x.yy.z/platform.txt`
+- ***`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`***
+ 
+ This is mandatory to fix the ***notorious Arduino SAMD compiler error***. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
+ 
+```
+ ...\arm-none-eabi\include\c++\7.2.1\bits\stl_algobase.h:243:56: error: macro "min" passed 3 arguments, but takes just 2
+     min(const _Tp& __a, const _Tp& __b, _Compare __comp)
+```
 
-- `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
+Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD releas, you don't need to copy the `Arduino.h` file anymore.
 
  5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
 
@@ -537,7 +550,7 @@ Device**** brightness level changed to 65
 
 ---
 
-#### Debug terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on nRD52 NRF52840_ITSYBITSY with W5500 Ethernet using "fixed" Ethernet2 Library
+#### Debug terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on nRF52 NRF52840_ITSYBITSY with W5500 Ethernet using "fixed" Ethernet2 Library
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
@@ -606,6 +619,33 @@ Connected to SinricPro
 [SRP] handleReceiveQueue(): Valid Signature. Processing message...
 [SRP] extractTimestamp(): Got Timestamp=  1596499807
 ```
+---
+
+#### Debug terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on Arduino SAMD_NANO_33_IOT with WiFiNINA using "fixed" `Arduino.h`
+
+```
+Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
+
+[Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.105
+[SRP] Creating new device. No Device=  _deviceID
+[SRP] add(): Adding device with id=  _deviceID
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+[SRP] Websocket: headers:
+ appkey:APP_KEY
+deviceids:_deviceID
+restoredevicestates:false
+ip:192.168.2.105
+mac:74:7A:C9:AE:11:4C
+platform:SAMD_NANO_33_IOT
+version:2.5.1
+[SRP] Websocket: connected
+Connected to SinricPro
+[SRP] Websocket: receiving data
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue=  1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp=  1596518895
+
+```
 
 ---
 
@@ -646,6 +686,8 @@ Connected to SinricPro
 5. Add more Packages' Patches.
 6. Bump up to sync with v2.5.1 of original SinricPro library to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
+8. Add Packages' Patches for Arduino SAMD21 to fix compiler error issue for Nano-33-IoT, ZERO, MKR, etc.
+9. Fix Teensy compiler issue for [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html)
 
 ### Releases v2.4.0
 

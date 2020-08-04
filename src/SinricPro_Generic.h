@@ -22,14 +22,20 @@
 #ifndef SINRIC_PRO_GENERIC_H_
 #define SINRIC_PRO_GENERIC_H_
 
-#ifdef min
-  #warning undef min
-  #undef min
-#endif
+#if 1   //!defined(ARDUINO_SAMD_NANO_33_IOT)
 
-#ifdef max
-  #warning undef max
-  #undef max
+  #ifdef min
+    #warning undef min
+    #undef min
+    #define min(a,b) ((a) < (b) ? (a) : (b))
+  #endif
+
+  #ifdef max
+    #warning undef max
+    #undef max
+    #define max(a,b) ((a) > (b) ? (a) : (b))
+  #endif
+  
 #endif
 
 #include <vector>
@@ -45,7 +51,8 @@ void __throw_length_error( char const*e )
   Serial.println(e);
 }
 
-#if defined(TEENSYDUINO)
+// KH, Don't need for Teensy from v1.5.3
+#if 0 //defined(TEENSYDUINO)
 namespace std
 {
   //To avoid Teensy linker issue wth STL library

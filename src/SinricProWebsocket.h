@@ -134,6 +134,24 @@ void websocketListener::setExtraHeaders()
             
   headers += "mac:" + String(macAddressStr) + "\r\n";
 
+#elif ( SINRIC_PRO_USING_WIFININA || WIFININA_USE_SAMD || WIFININA_USE_NRF528XX || WIFININA_USE_SAM_DUE || WIFININA_USE_STM32 )
+  #warning Very good. Using IP and macAddress for WebSockets header
+  #warning If you have error here, Use the Library Patches to fix the issue
+  
+  IPAddress localIP = WiFi.localIP();
+  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "." 
+                   + String(localIP[3]) + + "\r\n";
+                   
+  uint8_t macAddress[6];
+  char macAddressStr[18] = { 0 };      
+  
+  WiFi.macAddress(macAddress);
+  
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
+            macAddress[3], macAddress[4], macAddress[5]);
+            
+  headers += "mac:" + String(macAddressStr) + "\r\n";           
+  
 #else
   #warning Using no IP and macAddress for WebSockets header
   
