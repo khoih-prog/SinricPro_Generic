@@ -120,7 +120,9 @@ void websocketListener::setExtraHeaders()
   #warning Very good. Using IP and macAddress for WebSockets header
   #warning If you have error here, Use the Library Patches to fix the issue
   
-  headers += "ip:" + String(Ethernet.localIP()) + "\r\n";
+  IPAddress localIP = Ethernet.localIP();
+  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "." 
+                   + String(localIP[3]) + + "\r\n";
   
   uint8_t macAddress[6];
   char macAddressStr[18] = { 0 };

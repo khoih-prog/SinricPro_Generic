@@ -48,30 +48,30 @@
 
 #define SRP_LOGERROR(x)        if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGERROR1(x,y)     if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
-#define SRP_LOGERROR2(x,y,z)   if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
-#define SRP_LOGERROR3(x,y,z,w) if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
+#define SRP_LOGERROR2(x,y,z)   if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
+#define SRP_LOGERROR3(x,y,z,w) if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
 
 //////
 
 #define SRP_LOGWARN(x)         if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGWARN1(x,y)      if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
-#define SRP_LOGWARN2(x,y,z)    if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
-#define SRP_LOGWARN3(x,y,z,w)    if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
+#define SRP_LOGWARN2(x,y,z)    if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
+#define SRP_LOGWARN3(x,y,z,w)    if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
 
 //////
 
 #define SRP_LOGINFO(x)         if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGINFO1(x,y)      if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
-#define SRP_LOGINFO2(x,y,z)    if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
-#define SRP_LOGINFO3(x,y,z,w)  if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
+#define SRP_LOGINFO2(x,y,z)    if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
+#define SRP_LOGINFO3(x,y,z,w)  if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
 
 //////
 
-#define SRP_LOGDEBUG(x)        if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.println(x); }
-#define SRP_LOGDEBUG0(x)       if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print(x); }
-#define SRP_LOGDEBUG1(x,y)     if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
-#define SRP_LOGDEBUG2(x,y,z)   if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
-#define SRP_LOGDEBUG3(x,y,z,w) if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
+#define SRP_LOGDEBUG(x)        if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
+#define SRP_LOGDEBUG0(x)       if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); }
+#define SRP_LOGDEBUG1(x,y)     if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
+#define SRP_LOGDEBUG2(x,y,z)   if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
+#define SRP_LOGDEBUG3(x,y,z,w) if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }
 
 //////
 
