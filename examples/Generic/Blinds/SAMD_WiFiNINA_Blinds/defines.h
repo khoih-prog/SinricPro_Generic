@@ -25,7 +25,9 @@
 #ifndef defines_h
 #define defines_h
 
-#define WEBSOCKETS_NETWORK_TYPE   NETWORK_WIFININA
+#define SINRIC_PRO_USING_WIFININA       true
+
+#define WEBSOCKETS_NETWORK_TYPE         NETWORK_WIFININA
 
 #if defined(ESP8266) || defined(ESP32)
   #error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
@@ -34,7 +36,7 @@
 #define SRP_DEBUG_PORT                Serial
 
 // Debug Level from 0 to 4
-#define _SRP_LOGLEVEL_                1
+#define _SRP_LOGLEVEL_                4
 
 // Uncomment the following line to enable serial debug output
 #define ENABLE_DEBUG    true
@@ -287,13 +289,27 @@
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 222);
 
+#if 1
+
+#define WIFI_SSID         "HueNet1"
+#define WIFI_PASS         "jenniqqs"
+
+#define APP_KEY           "51c22eb7-fec7-415b-89c1-7c1d4f8d9992"
+#define APP_SECRET        "b29c62f5-54b7-4c2c-8cf1-28bf09b6d8ae-07d9f1b4-95e4-4576-970f-a0aaf2741576"
+
+#define BLINDS_ID         "5ed0759b3045f14787e48113"
+
+#else
+
 #define WIFI_SSID         "YOUR-WIFI-SSID"
 #define WIFI_PASS         "YOUR-WIFI-PASSWORD"
 
-#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
+#define APP_KEY           "YOUR-APP-KEY"        // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
+#define APP_SECRET        "YOUR-APP-SECRET"     // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
 
-#define BLINDS_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define BLINDS_ID         "YOUR-DEVICE-ID"      // Should look like "5dc1564130xxxxxxxxxxxxxx"
+
+#endif
 
 #define BAUD_RATE         115200              // Change baudrate to your need
 

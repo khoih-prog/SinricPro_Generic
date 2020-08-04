@@ -25,7 +25,9 @@
 #ifndef defines_h
 #define defines_h
 
-#define WEBSOCKETS_NETWORK_TYPE   NETWORK_WIFININA
+#define SINRIC_PRO_USING_WIFININA       true
+
+#define WEBSOCKETS_NETWORK_TYPE         NETWORK_WIFININA
 
 #if defined(ESP8266) || defined(ESP32)
   #error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
