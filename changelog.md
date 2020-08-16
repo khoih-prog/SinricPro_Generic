@@ -1,11 +1,27 @@
 # Changelog
-## Version 2.5.1
+
+## Version 2.6.1
+Fixed:
+  Air Quality Sensor example for sensor type GP2Y1014AU0F
+
+## Version 2.6.0
 New:
-- added IP and MAC address to header
+- Devices
+  - AirQualitySensor
+	
+- Examples
+  - AirQualitySensor
+
+Changed:
+  - SinricProCamera device type added to support Camera. Camera example updated
 
 ## Version 2.5.0
 New:
-- Speaker device supports SelectInput
+- Devices
+  - Camera
+
+- Examples
+  -  Camera
 
 ## Version 2.4.0
 New:
