@@ -18,7 +18,12 @@
    - Support onPowerState to turn on / turn off contactsensor
    - Checks a contact sensor connected to CONTACT_PIN and send event if state changed
 
-  Version: 2.5.1
+  Version: 2.6.1
+
+  Copyright (c) 2019 Sinric. All rights reserved.
+  Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
+
+  This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +31,7 @@
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+  2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
 
 // STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
