@@ -1,13 +1,13 @@
 /****************************************************************************************************************************
   defines.h
-  For Generic boards, running W5x00 or ENC28J60 Ethernet shield
+  For boards, running WiFiNINA shield
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.5.1
+  Version: 2.6.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,6 +20,7 @@
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+  2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
 
 #ifndef defines_h
@@ -311,4 +312,5 @@ IPAddress ip(192, 168, 2, 222);
 //#define DHT_TYPE      DHT11   // DHT 11
 #define DHT_TYPE        DHT22   // DHT 22  (AM2302), AM2321
 //#define DHT_TYPE      DHT21   // DHT 21 (AM2301)
+
 #endif    //defines_h
