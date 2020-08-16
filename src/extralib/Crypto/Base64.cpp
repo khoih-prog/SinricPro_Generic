@@ -2,10 +2,10 @@
 
 // KH
 #if (defined(ESP8266) || defined(ESP32))
-#include <pgmspace.h>
+  #include <pgmspace.h>
 #else
-#include <vector>
-#include <avr/pgmspace.h>
+  #include <vector>
+  #include <avr/pgmspace.h>
 #endif
 
 const char PROGMEM b64_alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

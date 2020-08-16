@@ -6,7 +6,7 @@
   
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.5.1
+  Version: 2.6.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -19,6 +19,7 @@
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+  2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
 
 #ifndef __SINRICPRODEBUG_H__
@@ -46,6 +47,7 @@
 
 //////
 
+#define SRP_LOGERROR0(x)       if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print(x); }
 #define SRP_LOGERROR(x)        if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGERROR1(x,y)     if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
 #define SRP_LOGERROR2(x,y,z)   if(_SRP_LOGLEVEL_>0) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
@@ -53,6 +55,7 @@
 
 //////
 
+#define SRP_LOGWARN0(x)        if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print(x); }
 #define SRP_LOGWARN(x)         if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGWARN1(x,y)      if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
 #define SRP_LOGWARN2(x,y,z)    if(_SRP_LOGLEVEL_>1) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
@@ -60,6 +63,7 @@
 
 //////
 
+#define SRP_LOGINFO0(x)        if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print(x); }
 #define SRP_LOGINFO(x)         if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
 #define SRP_LOGINFO1(x,y)      if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
 #define SRP_LOGINFO2(x,y,z)    if(_SRP_LOGLEVEL_>2) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
@@ -67,8 +71,8 @@
 
 //////
 
+#define SRP_LOGDEBUG0(x)       if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print(x); }
 #define SRP_LOGDEBUG(x)        if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.println(x); }
-#define SRP_LOGDEBUG0(x)       if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); }
 #define SRP_LOGDEBUG1(x,y)     if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(y); }
 #define SRP_LOGDEBUG2(x,y,z)   if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(z); }
 #define SRP_LOGDEBUG3(x,y,z,w) if(_SRP_LOGLEVEL_>3) { SRP_DEBUG_OUTPUT.print("[SRP] "); SRP_DEBUG_OUTPUT.print(x); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(y); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.print(z); SRP_DEBUG_OUTPUT.print(" "); SRP_DEBUG_OUTPUT.println(w); }

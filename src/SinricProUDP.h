@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.5.1
+  Version: 2.6.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -19,16 +19,17 @@
                                   Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+  2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  *****************************************************************************************************************************/
 
 #ifndef __SINRIC_PRO_UDP_H__
 #define __SINRIC_PRO_UDP_H__
 
 #if defined ESP8266
-#include <ESP8266WiFi.h>
+  #include <ESP8266WiFi.h>
 #endif
 #if defined ESP32
-#include <WiFi.h>
+  #include <WiFi.h>
 #endif
 
 // KH
@@ -49,11 +50,11 @@
   #endif
   //////
 #elif (WEBSOCKETS_NETWORK_TYPE == NETWORK_ENC28J60)
-#warning Use NETWORK_ENC28J60 UIPUdp in SinricProUDP
-#include <UIPUdp.h>
+  #warning Use NETWORK_ENC28J60 UIPUdp in SinricProUDP
+  #include <UIPUdp.h>
 #else
-#warning Use default WiFi in SinricProUDP
-#include <WiFiUdp.h>
+  #warning Use default WiFi in SinricProUDP
+  #include <WiFiUdp.h>
 #endif
 
 #include "SinricProQueue.h"
@@ -123,7 +124,8 @@ void udpListener::sendMessage(String &message)
 }
 
 /*
-  void udpListener::sendMessage(String &message) {
+  void udpListener::sendMessage(String &message) 
+  {
   WiFiUDP UDPsender;
   UDPsender.beginPacket(_udp.remoteIP(), _udp.remotePort());
   UDPsender.print(message);

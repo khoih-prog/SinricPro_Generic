@@ -1,5 +1,5 @@
-/****************************************************************************************************************************
-  SinricProSwitch.h - Sinric Pro Library for boards
+/*********************************************************************************************************************************
+  SinricProCamera.h - Sinric Pro Library for boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
@@ -20,31 +20,30 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
- *****************************************************************************************************************************/
+ **********************************************************************************************************************************/
 
-#ifndef _SINRICSWITCH_H_
-#define _SINRICSWITCH_H_
+#ifndef _SINRICCAMERA_H_
+#define _SINRICCAMERA_H_
 
 #include "SinricProDevice.h"
 
 /**
-   @class SinricProSwitch
-   @brief Device suporting basic on / off command
+   @class SinricProCamera
+   @brief Camera suporting basic on / off command
  **/
-class SinricProSwitch :  public SinricProDevice 
+class SinricProCamera :  public SinricProDevice 
 {
   public:
-    SinricProSwitch(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProCamera(const char* deviceId, unsigned long eventWaitTime = 100);
     
-    // From v2.5.1
     String getProductType() 
     {
-      return SinricProDevice::getProductType() + String("SWITCH"); 
+      return SinricProDevice::getProductType() + String("CAMERA");
     }
-    //////
 };
 
-SinricProSwitch::SinricProSwitch(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
+SinricProCamera::SinricProCamera(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
 
 
-#endif    //_SINRICSWITCH_H_
+#endif    // _SINRICCAMERA_H_
+

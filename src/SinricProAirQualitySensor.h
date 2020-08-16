@@ -1,5 +1,5 @@
-/****************************************************************************************************************************
-  SinricProTemperatureSensor.h - Sinric Pro Library for boards
+/*********************************************************************************************************************************
+  SinricProAirQualitySensor.h - Sinric Pro Library for boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
@@ -20,55 +20,56 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
- *****************************************************************************************************************************/
+ **********************************************************************************************************************************/
 
-#ifndef _SINRICTEMPERATURESENSOR_H_
-#define _SINRICTEMPERATURESENSOR_H_
+#ifndef _SINRICAIRQUALITYSENSOR_H_
+#define _SINRICAIRQUALITYSENSOR_H_
 
 #include "SinricProDevice.h"
 
 /**
-   @class SinricProTemperaturesensor
-   @brief Device to report actual temperature and humidity
+   @class SinricProAirQualitySensor
+   @brief Device to report air quality events
 */
-class SinricProTemperaturesensor :  public SinricProDevice 
+class SinricProAirQualitySensor :  public SinricProDevice 
 {
   public:
-    SinricProTemperaturesensor(const char* deviceId, unsigned long eventWaitTime = 60000);
+    SinricProAirQualitySensor(const char* deviceId, unsigned long eventWaitTime = 100);
     
-    // From v2.5.1
     String getProductType() 
     {
-      return SinricProDevice::getProductType() + String("TEMPERATURESENSOR"); 
+      return SinricProDevice::getProductType() + String("AIR_QUALITY_SENSOR");
     }
-    //////
 
     // event
-    bool sendTemperatureEvent(float temperature, float humidity = -1, String cause = "PERIODIC_POLL");
-
+    bool sendAirQualityEvent(int pm1 = 0, int pm2_5 = 0, int pm10 = 0, String cause = "PERIODIC_POLL");
+    
   private:
 };
 
-SinricProTemperaturesensor::SinricProTemperaturesensor(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
+SinricProAirQualitySensor::SinricProAirQualitySensor(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
 
 /**
-   @brief Sending current temperature and humidity to SinricPro server
+   @brief Sending air quality to SinricPro server
 
-   @param   temperature   float representing current temperature
-   @param   humidity      (optional) float representing current humidity (default = `-1` meaning not supported)
+   @param   pm1           1.0 μm particle pollutant in μg/m3
+   @param   pm2_5         2.5 μm particle pollutant in μg/m3
+   @param   pm10          10 μm particle pollutant in μg/m3
    @param   cause         (optional) `String` reason why event is sent (default = `"PERIODIC_POLL"`)
    @return  the success of sending the event
    @retval  true          event has been sent successfully
    @retval  false         event has not been sent, maybe you sent to much events in a short distance of time
  **/
-bool SinricProTemperaturesensor::sendTemperatureEvent(float temperature, float humidity, String cause) 
+bool SinricProAirQualitySensor::sendAirQualityEvent(int pm1, int pm2_5, int pm10, String cause) 
 {
-  DynamicJsonDocument eventMessage = prepareEvent(deviceId, "currentTemperature", cause.c_str());
+  DynamicJsonDocument eventMessage = prepareEvent(deviceId, "airQuality", cause.c_str());
   JsonObject event_value = eventMessage["payload"]["value"];
-  event_value["humidity"] = roundf(humidity * 10) / 10.0;
-  event_value["temperature"] = roundf(temperature * 10) / 10.0;
+
+  event_value["pm1"]    = limitValue(pm1, 0, 999);
+  event_value["pm2_5"]  = limitValue(pm2_5, 0, 999);
+  event_value["pm10"]   = limitValue(pm10, 0, 999);
+
   return sendEvent(eventMessage);
 }
 
-#endif    //_SINRICTEMPERATURESENSOR_H_
-
+#endif    // _SINRICAIRQUALITYSENSOR_H_
