@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  Blinds.ino
+  AirQualitySensor_GP2Y1014AU0F.ino
   For ESP32/ESP8266 boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -22,9 +22,11 @@
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
-
+ 
 /*
-   Example for how to use SinricPro Blinds device
+   Example for how to use SinricPro Air Quality Sensor with Sharp Dust Sensor (GP2Y1014AU0F) connected to WemosD1 Mini
+   More information is here
+   https://github.com/sharpsensoruser/sharp-sensor-demos/wiki/Application-Guide-for-Sharp-GP2Y1014AU0F-Dust-Sensor
 
    If you encounter any issues:
    - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
@@ -44,10 +46,12 @@
 //#define ENABLE_DEBUG
 
 #ifdef ENABLE_DEBUG
-  #define DEBUG_ESP_PORT Serial
-  #define NODEBUG_WEBSOCKETS
-  #define NDEBUG
+#define DEBUG_ESP_PORT Serial
+#define NODEBUG_WEBSOCKETS
+#define NDEBUG
 #endif
+
+#include <GP2YDustSensor.h> // https://github.com/luciansabo/GP2YDustSensor
 
 #if (ESP8266)
   #include <ESP8266WiFi.h>
@@ -56,39 +60,28 @@
 #endif
 
 #include "SinricPro_Generic.h"
-#include "SinricProBlinds.h"
+#include "SinricProAirQualitySensor.h"
 
-#define WIFI_SSID         "YOUR-WIFI-SSID"
-#define WIFI_PASS         "YOUR-WIFI-PASSWORD"
-#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-#define BLINDS_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-#define BAUD_RATE         115200              // Change baudrate to your need
+#define WIFI_SSID         ""
+#define WIFI_PASS         ""
+#define APP_KEY           ""      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
+#define APP_SECRET        ""      // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
+#define DEVICE_ID         ""      // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define BAUD_RATE         115200  // Change baudrate to your need
 
-int blindsPosition = 0;
-bool powerState = false;
+// Air quality sensor event dispatch time.  Min is every 1 min.
+#define MIN (1000UL * 60 * 1)
+unsigned long dispatchTime = millis() + MIN;
 
-bool onPowerState(const String &deviceId, bool &state) 
-{
-  Serial.printf("Device %s power turned %s \r\n", deviceId.c_str(), state ? "on" : "off");
-  powerState = state;
-  return true; // request handled properly
-}
+#if (ESP32)
+  #define SHARP_LED_PIN           5             // Pin D5 mapped to pin GPIO5/SPISS/VSPI_SS of ESP32
+  #define SHARP_VO_PIN            32            // Pin D32 mapped to pin GPIO32/ADC4/TOUCH9 of ESP32 for analog input
+#elif (ESP8266)
+  #define SHARP_LED_PIN           5             // Pin D5 mapped to pin GPIO14/HSCLK of ESP8266
+  #define SHARP_VO_PIN            A0            // pin A0 of ESP8266 for analog input
+#endif
 
-bool onSetPosition(const String &deviceId, int &position) 
-{
-  Serial.printf("Device %s set position to %d\r\n", deviceId.c_str(), position);
-  return true; // request handled properly
-}
-
-bool onAdjustPosition(const String &deviceId, int &positionDelta) 
-{
-  blindsPosition += positionDelta;
-  Serial.printf("Device %s position changed about %i to %d\r\n", deviceId.c_str(), positionDelta, blindsPosition);
-  positionDelta = blindsPosition; // calculate and return absolute position
-  
-  return true; // request handled properly
-}
+GP2YDustSensor dustSensor(GP2YDustSensorType::GP2Y1014AU0F, SHARP_LED_PIN, SHARP_VO_PIN);
 
 // setup function for WiFi connection
 void setupWiFi() 
@@ -106,13 +99,13 @@ void setupWiFi()
   Serial.println(WiFi.localIP());
 }
 
+// setup function for SinricPro
 void setupSinricPro() 
 {
-  // get a new Blinds device from SinricPro
-  SinricProBlinds &myBlinds = SinricPro[BLINDS_ID];
-  myBlinds.onPowerState(onPowerState);
-  myBlinds.onSetPosition(onSetPosition);
-  myBlinds.onAdjustPosition(onAdjustPosition);
+  // add device to SinricPro
+  SinricProAirQualitySensor& mySinricProAirQualitySensor = SinricPro[DEVICE_ID];
+
+  // set callback function to device
 
   // setup SinricPro
   SinricPro.onConnected([]() 
@@ -128,13 +121,19 @@ void setupSinricPro()
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
-// main setup function
+void setupDustSensor() 
+{
+  //dustSensor.setBaseline(0.4); // set no dust voltage according to your own experiments
+  //dustSensor.setCalibrationFactor(1.1); // calibrate against precision instrument
+  dustSensor.begin();
+}
+
 void setup() 
 {
   Serial.begin(BAUD_RATE); 
   while (!Serial);
   
-  Serial.println("\nStarting Blinds on " + String(ARDUINO_BOARD));
+  Serial.println("\nStarting AirQualitySensor_GP2Y1014AU0F on " + String(ARDUINO_BOARD));
   
   setupWiFi();
   setupSinricPro();
@@ -143,4 +142,24 @@ void setup()
 void loop() 
 {
   SinricPro.handle();
+
+  if ((long)(millis() - dispatchTime) >= 0) 
+  {
+    Serial.print("Dust density: ");
+    Serial.print(dustSensor.getDustDensity());
+    Serial.print(" ug/m3; Running average: ");
+    Serial.print(dustSensor.getRunningAverage());
+    Serial.println(" ug/m3");
+
+    SinricProAirQualitySensor &mySinricProAirQualitySensor = SinricPro[DEVICE_ID]; // get air q sensor device
+
+    int pm1 = 0;
+    int pm2_5 = dustSensor.getRunningAverage();
+    int pm10 = 0;
+
+    mySinricProAirQualitySensor.sendAirQualityEvent(pm1, pm2_5, pm10, "PERIODIC_POLL");
+    dispatchTime += MIN;
+
+    Serial.println("Sending Air Quality event ..");
+  }
 }

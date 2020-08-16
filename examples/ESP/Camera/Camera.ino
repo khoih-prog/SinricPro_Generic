@@ -1,3 +1,28 @@
+/****************************************************************************************************************************
+  Camera.ino
+  For ESP32/ESP8266 boards
+
+  Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
+  to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
+
+  Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
+  Licensed under MIT license
+  Version: 2.6.1
+
+  Copyright (c) 2019 Sinric. All rights reserved.
+  Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
+
+  This file is part of the Sinric Pro (https://github.com/sinricpro/)
+
+  Version Modified By   Date      Comments
+  ------- -----------  ---------- -----------
+  2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
+                                  Feather, Gemma, Trinket, Hallowing Metro M0/M4, NRF52840 Feather, Itsy-Bitsy, STM32, etc.
+  2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
+                                  Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
+  2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+ **********************************************************************************************************************************/
+ 
 /*
 
    Example for how to use SinricPro Camera device:
@@ -33,10 +58,10 @@
 #include <WebServer.h>
 #include <WiFiClient.h>
 
-#include "SinricPro.h"
-#include "SinricProSwitch.h"
+#include "SinricPro_Generic.h"
+#include "SinricProCamera.h"
 
-// To install Micro-RTSP library (https://github.com/geeksville/Micro-RTSP)
+// Micro-RTSP from https://github.com/geeksville/Micro-RTSP 
 #include "SimStreamer.h"
 #include "OV2640Streamer.h"
 #include "CRtspSession.h"
@@ -51,12 +76,13 @@
 
 #include "select_pins.h"
 
-#define WIFI_SSID  "YOUR-WIFI-SSID"
-#define WIFI_PASSWD "YOUR-WIFI-PASSWORD"
+#define WIFI_SSID         "YOUR-WIFI-SSID"
+#define WIFI_PASSWD       "YOUR-WIFI-PASSWORD"
 
 #define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx". Get it from https://portal.sinric.pro/ -> Credentials
 #define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx" . Get it from https://portal.sinric.pro/ -> Credentials
 #define CAMERA_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx". Get it from https://portal.sinric.pro/ -> Devices
+#define BAUD_RATE         115200              // Change baudrate to your need
 
 OV2640 cam;
 CStreamer *streamer;
@@ -81,20 +107,20 @@ bool onPowerState(const String &deviceId, bool &state)
 void setupSinricPro()
 {
   // add device to SinricPro
-  SinricProSwitch& mySwitch = SinricPro[CAMERA_ID];
+  SinricProCamera& mySwitch = SinricPro[CAMERA_ID];
 
   // set callback function to device
   mySwitch.onPowerState(onPowerState);
 
   // setup SinricPro
-  SinricPro.onConnected([]()
+  SinricPro.onConnected([]() 
   {
-    Serial.printf("Connected to SinricPro\r\n");
+    Serial.println("Connected to SinricPro");
   });
-
-  SinricPro.onDisconnected([]()
+  
+  SinricPro.onDisconnected([]() 
   {
-    Serial.printf("Disconnected from SinricPro\r\n");
+    Serial.println("Disconnected from SinricPro");
   });
 
   SinricPro.begin(APP_KEY, APP_SECRET);
@@ -118,9 +144,8 @@ void setupWiFi()
     Serial.print(".");
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
+  Serial.println("\nWiFi connected");
+  Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 }
 
@@ -128,7 +153,8 @@ void setupCamera()
 {
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
-  config.ledc_timer = LEDC_TIMER_0;
+  config.ledc_timer   = LEDC_TIMER_0;
+  
   config.pin_d0 = Y2_GPIO_NUM;
   config.pin_d1 = Y3_GPIO_NUM;
   config.pin_d2 = Y4_GPIO_NUM;
@@ -137,14 +163,15 @@ void setupCamera()
   config.pin_d5 = Y7_GPIO_NUM;
   config.pin_d6 = Y8_GPIO_NUM;
   config.pin_d7 = Y9_GPIO_NUM;
-  config.pin_xclk = XCLK_GPIO_NUM;
-  config.pin_pclk = PCLK_GPIO_NUM;
-  config.pin_vsync = VSYNC_GPIO_NUM;
-  config.pin_href = HREF_GPIO_NUM;
+  
+  config.pin_xclk     = XCLK_GPIO_NUM;
+  config.pin_pclk     = PCLK_GPIO_NUM;
+  config.pin_vsync    = VSYNC_GPIO_NUM;
+  config.pin_href     = HREF_GPIO_NUM;
   config.pin_sscb_sda = SIOD_GPIO_NUM;
   config.pin_sscb_scl = SIOC_GPIO_NUM;
-  config.pin_pwdn = PWDN_GPIO_NUM;
-  config.pin_reset = RESET_GPIO_NUM;
+  config.pin_pwdn     = PWDN_GPIO_NUM;
+  config.pin_reset    = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG; //PIXFORMAT_YUV422 PIXFORMAT_GRAYSCALE PIXFORMAT_RGB565 PIXFORMAT_JPEG
 
@@ -161,6 +188,7 @@ void setupCamera()
   if (psramFound())
   {
     Serial.println("psram found");
+    
     config.frame_size = FRAMESIZE_UXGA;
     config.jpeg_quality = 40; //10-63 lower number means higher quality
     config.fb_count = 2;
@@ -207,7 +235,8 @@ void handleStreaming()
 
       if (now > lastimage + msecPerFrame)
       {
-        printf("warning exceeding max frame rate of %d ms\n", now - lastimage);
+        printf("Warning exceeding max frame rate of %d ms\n", now - lastimage);
+        Serial.printf("Warning exceeding max frame rate of %d ms\n", now - lastimage);
       }
     }
   }
@@ -217,16 +246,18 @@ void handleStreaming()
   if (rtspClient)
   {
     Serial.print("client: ");
-    Serial.print(rtspClient.remoteIP());
-    Serial.println();
+    Serial.println(rtspClient.remoteIP());
+
     streamer->addSession(rtspClient);
   }
 }
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   while (!Serial);            //wait for serial connection.
+
+  Serial.println("\nStarting Camera on " + String(ARDUINO_BOARD));
 
   setupCamera();
   setupWiFi();

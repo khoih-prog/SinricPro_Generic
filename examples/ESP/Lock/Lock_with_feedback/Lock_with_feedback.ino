@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  GarageDoor.ino
+  Lock_with_feedback.ino
   For ESP32/ESP8266 boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -23,17 +23,22 @@
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
 /*
- * Example for Garage Door device
- * 
- * If you encounter any issues:
- * - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
- * - ensure all dependent libraries are installed
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
- * - open serial monitor and check whats happening
- * - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
- * - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
- */
+   Example for smart lock with feedback
+
+   The lock must give a feedback signal on pin defined in LOCK_STATE_PIN
+   Alternative: Use a contact sensor, indicating the current lock state
+   HIGH on LOCK_STATE_PIN means lock is locked
+   LOW on LOCK_STATE_PIN means lock is unlocked
+
+   If you encounter any issues:
+   - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
+   - ensure all dependent libraries are installed
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
+   - open serial monitor and check whats happening
+   - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
+   - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
+*/
 
 #if !(defined(ESP8266) || defined(ESP32))
   #error This code is intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
@@ -55,20 +60,47 @@
 #endif
 
 #include "SinricPro_Generic.h"
-#include "SinricProGarageDoor.h"
+#include "SinricProLock.h"
 
-#define WIFI_SSID         "YOUR_WIFI_SSID"    
+#define WIFI_SSID         "YOUR_WIFI_SSID"
 #define WIFI_PASS         "YOUR_WIFI_PASSWORD"
 #define APP_KEY           "YOUR_APP_KEY_HERE"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
 #define APP_SECRET        "YOUR_APP_SECRET_HERE"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-#define GARAGEDOOR_ID     "YOUR_DEVICE_ID_HERE"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define LOCK_ID           "YOUR_DEVICE_ID_HERE"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 #define BAUD_RATE         115200                   // Change baudrate to your need
 
+// LOCK_PIN where the lock is connected to: HIGH = locked, LOW = unlocked
+// LOCK_STATE_PIN where the lock feedback is connected to (HIGH:locked, LOW:unlocked)
+#if (ESP32)
+  #define LOCK_PIN                  1              // Pin D1 mapped to pin GPIO1/TX0 of ESP32
+  #define LOCK_STATE_PIN            2              // Pin D2 mapped to pin GPIO2/ADC12/TOUCH2 of ESP32
+#elif (ESP8266)
+  #define LOCK_PIN                  5              // Pin D1 mapped to pin GPIO5 of ESP8266
+  #define LOCK_STATE_PIN            4              // Pin D2 mapped to pin GPIO4 of ESP8266
+#endif
 
-bool onDoorState(const String& deviceId, bool &doorState) 
+bool lastLockState;
+
+bool onLockState(String deviceId, bool &lockState) 
 {
-  Serial.printf("Garagedoor is %s now.\r\n", doorState?"closed":"open");
+  Serial.printf("Device %s is %s\r\n", deviceId.c_str(), lockState ? "locked" : "unlocked");
+  digitalWrite(LOCK_PIN, lockState);
+  
   return true;
+}
+
+void checkLockState() 
+{
+  bool currentLockState = digitalRead(LOCK_STATE_PIN);                                    // get current lock state
+  
+  if (currentLockState == lastLockState) 
+    return;                                                                               // do nothing if state didn't changed
+    
+  Serial.printf("Lock has been %s manually\r\n", currentLockState ? "locked" : "unlocked"); // print current lock state to serial
+  
+  lastLockState = currentLockState;                                                       // update last known lock state
+  SinricProLock &myLock = SinricPro[LOCK_ID];                                             // get the LockDevice
+  myLock.sendLockStateEvent(currentLockState);                                            // update LockState on Server
 }
 
 // setup function for WiFi connection
@@ -89,8 +121,8 @@ void setupWiFi()
 
 void setupSinricPro() 
 {
-  SinricProGarageDoor &myGarageDoor = SinricPro[GARAGEDOOR_ID];
-  myGarageDoor.onDoorState(onDoorState);
+  SinricProLock &myLock = SinricPro[LOCK_ID];
+  myLock.onLockState(onLockState);
 
   // setup SinricPro
   SinricPro.onConnected([]() 
@@ -112,8 +144,11 @@ void setup()
   Serial.begin(BAUD_RATE); 
   while (!Serial);
   
-  Serial.println("\nStarting GarageDoor on " + String(ARDUINO_BOARD));
-  
+  Serial.println("\nStarting Lock_with_feedback on " + String(ARDUINO_BOARD));
+
+  pinMode(LOCK_PIN, OUTPUT);
+  pinMode(LOCK_STATE_PIN, INPUT);
+
   setupWiFi();
   setupSinricPro();
 }
@@ -121,4 +156,5 @@ void setup()
 void loop() 
 {
   SinricPro.handle();
+  checkLockState();
 }

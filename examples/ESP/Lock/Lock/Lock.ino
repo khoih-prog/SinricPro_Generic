@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  GarageDoor.ino
+  Lock.ino
   For ESP32/ESP8266 boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -23,17 +23,17 @@
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
  **********************************************************************************************************************************/
 /*
- * Example for Garage Door device
- * 
- * If you encounter any issues:
- * - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
- * - ensure all dependent libraries are installed
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
- * - open serial monitor and check whats happening
- * - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
- * - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
- */
+   Example for smart lock
+
+   If you encounter any issues:
+   - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
+   - ensure all dependent libraries are installed
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
+   - open serial monitor and check whats happening
+   - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
+   - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
+*/
 
 #if !(defined(ESP8266) || defined(ESP32))
   #error This code is intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
@@ -55,19 +55,19 @@
 #endif
 
 #include "SinricPro_Generic.h"
-#include "SinricProGarageDoor.h"
+#include "SinricProLock.h"
 
-#define WIFI_SSID         "YOUR_WIFI_SSID"    
+#define WIFI_SSID         "YOUR_WIFI_SSID"
 #define WIFI_PASS         "YOUR_WIFI_PASSWORD"
 #define APP_KEY           "YOUR_APP_KEY_HERE"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
 #define APP_SECRET        "YOUR_APP_SECRET_HERE"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-#define GARAGEDOOR_ID     "YOUR_DEVICE_ID_HERE"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define LOCK_ID           "YOUR_DEVICE_ID_HERE"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 #define BAUD_RATE         115200                   // Change baudrate to your need
 
 
-bool onDoorState(const String& deviceId, bool &doorState) 
+bool onLockState(String deviceId, bool &lockState) 
 {
-  Serial.printf("Garagedoor is %s now.\r\n", doorState?"closed":"open");
+  Serial.printf("Device %s is %s\r\n", deviceId.c_str(), lockState ? "locked" : "unlocked");
   return true;
 }
 
@@ -89,8 +89,8 @@ void setupWiFi()
 
 void setupSinricPro() 
 {
-  SinricProGarageDoor &myGarageDoor = SinricPro[GARAGEDOOR_ID];
-  myGarageDoor.onDoorState(onDoorState);
+  SinricProLock &myLock = SinricPro[LOCK_ID];
+  myLock.onLockState(onLockState);
 
   // setup SinricPro
   SinricPro.onConnected([]() 
@@ -112,7 +112,7 @@ void setup()
   Serial.begin(BAUD_RATE); 
   while (!Serial);
   
-  Serial.println("\nStarting GarageDoor on " + String(ARDUINO_BOARD));
+  Serial.println("\nStarting Lock on " + String(ARDUINO_BOARD));
   
   setupWiFi();
   setupSinricPro();
