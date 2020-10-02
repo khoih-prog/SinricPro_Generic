@@ -6,7 +6,7 @@
   "authors": [
     {
       "name": "Boris Jaeger",
-      "email": "sivar2311@gmail.com",
+      "email": "sivar2311@gmail.com"
     },
     {
       "name":  "Khoi Hoang",
@@ -18,7 +18,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/khoih-prog/SinricPro_Generic"
-  },  
+  },
+  "homepage": "https://github.com/khoih-prog/SinricPro_Generic",
+  "export": {
+    "exclude": [
+      "linux",
+      "extras",
+      "tests"
+    ]
+  },
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino",
