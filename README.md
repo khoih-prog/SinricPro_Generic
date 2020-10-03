@@ -5,6 +5,8 @@
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
+[![star this repo](https://githubbadges.com/star.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic)
+[![fork this repo](https://githubbadges.com/fork.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic/fork)
 
 ---
 ---
@@ -51,7 +53,7 @@
 
 ## Prerequisite
 
- 1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`ESP32 core 1.0.4+`](https://github.com/espressif/arduino-esp32/releases) for ESP32 boards
  4. [`ESP8266 core 2.7.4+` for Arduino](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS.
@@ -168,22 +170,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
+ 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
 
-Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
+ 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
 
-Supposing the Seeeduino SAMD core version is 1.7.8. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -224,14 +226,20 @@ theses files must be copied into the corresponding directory:
 - [w5100.cpp](LibraryPatches/EthernetLarge/src/utility/w5100.cpp)
 
 4. To fix [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2), just copy these following files into the [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) directory to overwrite the old files:
+
 - [Ethernet2.h](LibraryPatches/Ethernet2/src/Ethernet2.h)
 - [Ethernet2.cpp](LibraryPatches/Ethernet2/src/Ethernet2.cpp)
+
+To add UDP Multicast support, necessary for this [**MDNS_Generic library**](https://github.com/khoih-prog/MDNS_Generic):
+
+- [EthernetUdp2.h](LibraryPatches/Ethernet2/src/EthernetUdp2.h)
+- [EthernetUdp2.cpp](LibraryPatches/Ethernet2/src/EthernetUdp2.cpp)
 
 5. To fix [`Ethernet3 library`](https://github.com/sstaub/Ethernet3), just copy these following files into the [`Ethernet3 library`](https://github.com/sstaub/Ethernet3) directory to overwrite the old files:
 - [Ethernet3.h](LibraryPatches/Ethernet3/src/Ethernet3.h)
 - [Ethernet3.cpp](LibraryPatches/Ethernet3/src/Ethernet3.cpp)
 
-6. **To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library**, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+6. ***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
 - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
 - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
@@ -240,6 +248,7 @@ theses files must be copied into the corresponding directory:
 
 7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
+
 
 ---
 
@@ -1121,7 +1130,7 @@ Submit issues to: [SinricPro_Generic issues](https://github.com/khoih-prog/Sinri
   <tr>
     <td align="center"><a href="https://github.com/sivar2311"><img src="https://github.com/sivar2311.png" width="100px;" alt="sivar2311"/><br /><sub><b>⭐️ Boris Jaeger</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/kakopappa"><img src="https://github.com/kakopappa.png" width="100px;" alt="kakopappa"/><br /><sub><b>⭐️ Aruna Tennakoon</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>tcpipchip</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>Miguel Wisintainer</b></sub></a><br /></td>
   </tr> 
 </table>
 
