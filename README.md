@@ -81,22 +81,23 @@
 ## Installation
 
 ### Use Arduino Library Manager
-The best and easiest way is to use `Arduino Library Manager`. Search for `SinricPro_Generic`, then select / install the latest version.
+The best and easiest way is to use `Arduino Library Manager`. Search for [**SinricPro_Generic**](https://github.com/khoih-prog/SinricPro_Generic), then select / install the latest version.
 You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/SinricPro_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic) for more detailed instructions.
 
 ### Manual Install
 
 Another way to install is to:
 
-1. Navigate to [SinricPro_Generic](https://github.com/khoih-prog/SinricPro_Generic) page.
+1. Navigate to [**SinricPro_Generic**](https://github.com/khoih-prog/SinricPro_Generic) page.
 2. Download the latest release `SinricPro_Generic-master.zip`.
 3. Extract the zip file to `SinricPro_Generic-master` directory 
 4. Copy whole `SinricPro_Generic-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO:
+
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **SinricPro_Generic** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for SinricPro_Generic in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**SinricPro_Generic** library](https://platformio.org/lib/show/11243/SinricPro_Generic) by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for SinricPro_Generic in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 
@@ -290,7 +291,7 @@ To know the default CS/SS pins of not listed boards, check the related `variant.
 ---
 
 ## Full user documentation
-Please see here for [full user documentation](https://sinricpro.github.io/esp8266-esp32-sdk)
+Please see here for [**Full User Documentation**](https://sinricpro.github.io/esp8266-esp32-sdk)
 
 ---
 
@@ -426,11 +427,12 @@ Syntax is
 ## How to retrieve a device for sending an event?
 
 Syntax is
+
 ```C++
   DeviceType& myDevice = SinricPro[DEVICE_ID];
 ```
 
-####Example 1
+#### Example 1
 
 ```C++
   SinricProDoorbell& myDoorbell = SinricPro["YOUR-DOORBELL-ID-HERE"];
@@ -1149,7 +1151,7 @@ If you want to contribute to this project:
 
 ### License and credits ###
 
-- All credits go to original author [Boris Jaeger](https://github.com/sivar2311).
+- All credits go to original author [**Boris Jaeger**](https://github.com/sivar2311).
 
 - The library is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by/2.0/) and [MIT](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
 
