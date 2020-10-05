@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  doorbell.ino
+  WeMosD1_mini_relay_shield.ino
   For ESP32/ESP8266 boards
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
@@ -24,9 +24,11 @@
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  **********************************************************************************************************************************/
 /*
-   Example for how to use SinricPro Doorbell device:
-   - setup a doorbell device
-   - send event to sinricPro server if button is pressed
+   Example shows how to use D1 mini with a relay shield.
+
+   Use WeMos D1 Mini board from Tools -> Boards
+
+   Relay shield: https://docs.wemos.cc/en/latest/d1_mini_shiled/relay.html
 
    If you encounter any issues:
    - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
@@ -38,94 +40,89 @@
    - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
 */
 
-#if !(defined(ESP8266) || defined(ESP32))
-  #error This code is intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
-#endif
-
 // Uncomment the following line to enable serial debug output
 //#define ENABLE_DEBUG
 
 #ifdef ENABLE_DEBUG
-  #define DEBUG_ESP_PORT Serial
+  #define DEBUG_ESP_PORT      Serial
   #define NODEBUG_WEBSOCKETS
   #define NDEBUG
 #endif
 
-#if (ESP8266)
+#include <Arduino.h>
+#ifdef ESP8266
   #include <ESP8266WiFi.h>
-#elif (ESP32)
+#endif
+
+#ifdef ESP32
   #include <WiFi.h>
 #endif
 
 #include "SinricPro_Generic.h"
-#include "SinricProDoorbell.h"
+#include "SinricProSwitch.h"
 
 #define WIFI_SSID         "YOUR-WIFI-SSID"
 #define WIFI_PASS         "YOUR-WIFI-PASSWORD"
 #define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
 #define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-#define DOORBELL_ID       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define SWITCH_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 #define BAUD_RATE         115200              // Change baudrate to your need
 
+#define RELAY_PIN         D1                  // * Relay Shield transistor closes relay when D1 is HIGH
 
-// change this to your button PIN
-// on NodeMCU D3 / GPIO-0 is flash button PIN so you can use the builtin flash button
-#define BUTTON_PIN 0
+bool myPowerState = false;
 
-// checkButtonpress
-// reads if BUTTON_PIN gets LOW and send Event
-void checkButtonPress() 
+/* bool onPowerState(String deviceId, bool &state)
+
+   Callback for setPowerState request
+   parameters
+    String deviceId (r)
+      contains deviceId (useful if this callback used by multiple devices)
+    bool &state (r/w)
+      contains the requested state (true:on / false:off)
+      must return the new state
+
+   return
+    true if request should be marked as handled correctly / false if not
+*/
+bool onPowerState(const String &deviceId, bool &state) 
 {
-  static unsigned long lastBtnPress;
-  unsigned long actualMillis = millis();
-
-  if (actualMillis - lastBtnPress > 500) 
-  {
-    if (digitalRead(BUTTON_PIN) == LOW) 
-    {
-      Serial.println("Ding dong...");
-      lastBtnPress = actualMillis;
-
-      // get Doorbell device back
-      SinricProDoorbell& myDoorbell = SinricPro[DOORBELL_ID];
-
-      // send doorbell event
-      myDoorbell.sendDoorbellEvent();
-    }
-  }
+  Serial.printf("Device %s turned %s (via SinricPro) \r\n", deviceId.c_str(), state ? "on" : "off");
+  myPowerState = state;
+  digitalWrite(RELAY_PIN, myPowerState ? HIGH : LOW);
+  return true; // request handled properly
 }
 
 // setup function for WiFi connection
 void setupWiFi() 
 {
-  Serial.print("\n[Wifi]: Connecting");
+  Serial.printf("\r\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
   while (WiFi.status() != WL_CONNECTED) 
   {
-    Serial.print(".");
+    Serial.printf(".");
     delay(250);
   }
   
-  Serial.print("\n[WiFi]: IP-Address is ");
-  Serial.println(WiFi.localIP());
+  Serial.printf("connected!\r\n[WiFi]: IP-Address is %s\r\n", WiFi.localIP().toString().c_str());
 }
 
 // setup function for SinricPro
 void setupSinricPro() 
 {
-  // add doorbell device to SinricPro
-  SinricPro.add<SinricProDoorbell>(DOORBELL_ID);
-  
+  // add device to SinricPro
+  SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
+
   // setup SinricPro
   SinricPro.onConnected([]() 
   {
-    Serial.println("Connected to SinricPro");
+    Serial.printf("Connected to SinricPro\r\n");
   });
   
   SinricPro.onDisconnected([]() 
   {
-    Serial.println("Disconnected from SinricPro");
+    Serial.printf("Disconnected from SinricPro\r\n");
   });
   
   SinricPro.begin(APP_KEY, APP_SECRET);
@@ -134,19 +131,14 @@ void setupSinricPro()
 // main setup function
 void setup() 
 {
-  pinMode(BUTTON_PIN, INPUT_PULLUP); // BUTTIN_PIN as INPUT
+  pinMode(RELAY_PIN, OUTPUT); // define Relay GPIO as output
 
-  Serial.begin(BAUD_RATE); 
-  while (!Serial);
-  
-  Serial.println("\nStarting doorbell on " + String(ARDUINO_BOARD));
-  
+  Serial.begin(BAUD_RATE); Serial.printf("\r\n\r\n");
   setupWiFi();
   setupSinricPro();
 }
 
 void loop() 
 {
-  checkButtonPress();
   SinricPro.handle();
 }
