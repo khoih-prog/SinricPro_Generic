@@ -133,7 +133,11 @@ void setup()
 {
   pinMode(RELAY_PIN, OUTPUT); // define Relay GPIO as output
 
-  Serial.begin(BAUD_RATE); Serial.printf("\r\n\r\n");
+  Serial.begin(BAUD_RATE); 
+  while (!Serial);
+  
+  Serial.println("\nStarting WeMosD1_mini_relay_shield on " + String(ARDUINO_BOARD));
+  
   setupWiFi();
   setupSinricPro();
 }
