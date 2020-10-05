@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICPOWERSENSOR_H_
-#define _SINRICPOWERSENSOR_H_
+#ifndef _SINRIC_PRO_POWERSENSOR_H_
+#define _SINRIC_PRO_POWERSENSOR_H_
 
 #include "SinricProDevice.h"
 
@@ -34,7 +35,7 @@
 class SinricProPowerSensor :  public SinricProDevice
 {
   public:
-    SinricProPowerSensor(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProPowerSensor(const DeviceId &deviceId);
     
     // From v2.5.1
     String getProductType() 
@@ -45,14 +46,16 @@ class SinricProPowerSensor :  public SinricProDevice
     
     // event
     bool sendPowerSensorEvent(float voltage, float current, float power = -1.0f, float apparentPower = -1.0f, float reactivePower = -1.0f, float factor = -1.0f, String cause = "PERIODIC_POLL");
+    
   private:
     unsigned long startTime = 0;
     unsigned long lastPower = 0;
+    
   protected:
     float getWattHours(unsigned long currentTimestamp);
 };
 
-SinricProPowerSensor::SinricProPowerSensor(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
+SinricProPowerSensor::SinricProPowerSensor(const DeviceId &deviceId) : SinricProDevice(deviceId) {}
 
 /**
    @brief Send PowerSensor event to SinricPro Server
@@ -87,10 +90,11 @@ bool SinricProPowerSensor::sendPowerSensorEvent(float voltage, float current, fl
   event_value["apparentPower"] = apparentPower;
   event_value["reactivePower"] = reactivePower;
   event_value["factor"]        = factor;
-  event_value["wattHours"]      = getWattHours(currentTimestamp);
+  event_value["wattHours"]     = getWattHours(currentTimestamp);
 
   startTime = currentTimestamp;
   lastPower = power;
+  
   return sendEvent(eventMessage);
 }
 
@@ -102,4 +106,4 @@ float SinricProPowerSensor::getWattHours(unsigned long currentTimestamp)
   return 0;
 }
 
-#endif    //_SINRICPOWERSENSOR_H_
+#endif    //_SINRIC_PRO_POWERSENSOR_H_

@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICGARAGEDOOR_H_
-#define _SINRICGARAGEDOOR_H_
+#ifndef _SINRIC_PRO_GARAGEDOOR_H_
+#define _SINRIC_PRO_GARAGEDOOR_H_
 
 #include "SinricProDevice.h"
 
@@ -37,7 +38,7 @@
 class SinricProGarageDoor :  public SinricProDevice
 {
   public:
-    SinricProGarageDoor(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProGarageDoor(const DeviceId &deviceId);
     
     // From v2.5.1
     String getProductType() 
@@ -69,19 +70,21 @@ class SinricProGarageDoor :  public SinricProDevice
     bool sendPowerStateEvent() = delete; // SinricProGarageDoor has no powerState
 
     // handle
-    bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    
   private:
     DoorStateCallback doorStateCallback;
 };
 
-SinricProGarageDoor::SinricProGarageDoor(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime),
+SinricProGarageDoor::SinricProGarageDoor(const DeviceId &deviceId) : SinricProDevice(deviceId),
   doorStateCallback(nullptr)
 {
 }
 
-bool SinricProGarageDoor::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProGarageDoor::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+                                        JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   if (SinricProDevice::handleRequest(deviceId, action, request_value, response_value))
@@ -101,7 +104,7 @@ bool SinricProGarageDoor::handleRequest(const char* deviceId, const char* action
     if (modeStr == "Close")
       mode = true;
 
-    success = doorStateCallback(String(deviceId), mode);
+    success = doorStateCallback(deviceId, mode);
 
     if (mode == false)
       modeStr = "Open";
@@ -144,5 +147,5 @@ bool SinricProGarageDoor::sendDoorStateEvent(bool state, String cause)
   return sendEvent(eventMessage);
 }
 
-#endif    //_SINRICGARAGEDOOR_H_
+#endif    //_SINRIC_PRO_GARAGEDOOR_H_
 

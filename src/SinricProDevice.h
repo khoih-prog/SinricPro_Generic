@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,13 +20,15 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  **********************************************************************************************************************************/
 
-#ifndef _SINRICDEVICE_H_
-#define _SINRICDEVICE_H_
+#ifndef _SINRIC_PRO_DEVICE_H_
+#define _SINRIC_PRO_DEVICE_H_
 
 #include "SinricProDeviceInterface.h"
 #include "LeakyBucket.h"
+#include "SinricProId.h"
 
 #include <map>
 
@@ -40,25 +42,13 @@
 class SinricProDevice : public SinricProDeviceInterface
 {
   public:
-    SinricProDevice(const char* newDeviceId, unsigned long eventWaitTime = 100);
+    SinricProDevice(const DeviceId &deviceId);
     virtual ~SinricProDevice();
-    virtual const char* getDeviceId();
+    virtual DeviceId getDeviceId();
     // From v2.5.1
     virtual String getProductType();
     //////
     virtual void begin(SinricProInterface* eventSender);
-
-    virtual void setEventWaitTime(unsigned long eventWaitTime)
-    {
-      if (eventWaitTime < 100)
-      {
-        this->eventWaitTime = 100;
-      }
-      else
-      {
-        this->eventWaitTime = eventWaitTime;
-      }
-    }
 
     // callback definitions
     /**
@@ -77,7 +67,7 @@ class SinricProDevice : public SinricProDeviceInterface
     typedef std::function<bool(const String&, bool&)> PowerStateCallback;
 
     // standard request handler
-    virtual bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value);
+    virtual bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value);
 
     // standard Callbacks
     virtual void onPowerState(PowerStateCallback cb);
@@ -87,48 +77,42 @@ class SinricProDevice : public SinricProDeviceInterface
 
   protected:
     virtual bool sendEvent(JsonDocument& event);
-    virtual DynamicJsonDocument prepareEvent(const char* deviceId, const char* action, const char* cause);
+    virtual DynamicJsonDocument prepareEvent(const DeviceId &deviceId, const char* action, const char* cause);
     unsigned long getTimestamp();
-    char* deviceId;
+    DeviceId deviceId;
     PowerStateCallback powerStateCallback;
     // From v2.5.1
     template <typename T> T limitValue(T value, T minValue, T maxValue);
     //////
+    
   private:
     SinricProInterface* eventSender;
-    unsigned long eventWaitTime;
     std::map<String, LeakyBucket_t> eventFilter;
 };
 
-SinricProDevice::SinricProDevice(const char* newDeviceId, unsigned long eventWaitTime) :
+SinricProDevice::SinricProDevice(const DeviceId &deviceId) : 
+  deviceId(deviceId),
   powerStateCallback(nullptr),
-  eventSender(nullptr),
-  eventWaitTime(eventWaitTime)
-{
-  deviceId = strdup(newDeviceId);
-
-  if (this->eventWaitTime < 100)
-    this->eventWaitTime = 100;
-}
+  eventSender(nullptr)
+{}
 
 SinricProDevice::~SinricProDevice()
-{
-  if (deviceId) free(deviceId);
-}
+{}
 
 void SinricProDevice::begin(SinricProInterface* eventSender)
 {
   this->eventSender = eventSender;
 }
 
-const char* SinricProDevice::getDeviceId()
+DeviceId SinricProDevice::getDeviceId()
 {
   return deviceId;
 }
 
-bool SinricProDevice::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProDevice::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+                                    JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   SRP_LOGDEBUG("SinricProDevice::handleRequest()");
@@ -138,19 +122,21 @@ bool SinricProDevice::handleRequest(const char* deviceId, const char* action, Js
   if (actionString == "setPowerState" && powerStateCallback)
   {
     bool powerState = request_value["state"] == "On" ? true : false;
-    success = powerStateCallback(String(deviceId), powerState);
+    success = powerStateCallback(deviceId, powerState);
     response_value["state"] = powerState ? "On" : "Off";
     return success;
   }
+  
   return success;
 }
 
-DynamicJsonDocument SinricProDevice::prepareEvent(const char* deviceId, const char* action, const char* cause)
+DynamicJsonDocument SinricProDevice::prepareEvent(const DeviceId &deviceId, const char* action, const char* cause)
 {
   if (eventSender)
     return eventSender->prepareEvent(deviceId, action, cause);
 
-  SRP_LOGDEBUG3("SinricProDevice:prepareEvent(): Not configured correctly Device= ", deviceId, ". Ignored event= ", action);
+  SRP_LOGDEBUG3("SinricProDevice:prepareEvent(): Not configured correctly Device =", deviceId.toString(), ". Ignored event =", action);
+  
   return DynamicJsonDocument(1024);
 }
 
@@ -248,4 +234,4 @@ String SinricProDevice::getProductType()
 }
 //////
 
-#endif    //_SINRICDEVICE_H_
+#endif    //_SINRIC_PRO_DEVICE_H_

@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,6 +20,7 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
 #ifndef _SINRICCONTACTSENSOR_H_
@@ -34,7 +35,7 @@
 class SinricProContactsensor :  public SinricProDevice 
 {
   public:
-    SinricProContactsensor(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProContactsensor(const DeviceId &deviceId);
     
     // From v2.5.1
     virtual String getProductType() 
@@ -49,7 +50,7 @@ class SinricProContactsensor :  public SinricProDevice
   private:
 };
 
-SinricProContactsensor::SinricProContactsensor(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime) {}
+SinricProContactsensor::SinricProContactsensor(const DeviceId &deviceId) : SinricProDevice(deviceId) {}
 
 /**
    \brief Send `setContactState` event to SinricPro Server indicating actual power state

@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICFANUS_H_
-#define _SINRICFANUS_H_
+#ifndef _SINRIC_PRO_FANUS_H_
+#define _SINRIC_PRO_FANUS_H_
 
 #define FAN_US_MIN_RANGE      1
 #define FAN_US_MAX_RANGE      3
@@ -37,7 +38,7 @@
 class SinricProFanUS :  public SinricProDevice
 {
   public:
-    SinricProFanUS(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProFanUS(const DeviceId &deviceId);
     
     // From v2.5.1
     String getProductType() 
@@ -88,19 +89,20 @@ class SinricProFanUS :  public SinricProDevice
     bool sendRangeValueEvent(int rangeValue, String cause = "PHYSICAL_INTERACTION");
 
     // handle
-    bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
     
   private:
     SetRangeValueCallback setRangeValueCallback;
     AdjustRangeValueCallback adjustRangeValueCallback;
 };
 
-SinricProFanUS::SinricProFanUS(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime),
+SinricProFanUS::SinricProFanUS(const DeviceId &deviceId) : SinricProDevice(deviceId),
   setRangeValueCallback(nullptr) {}
 
-bool SinricProFanUS::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProFanUS::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+                                   JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   if (SinricProDevice::handleRequest(deviceId, action, request_value, response_value))
@@ -112,7 +114,7 @@ bool SinricProFanUS::handleRequest(const char* deviceId, const char* action, Jso
   if (actionString == "setRangeValue" && setRangeValueCallback)
   {
     int rangeValue = request_value["rangeValue"] | 0;
-    success = setRangeValueCallback(String(deviceId), rangeValue);
+    success = setRangeValueCallback(deviceId, rangeValue);
     
     // Mod From v2.5.1
     response_value["rangeValue"] = limitValue(rangeValue, FAN_US_MIN_RANGE, FAN_US_MAX_RANGE);
@@ -124,7 +126,7 @@ bool SinricProFanUS::handleRequest(const char* deviceId, const char* action, Jso
   if (actionString == "adjustRangeValue" && adjustRangeValueCallback)
   {
     int rangeValueDelta = request_value["rangeValueDelta"] | 0;
-    success = adjustRangeValueCallback(String(deviceId), rangeValueDelta);
+    success = adjustRangeValueCallback(deviceId, rangeValueDelta);
     
     // Mod From v2.5.1
     response_value["rangeValue"] = limitValue(rangeValueDelta, FAN_US_MIN_RANGE, FAN_US_MAX_RANGE);
@@ -175,5 +177,5 @@ bool SinricProFanUS::sendRangeValueEvent(int rangeValue, String cause)
   return sendEvent(eventMessage);
 }
 
-#endif    //_SINRICFANUS_H_
+#endif    //_SINRIC_PRO_FANUS_H_
 

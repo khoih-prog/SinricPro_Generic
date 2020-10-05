@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  **********************************************************************************************************************************/
 
-#ifndef _SINRICPRO_WEBSOCKET_H__
-#define _SINRICPRO_WEBSOCKET_H__
+#ifndef _SINRIC_PRO_WEBSOCKET_H__
+#define _SINRIC_PRO_WEBSOCKET_H__
 
 #if defined ESP8266
 #include <ESP8266WiFi.h>
@@ -44,6 +45,31 @@
 #include "SinricProConfig.h"
 #include "SinricProQueue.h"
 #include "SinricProInterface.h"
+
+// New from v2.7.0
+class AdvWebSocketsClient : public WebSocketsClient 
+{
+  public:
+    void onPong(std::function<void(uint32_t)> cb) 
+    { 
+      _rttCb = cb; 
+    }
+    
+  protected:
+    void messageReceived(WSclient_t * client, WSopcode_t opcode, uint8_t * payload, size_t length, bool fin) 
+    {
+      if ((opcode == WSop_pong)&& (_rttCb)) 
+      {
+        _rttCb(millis()-_client.lastPing);
+      }
+      
+      WebSocketsClient::messageReceived(client, opcode, payload, length, fin);
+    }
+    
+  private:
+    std::function<void(uint32_t)> _rttCb = nullptr;
+};
+//////
 
 class websocketListener
 {
@@ -89,7 +115,9 @@ class websocketListener
     bool _isConnected = false;
     bool restoreDeviceStates = false;
 
-    WebSocketsClient webSocket;
+    // New from v2.7.0
+    AdvWebSocketsClient webSocket;
+    //////
 
     wsConnectedCallback _wsConnectedCb;
     wsDisconnectedCallback _wsDisconnectedCb;
@@ -179,7 +207,11 @@ void websocketListener::setExtraHeaders()
 
 
   headers += "version:" + String(SINRICPRO_VERSION);
-  SRP_LOGDEBUG1("Websocket: headers:\n", headers);
+  
+  SRP_LOGINFO0("Websocket: headers:\n");
+  SRP_LOGINFO0(headers);
+  SRP_LOGINFO0("\n");
+  
   webSocket.setExtraHeaders(headers.c_str());
 }
 
@@ -202,9 +234,9 @@ void websocketListener::begin(String server, String socketAuthToken, String devi
   this->deviceIds = deviceIds;
 
 #ifdef WEBSOCKET_SSL
-  SRP_LOGDEBUG1("Websocket: Connecting SSL to WebSocket Server: ", server);
+  SRP_LOGINFO1("Websocket: Connecting SSL to WebSocket Server: ", server);
 #else
-  SRP_LOGDEBUG1("Websocket: Connecting to WebSocket Server: ", server);
+  SRP_LOGINFO1("Websocket: Connecting to WebSocket Server: ", server);
 #endif
 
   if (_isConnected)
@@ -285,4 +317,4 @@ void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t 
   }
 }
 
-#endif    //_SINRICPRO_WEBSOCKET_H__
+#endif    //_SINRIC_PRO_WEBSOCKET_H__

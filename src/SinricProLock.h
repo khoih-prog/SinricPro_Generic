@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICLOCK_H_
-#define _SINRICLOCK_H_
+#ifndef _SINRIC_PRO_LOCK_H_
+#define _SINRIC_PRO_LOCK_H_
 
 #include "SinricProDevice.h"
 
@@ -38,7 +39,7 @@
 class SinricProLock :  public SinricProDevice
 {
   public:
-    SinricProLock(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProLock(const DeviceId &deviceId);
     
     // From v2.5.1
     String getProductType() 
@@ -68,7 +69,7 @@ class SinricProLock :  public SinricProDevice
        }
        @endcode
      **/
-    typedef std::function<bool(const String&, bool&)> LockStateCallback; // void onLockState(const char* deviceId, bool& lockState);
+    typedef std::function<bool(const String&, bool&)> LockStateCallback; // void onLockState(const DeviceId &deviceId, bool& lockState);
 
     void onLockState(LockStateCallback cb);
     void onPowerState() = delete;  // SinricProLock has no powerState
@@ -77,17 +78,19 @@ class SinricProLock :  public SinricProDevice
     bool sendLockStateEvent(bool state, String cause = "PHYSICAL_INTERACTION");
 
     // handle
-    bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    
   private:
     LockStateCallback lockStateCallback;
 };
 
-SinricProLock::SinricProLock(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime),
+SinricProLock::SinricProLock(const DeviceId &deviceId) : SinricProDevice(deviceId),
   lockStateCallback(nullptr) {}
 
-bool SinricProLock::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProLock::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+                                  JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   bool success = false;
@@ -96,7 +99,7 @@ bool SinricProLock::handleRequest(const char* deviceId, const char* action, Json
   if (actionString == "setLockState" && lockStateCallback)
   {
     bool lockState = request_value["state"] == "lock" ? true : false;
-    success = lockStateCallback(String(deviceId), lockState);
+    success = lockStateCallback(deviceId, lockState);
     response_value["state"] = success ? lockState ? "LOCKED" : "UNLOCKED" : "JAMMED";
     return success;
   }
@@ -131,5 +134,5 @@ bool SinricProLock::sendLockStateEvent(bool state, String cause)
   state ? event_value["state"] = "LOCKED" : event_value["state"] = "UNLOCKED";
   return sendEvent(eventMessage);
 }
-#endif    //_SINRICLOCK_H_
+#endif    //_SINRIC_PRO_LOCK_H_
 

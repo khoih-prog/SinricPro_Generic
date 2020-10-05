@@ -5,17 +5,24 @@
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
+
 [![star this repo](https://githubbadges.com/star.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic)
 [![fork this repo](https://githubbadges.com/fork.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic/fork)
 
 ---
 ---
 
-### Releases v2.6.1
+### Releases v2.7.0
 
-1. Bump up to sync with v2.6.1 of original [SinricPro library](https://github.com/sinricpro/esp8266-esp32-sdk) to add AirQualitySensor, Camera Class.
+1. Sync with v2.7.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) : Added AppKey, AppSecret and DeviceId classes.
+2. Add function to measure the RTT between device and SinricPro Server (SinricPro.onPong())
+3. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
 
-### Releases v2.5.1
+#### Releases v2.6.1
+
+1. Sync with v2.6.1 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) to add AirQualitySensor, Camera Class.
+
+#### Releases v2.5.1
 
 1. Add support to :
 
@@ -29,12 +36,12 @@
 3. Add sample Packages_Patches for **STM32 stm32** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8)
 4. Add Ethernet Library Patches to support **new WebSockets headers.**
 5. Add more Packages' Patches.
-6. Bump up to sync with v2.5.1 of original [SinricPro library](https://github.com/sinricpro/esp8266-esp32-sdk) to add Speaker SelectInput and ESP32 Camera.
+6. Sync with v2.5.1 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
 8. Add Packages' Patches for Arduino SAMD21 to fix compiler error issue for Nano-33-IoT, ZERO, MKR, etc.
 9. Fix Teensy compiler issue for [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html)
 
-### Releases v2.4.0
+#### Releases v2.4.0
 
 1. Add support to :
 
@@ -46,7 +53,7 @@
   - **STM32 (Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.)**.
   - **SAM DUE**
   
-2. Bump up to sync with v2.4.0 of original SinricPro library
+2. Bump up to sync with v2.4.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk)
 
 ---
 ---
@@ -64,8 +71,8 @@
  9. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
 10. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. To install go to Arduino IDE, select Boards Manager, search for **`STM32`**
 11. [`Seeeduino SAMD core 1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
-12. [`ArduinoJson Version 6.16.1+`](https://github.com/bblanchon/ArduinoJson)
-13. [`WebSockets_Generic Version 2.2.3+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+12. [`ArduinoJson v6.16.1+`](https://github.com/bblanchon/ArduinoJson)
+13. [`WebSockets_Generic v2.2.3+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 14. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library).
@@ -97,7 +104,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**SinricPro_Generic** library](https://platformio.org/lib/show/11243/SinricPro_Generic) by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for SinricPro_Generic in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**SinricPro_Generic** library](https://platformio.org/lib/show/11243/SinricPro_Generic) by using [**Library Manager**](https://platformio.org/lib/show/11243/SinricPro_Generic/installation). Search for [**SinricPro_Generic**](https://platformio.org/lib/show/11243/SinricPro_Generic) in [Platform.io **Author's Libraries**](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 
@@ -240,17 +247,27 @@ To add UDP Multicast support, necessary for this [**MDNS_Generic library**](http
 - [Ethernet3.h](LibraryPatches/Ethernet3/src/Ethernet3.h)
 - [Ethernet3.cpp](LibraryPatches/Ethernet3/src/Ethernet3.cpp)
 
-6. ***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+6. **To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library**, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
-- [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
-- [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
-- [Enc28J60Network.h](LibraryPatches/UIPEthernet/utility/Enc28J60Network.h)
-- [Enc28J60Network.cpp](LibraryPatches/UIPEthernet/utility/Enc28J60Network.cpp)
+- For [UIPEthernet v2.0.8](https://github.com/UIPEthernet/UIPEthernet)
+
+  - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
+  - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
+  - [Enc28J60Network.h](LibraryPatches/UIPEthernet/utility/Enc28J60Network.h)
+  - [Enc28J60Network.cpp](LibraryPatches/UIPEthernet/utility/Enc28J60Network.cpp)
+
+- For [UIPEthernet v2.0.9](https://github.com/UIPEthernet/UIPEthernet)
+
+  - [UIPEthernet.h](LibraryPatches/UIPEthernet-2.0.9/UIPEthernet.h)
+  - [UIPEthernet.cpp](LibraryPatches/UIPEthernet-2.0.9/UIPEthernet.cpp)
+  - [Enc28J60Network.h](LibraryPatches/UIPEthernet-2.0.9/utility/Enc28J60Network.h)
+  - [Enc28J60Network.cpp](LibraryPatches/UIPEthernet-2.0.9/utility/Enc28J60Network.cpp)
 
 7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
 
 
+---
 ---
 
 ### Important Notes
@@ -302,7 +319,7 @@ See [Many examples](https://github.com/khoih-prog/SinricPro_Generic/tree/master/
 
 ### Examples for ESP32/ESP8266
 
-[ESP32/ESP8266 examples](https://github.com/khoih-prog/SinricPro_Generic/tree/master/examples/ESP)
+#### [ESP32/ESP8266 examples](https://github.com/khoih-prog/SinricPro_Generic/tree/master/examples/ESP)
 
  1. [AirQualitySensor](examples/ESP/AirQualitySensor)
  2. [Blinds](examples/ESP/Blinds)
@@ -354,8 +371,9 @@ Each item is a directory containing many examples designed for different kinds o
 21. [TV](examples/Generic/TV)
 
 ---
+---
 
-## HOWTO Usage
+### HOWTO Usage
 
 #### Include SinricPro-Library (SinricPro_Generic.h) and SinricPro-Device-Libraries (eg. SinricProSwitch.h)
 
@@ -402,7 +420,7 @@ bool onPowerState(const String &deviceId, bool &state)
 
 ---
 
-## HOWTO Add a device
+### HOWTO Add a device
 
 Syntax is
 
@@ -424,7 +442,7 @@ Syntax is
 
 ---
 
-## How to retrieve a device for sending an event?
+### How to retrieve a device for sending an event?
 
 Syntax is
 
@@ -870,6 +888,7 @@ IPAddress ip(192, 168, 2, 222);
 ```
 
 ---
+---
 
 ### Debug Terminal Output Samples
 
@@ -1030,6 +1049,280 @@ Connected to SinricPro
 ```
 
 ---
+
+#### 6. Debug terminal output (_SRP_LOGLEVEL_ = 3) when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on Adafruit nRF52 NRF52840_FEATHER with W5500 Ethernet using EthernetLarge Library
+
+```
+Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
+[SRP] =========== USE_ETHERNET_LARGE ===========
+[SRP] Default SPI pinout:
+[SRP] MOSI: 25
+[SRP] MISO: 24
+[SRP] SCK: 26
+[SRP] SS: 5
+[SRP] =========================
+[SRP] Use default CS/SS pin :  10
+Index = 6
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
+W5100::init: W5500, SSIZE =8192
+Connected!
+[Ethernet]: IP-Address is 192.168.2.97
+[SRP] Creating new device. No Device = 123456789012345678901234
+[SRP] add(): Adding DeviceId = 123456789012345678901234
+[SRP] begin(): App-Key = 12345678-1234-1234-1234-123456789012
+[SRP] begin(): App-Secret = 12345678-1234-1234-1234-123456789012-12345678-1234-1234-1234-123456789012
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+Websocket: headers:
+appkey:12345678-1234-1234-1234-123456789012
+deviceids:123456789012345678901234
+restoredevicestates:false
+ip:192.168.2.87
+mac:DE:AD:BE:EF:FE:0B
+platform:NRF52840_FEATHER
+version:2.7.0
+Connected to SinricPro
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601877066
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601877184
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601877184,
+    "deviceAttributes": [],
+    "deviceId": "123456789012345678901234",
+    "replyToken": "1068f321-1ad6-4750-a089-f73e56502044",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "/3hvMknpWRtzgNcD41s94YMLzPrA/gj1BIUihcRajjk="
+  }
+}
+Device 123456789012345678901234 power turned off
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601877184,
+    "deviceId": "123456789012345678901234",
+    "message": "OK",
+    "replyToken": "1068f321-1ad6-4750-a089-f73e56502044",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "DS4Lby1xXXiM7OBe3cphs2G+1HaN6Z9T8crcRRA4avc="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+
+```
+
+---
+
+#### 7. Debug terminal output (_SRP_LOGLEVEL_ = 3) when running [Generic_Ethernet_Blinds](examples/Generic/Speaker/Generic_Ethernet_Speaker) on STM32F7 Nucleo-144 NUCLEO_F767ZI with W5500 Ethernet using Ethernet2 Library
+
+```
+Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
+Index = 0
+Connected!
+[Ethernet]: IP-Address is 192.168.2.84
+[SRP] Creating new device. No current DeviceId = 123456789012345678901234
+[SRP] add(): Adding DeviceId = 123456789012345678901234
+[SRP] begin(): App-Key = 12345678-1234-1234-1234-123456789012
+[SRP] begin(): App-Secret = 12345678-1234-1234-1234-123456789012-12345678-1234-1234-1234-123456789012
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+Websocket: headers:
+appkey:12345678-1234-1234-1234-123456789012
+deviceids:123456789012345678901234
+restoredevicestates:false
+ip:192.168.2.84
+mac:DE:AD:BE:EF:FE:01
+platform:NUCLEO_F767ZI
+version:2.7.0
+Connected to SinricPro
+
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601879732
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601879782
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setVolume",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879782,
+    "deviceAttributes": [],
+    "deviceId": "123456789012345678901234",
+    "replyToken": "7c989b3f-84aa-4462-8f3d-1a29c04c7df0",
+    "type": "request",
+    "value": {
+      "volume": 45
+    }
+  },
+  "signature": {
+    "HMAC": "J27eUYEZJ+pQyzG5uC1+w/2jz8SKGU4LcP5snSb0KF4="
+  }
+}
+Volume set to: 45
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setVolume",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879782,
+    "deviceId": "123456789012345678901234",
+    "message": "OK",
+    "replyToken": "7c989b3f-84aa-4462-8f3d-1a29c04c7df0",
+    "success": true,
+    "type": "response",
+    "value": {
+      "volume": 45
+    }
+  },
+  "signature": {
+    "HMAC": "mYoFZxZ//yKd3BU/TWs56rKoM+lcdZsxVs1ql0/1XM4="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601879790
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879790,
+    "deviceAttributes": [],
+    "deviceId": "123456789012345678901234",
+    "replyToken": "0069ff67-31ee-4e6e-a647-a054617a2061",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "kx6ZtXl1DUNMIXCmlcBO5ni8NN9w1CLaM8hSIESM9fM="
+  }
+}
+Speaker turned off
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879790,
+    "deviceId": "123456789012345678901234",
+    "message": "OK",
+    "replyToken": "0069ff67-31ee-4e6e-a647-a054617a2061",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "qiI38SI0ulIJKXR/R/Zm9n6Uhd3HlNmX2vto9DkDah8="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1601879793
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879793,
+    "deviceAttributes": [],
+    "deviceId": "123456789012345678901234",
+    "replyToken": "d4d1d50c-9c44-40fa-943c-84c40c0d7550",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "49poW0mpG3CZUs8UJ48EF6eAw8mz09jcfGRy2Xob86w="
+  }
+}
+Speaker turned on
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1601879793,
+    "deviceId": "123456789012345678901234",
+    "message": "OK",
+    "replyToken": "d4d1d50c-9c44-40fa-943c-84c40c0d7550",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "msDcqzA0tGgzJOB0uAeaiIEFvPSQ3ACTZPmk+lMty5o="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+
+```
+
+---
 ---
 
 ### Devices
@@ -1055,11 +1348,19 @@ Connected to SinricPro
 ---
 ---
 
-### Releases v2.6.1
+## Releases
 
-1. Bump up to sync with v2.6.1 of original [SinricPro library](https://github.com/sinricpro/esp8266-esp32-sdk) to add AirQualitySensor, Camera Class.
+### Releases v2.7.0
 
-### Releases v2.5.1
+1. Sync with v2.7.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) : Added AppKey, AppSecret and DeviceId classes.
+2. Add function to measure the RTT between device and SinricPro Server (SinricPro.onPong())
+3. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
+
+#### Releases v2.6.1
+
+1. Sync with v2.6.1 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) to add AirQualitySensor, Camera Class.
+
+#### Releases v2.5.1
 
 1. Add support to :
 
@@ -1073,24 +1374,24 @@ Connected to SinricPro
 3. Add sample Packages_Patches for **STM32 stm32** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8)
 4. Add Ethernet Library Patches to support **new WebSockets headers.**
 5. Add more Packages' Patches.
-6. Bump up to sync with v2.5.1 of original SinricPro library to add Speaker SelectInput and ESP32 Camera.
+6. Sync with v2.5.1 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) to add Speaker SelectInput and ESP32 Camera.
 7. Restructure examples.
 8. Add Packages' Patches for Arduino SAMD21 to fix compiler error issue for Nano-33-IoT, ZERO, MKR, etc.
 9. Fix Teensy compiler issue for [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html)
 
-### Releases v2.4.0
+#### Releases v2.4.0
 
 1. Add support to :
 
-  - **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)**.
+  - **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)**.
   - **Adafruit SAM21 (Itsy-Bitsy M0, Metro M0, Feather M0, Gemma M0, etc.)**.
   - **Adafruit SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
-  - **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**.
+  - **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox etc.**.
   - **Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0.**
   - **STM32 (Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.)**.
   - **SAM DUE**
   
-2. Bump up to sync with v2.4.0 of original SinricPro library
+2. Bump up to sync with v2.4.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk)
 
 ---
 
@@ -1101,6 +1402,7 @@ Connected to SinricPro
 3. Support more types of Ethernet modules/shields, such as **LAN8742A, LAN8720, etc.**
 4. Support more types of WiFi modules/shields, such as WiFi101, **ESP8266-AT, ESP32-AT**
 5. Support **GSM/GPRS** modules/shields.
+6. Support ENC28J60 Ethernet modules/shields, using new [EthernetENC](https://github.com/jandrassy/EthernetENC) library.
 
 ### DONE
 
@@ -1118,14 +1420,14 @@ Connected to SinricPro
 
 ### Issues
 
-Submit issues to: [SinricPro_Generic issues](https://github.com/khoih-prog/SinricPro_Generic/issues)
+Submit issues to: [**SinricPro_Generic issues**](https://github.com/khoih-prog/SinricPro_Generic/issues)
 
 ---
 
 ### Contributions and thanks
 
-1. Based on and modified from [Boris Jaeger's](https://github.com/sivar2311) [SinricPro library](https://github.com/sinricpro/esp8266-esp32-sdk) which is written for only ESP8266 and ESP32. 
-2. Also thanks to the good [Sinric](https://sinric.com)/[SinricPro](https://sinric.pro) platform of [Aruna Tennakoon](https://github.com/kakopappa)
+1. Based on and modified from [Boris Jaeger's](https://github.com/sivar2311) [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) which is written for only ESP8266 and ESP32. 
+2. Also thanks to the good [**Sinric**](https://sinric.com)/[**SinricPro**](https://sinric.pro) platform of [Aruna Tennakoon](https://github.com/kakopappa)
 3. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially **U-Blox B302 running as nRF52840 and U-Box B112 running as nRF52832**, has never been started and finished.
 
 <table>
@@ -1151,7 +1453,7 @@ If you want to contribute to this project:
 
 ### License and credits ###
 
-- All credits go to original author [**Boris Jaeger**](https://github.com/sivar2311).
+- Most of the credits go to original author [**Boris Jaeger**](https://github.com/sivar2311).
 
 - The library is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by/2.0/) and [MIT](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
 

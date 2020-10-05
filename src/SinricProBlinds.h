@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  **********************************************************************************************************************************/
 
-#ifndef _SINRICBLINDS_H_
-#define _SINRICBLINDS_H_
+#ifndef _SINRIC_PRO_BLINDS_H_
+#define _SINRIC_PRO_BLINDS_H_
 
 #include "SinricProDevice.h"
 
@@ -42,10 +43,10 @@
 class SinricProBlinds :  public SinricProDevice
 {
   public:
-    SinricProBlinds(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProBlinds(const DeviceId &deviceId);
     
     // From v2.5.1
-    virtual String getProductType() 
+    String getProductType() 
     { 
       return SinricProDevice::getProductType() + String("BLIND"); 
     }
@@ -88,21 +89,22 @@ class SinricProBlinds :  public SinricProDevice
     bool sendPositionEvent(int position, String cause = "PHYSICAL_INTERACTION");
 
     // handle
-    bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    
   private:
     SetPositionCallback setPositionCallback;
     AdjustPositionCallback adjustPositionCallback;
 };
 
-SinricProBlinds::SinricProBlinds(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime),
+SinricProBlinds::SinricProBlinds(const DeviceId &deviceId) : SinricProDevice(deviceId),
   setPositionCallback(nullptr),
   adjustPositionCallback(nullptr)
 {
 }
 
-bool SinricProBlinds::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProBlinds::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   if (SinricProDevice::handleRequest(deviceId, action, request_value, response_value))
@@ -114,7 +116,7 @@ bool SinricProBlinds::handleRequest(const char* deviceId, const char* action, Js
   if (actionString == "setRangeValue" && setPositionCallback)
   {
     int position = request_value["rangeValue"] | 0;
-    success = setPositionCallback(String(deviceId), position);
+    success = setPositionCallback(deviceId, position);
     // Mod From v2.5.1
     response_value["rangeValue"] = limitValue(position, BLINDS_MIN_RANGE, BLINDS_MAX_RANGE);
     return success;
@@ -123,7 +125,7 @@ bool SinricProBlinds::handleRequest(const char* deviceId, const char* action, Js
   if (actionString == "adjustRangeValue" && adjustPositionCallback)
   {
     int positionDelta = request_value["rangeValueDelta"] | 0;
-    success = adjustPositionCallback(String(deviceId), positionDelta);
+    success = adjustPositionCallback(deviceId, positionDelta);
     // Mod From v2.5.1
     response_value["rangeValue"] = limitValue(positionDelta, BLINDS_MIN_RANGE, BLINDS_MAX_RANGE);
     return success;
@@ -172,5 +174,5 @@ bool SinricProBlinds::sendPositionEvent(int position, String cause)
   return sendEvent(eventMessage);
 }
 
-#endif    //_SINRICBLINDS_H_
+#endif    //_SINRIC_PRO_BLINDS_H_
 

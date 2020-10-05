@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,27 +20,30 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICPRODEVICEINTERFACE_
-#define _SINRICPRODEVICEINTERFACE_
+#ifndef _SINRIC_PRO_DEVICEINTERFACE_
+#define _SINRIC_PRO_DEVICEINTERFACE_
 
 #include <SinricProInterface.h>
+#include <SinricProId.h>
 
 class SinricProDeviceInterface
 {
   public:
-    virtual bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) = 0;
-    virtual const char* getDeviceId() = 0;
+    virtual bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) = 0;
+    virtual DeviceId getDeviceId() = 0;
     
     // From v2.5.1
     virtual String getProductType() = 0;
     //////
     
     virtual void begin(SinricProInterface* eventSender) = 0;
+    
   protected:
     virtual bool sendEvent(JsonDocument& event) = 0;
-    virtual DynamicJsonDocument prepareEvent(const char* deviceId, const char* action, const char* cause) = 0;
+    virtual DynamicJsonDocument prepareEvent(const DeviceId &deviceId, const char* action, const char* cause) = 0;
 };
 
-#endif    //_SINRICPRODEVICEINTERFACE_
+#endif    //_SINRIC_PRO_DEVICEINTERFACE_

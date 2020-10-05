@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.6.1
+  Version: 2.7.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -20,10 +20,11 @@
   2.5.1   K Hoang      02/08/2020 Add support to STM32F/L/H/G/WB/MP1. Add debug feature, examples. Restructure examples.
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
+  2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
  *****************************************************************************************************************************/
 
-#ifndef _SINRICSPEAKER_H_
-#define _SINRICSPEAKER_H_
+#ifndef _SINRIC_PRO_SPEAKER_H_
+#define _SINRIC_PRO_SPEAKER_H_
 
 #include "SinricProDevice.h"
 
@@ -56,7 +57,7 @@
 class SinricProSpeaker :  public SinricProDevice
 {
   public:
-    SinricProSpeaker(const char* deviceId, unsigned long eventWaitTime = 100);
+    SinricProSpeaker(const DeviceId &deviceId);
     
     // From v2.5.1
     String getProductType() 
@@ -233,22 +234,27 @@ class SinricProSpeaker :  public SinricProDevice
     bool sendVolumeEvent(int volume, String cause = "PHYSICAL_INTERACTION");
     bool sendMuteEvent(bool mute, String cause = "PHYSICAL_INTERACTION");
     bool sendMediaControlEvent(String mediaControl, String cause = "PHYSICAL_INTERACTION");
+    
     // From v2.5.1
     bool sendSelectInputEvent(String intput, String cause = "PHYSICAL_INTERACTION");
     //////
+    
     bool sendBandsEvent(String bands, int level, String cause = "PHYSICAL_INTERACTION");
     bool sendModeEvent(String mode, String cause = "PHYSICAL_INTERACTION");
+    
     // handle
-    bool handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
     
   private:
     SetVolumeCallback volumeCallback;
     AdjustVolumeCallback adjustVolumeCallback;
     MuteCallback muteCallback;
     MediaControlCallback mediaControlCallback;
+    
     // From v2.5.1
     SelectInputCallback selectInputCallback;
     //////
+    
     SetBandsCallback setBandsCallback;
     AdjustBandsCallback adjustBandsCallback;
     ResetBandsCallback resetBandsCallback;
@@ -256,7 +262,7 @@ class SinricProSpeaker :  public SinricProDevice
 };
 
 
-SinricProSpeaker::SinricProSpeaker(const char* deviceId, unsigned long eventWaitTime) : SinricProDevice(deviceId, eventWaitTime),
+SinricProSpeaker::SinricProSpeaker(const DeviceId &deviceId) : SinricProDevice(deviceId),
   volumeCallback(nullptr),
   adjustVolumeCallback(nullptr),
   muteCallback(nullptr),
@@ -268,9 +274,10 @@ SinricProSpeaker::SinricProSpeaker(const char* deviceId, unsigned long eventWait
 {
 }
 
-bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, JsonObject &request_value, JsonObject &response_value)
+bool SinricProSpeaker::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+                                     JsonObject &response_value)
 {
-  if (strcmp(deviceId, this->deviceId) != 0)
+  if (deviceId != this->deviceId)
     return false;
 
   if (SinricProDevice::handleRequest(deviceId, action, request_value, response_value))
@@ -282,44 +289,51 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
   if (volumeCallback && actionString == "setVolume")
   {
     int volume = request_value["volume"];
-    success = volumeCallback(String(deviceId), volume);
+    success = volumeCallback(deviceId, volume);
+    
     // From v2.5.1
     response_value["volume"] = limitValue(volume, SPEAKER_MIN_VOLUME_LEVEL, SPEAKER_MAX_VOLUME_LEVEL);
     //////
+    
     return success;
   }
 
   if (adjustVolumeCallback && actionString == "adjustVolume")
   {
     int volume = request_value["volume"];
-    success = adjustVolumeCallback(String(deviceId), volume);
+    success = adjustVolumeCallback(deviceId, volume);
+    
     // From v2.5.1
     response_value["volume"] = limitValue(volume, SPEAKER_MIN_VOLUME_LEVEL, SPEAKER_MAX_VOLUME_LEVEL);
     //////
+    
     return success;
   }
 
   if (muteCallback && actionString == "setMute")
   {
     bool mute = request_value["mute"];
-    success = muteCallback(String(deviceId), mute);
+    success = muteCallback(deviceId, mute);
     response_value["mute"] = mute;
+    
     return success;
   }
 
   if (setModeCallback && actionString == "setMode")
   {
     String mode = request_value["mode"] | "";
-    success = setModeCallback(String(deviceId), mode);
+    success = setModeCallback(deviceId, mode);
     response_value["mode"] = mode;
+    
     return success;
   }
 
   if (mediaControlCallback && actionString == "mediaControl")
   {
     String mediaControl = request_value["control"];
-    success = mediaControlCallback(String(deviceId), mediaControl);
+    success = mediaControlCallback(deviceId, mediaControl);
     response_value["control"] = mediaControl;
+    
     return success;
   }
   
@@ -327,8 +341,9 @@ bool SinricProSpeaker::handleRequest(const char* deviceId, const char* action, J
   if (selectInputCallback && actionString == "selectInput") 
   {
     String input = request_value["input"];
-    success = selectInputCallback(String(deviceId), input);
+    success = selectInputCallback(deviceId, input);
     response_value["input"] = input;
+    
     return success;
   }
   //////
@@ -598,5 +613,5 @@ bool SinricProSpeaker::sendBandsEvent(String bands, int level, String cause)
   return sendEvent(eventMessage);
 }
 
-#endif    //_SINRICSPEAKER_H_
+#endif    //_SINRIC_PRO_SPEAKER_H_
 
