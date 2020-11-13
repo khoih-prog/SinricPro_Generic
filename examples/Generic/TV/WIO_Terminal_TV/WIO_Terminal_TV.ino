@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-  SAMD_WiFiNINA_TV.ino
-  For Arduino SAMD21, Adafruit SAMD21, SAMD51 boards, running WiFiNINA
+  WIO_Terminal_TV.ino
+  For WIO Terminal boards, running RTL8720DN WiFi, using Seeed_Arduino_rpcWiFi and Seeed_Arduino_rpcUnified libraries
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
@@ -32,7 +32,7 @@ bool tvMuted;
 // please put in your TV channel names
 // channel numbers starts counting from 0!
 // so "CBC" is channel 2
-const char* channelNames[] = 
+const char* channelNames[] =
 {
   "A/V",
   "CTV",
@@ -54,9 +54,9 @@ const char* channelNames[] =
 // This map is initialized in "setupChannelNumbers()" function by using the "channelNames" array
 std::map<String, unsigned int> channelNumbers;
 
-void setupChannelNumbers() 
+void setupChannelNumbers()
 {
-  for (unsigned int i = 0; i < MAX_CHANNELS; i++) 
+  for (unsigned int i = 0; i < MAX_CHANNELS; i++)
   {
     channelNumbers[channelNames[i]] = i;
   }
@@ -67,30 +67,30 @@ void setupChannelNumbers()
 bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
 {
   tvVolume += volumeDelta;  // calcualte new absolute volume
-  
+
   Serial.println("Volume changed about " + String(volumeDelta) + " to " + String(tvVolume));
-  
+
   volumeDelta = tvVolume; // return new absolute volume
   return true;
 }
 
-bool onChangeChannel(const String &deviceId, String &channel) 
+bool onChangeChannel(const String &deviceId, String &channel)
 {
   tvChannel = channelNumbers[channel]; // save new channelNumber in tvChannel variable
-  
+
   Serial.println("Change channel to \"" + channel + "\" / channel number " + String(tvChannel));
-  
+
   return true;
 }
 
-bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& channelName) 
+bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& channelName)
 {
   tvChannel = channelNumber; // update tvChannel to new channel number
-  
-  if (tvChannel < 0) 
+
+  if (tvChannel < 0)
     tvChannel = 0;
-    
-  if (tvChannel > MAX_CHANNELS - 1) 
+
+  if (tvChannel > MAX_CHANNELS - 1)
     tvChannel = MAX_CHANNELS - 1;
 
   channelName = channelNames[tvChannel]; // return the channelName
@@ -99,10 +99,10 @@ bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& ch
   return true;
 }
 
-bool onMediaControl(const String &deviceId, String &control) 
+bool onMediaControl(const String &deviceId, String &control)
 {
   Serial.println("MediaControl: " + control);
-  
+
   if (control == "Play") {}           // do whatever you want to do here
   if (control == "Pause") {}          // do whatever you want to do here
   if (control == "Stop") {}           // do whatever you want to do here
@@ -114,43 +114,43 @@ bool onMediaControl(const String &deviceId, String &control)
   return true;
 }
 
-bool onMute(const String &deviceId, bool &mute) 
+bool onMute(const String &deviceId, bool &mute)
 {
   Serial.println("TV volume is " + String(mute ? "muted" : "unmuted"));
   tvMuted = mute; // set tvMuted state
   return true;
 }
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("TV turned " + String(state ? "on" : "off"));
   tvPowerState = state; // set powerState
   return true;
 }
 
-bool onSelectInput(const String &deviceId, String &input) 
+bool onSelectInput(const String &deviceId, String &input)
 {
   Serial.println("Input changed to " + input);
   return true;
 }
 
-bool onSetVolume(const String &deviceId, int &volume) 
+bool onSetVolume(const String &deviceId, int &volume)
 {
   Serial.println("Volume set to:  " + String(volume));
   tvVolume = volume; // update tvVolume
   return true;
 }
 
-bool onSkipChannels(const String &deviceId, const int channelCount, String &channelName) 
+bool onSkipChannels(const String &deviceId, const int channelCount, String &channelName)
 {
   tvChannel += channelCount; // calculate new channel number
-  
-  if (tvChannel < 0) 
+
+  if (tvChannel < 0)
     tvChannel = 0;
-    
-  if (tvChannel > MAX_CHANNELS - 1) 
+
+  if (tvChannel > MAX_CHANNELS - 1)
     tvChannel = MAX_CHANNELS - 1;
-    
+
   channelName = String(channelNames[tvChannel]); // return channel name
 
   Serial.println("Skip channel: " + String(channelCount) + " (number: " + String(tvChannel) + " / name: \"" + channelName + "\"");
@@ -158,71 +158,23 @@ bool onSkipChannels(const String &deviceId, const int channelCount, String &chan
   return true;
 }
 
-// setup function for setupEthernet connection
-void setupEthernet() 
+// setup function for WiFi connection
+void setupWiFi()
 {
-  #if USE_ETHERNET
-    LOGWARN(F("=========== USE_ETHERNET ==========="));
-  #elif USE_ETHERNET2
-    LOGWARN(F("=========== USE_ETHERNET2 ==========="));
-  #elif USE_ETHERNET3
-    LOGWARN(F("=========== USE_ETHERNET3 ==========="));
-  #elif USE_ETHERNET_LARGE
-    LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
-  #elif USE_ETHERNET_ESP8266
-    LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
-  #else
-    LOGWARN(F("========================="));
-  #endif
- 
-  LOGWARN(F("Default SPI pinout:"));
-  LOGWARN1(F("MOSI:"), MOSI);
-  LOGWARN1(F("MISO:"), MISO);
-  LOGWARN1(F("SCK:"),  SCK);
-  LOGWARN1(F("SS:"),   SS);
-  LOGWARN(F("========================="));
-   
-  // unknown board, do nothing, use default SS = 10
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   10    // For other boards
-  #endif
-       
-  LOGWARN1(F("Use default CS/SS pin : "), USE_THIS_SS_PIN);
+  Serial.println("\n[Wifi]: Connecting");
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  // For other boards, to change if necessary
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
-    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-
-    Ethernet.init (USE_THIS_SS_PIN);
-
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-    
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-                    
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-    // start the ethernet connection and the server:
-  // Use Static IP
-  //Ethernet.begin(mac, ip);
-  // Use DHCP dynamic IP and random mac
-  uint16_t index = millis() % NUMBER_OF_MAC;
-
-  Serial.print("Index = ");
-  Serial.println(index);
-
-  Ethernet.begin(mac[index]);
-  
-  Serial.print("Connected!\n[Ethernet]: IP-Address is ");
-  Serial.println(Ethernet.localIP());
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(250);
+  }
+  Serial.print("\n[WiFi]: IP-Address is ");
+  Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProTV& myTV = SinricPro[TV_ID];
@@ -239,36 +191,36 @@ void setupSinricPro()
   myTV.onSkipChannels(onSkipChannels);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
   while (!Serial);
-  
-  Serial.println("\nStarting SAMD_Ethernet_TV on " + String(BOARD_NAME));
+
+  Serial.println("\nStarting WIO_Terminal_TV on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
   Serial.println(String(MAX_CHANNELS) + " channels configured");
 
-  setupEthernet();
+  setupWiFi();
   setupSinricPro();
   setupChannelNumbers();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
