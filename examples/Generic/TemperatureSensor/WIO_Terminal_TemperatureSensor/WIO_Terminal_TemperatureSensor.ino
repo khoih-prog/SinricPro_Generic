@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-  Generic_WiFiNINA_TemperatureSensor.ino
-  For Generic boards, running WiFiNINA
+  WIO_Terminal_TemperatureSensor.ino
+  For WIO Terminal boards, running RTL8720DN WiFi, using Seeed_Arduino_rpcWiFi and Seeed_Arduino_rpcUnified libraries
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
@@ -158,7 +158,7 @@ void setup()
   Serial.begin(BAUD_RATE);
   while (!Serial);
 
-  Serial.println("\nStarting Generic_WiFiNINA_TemperatureSensor on " + String(BOARD_NAME));
+  Serial.println("\nStarting WIO_Terminal_TemperatureSensor on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
   dht.begin();
