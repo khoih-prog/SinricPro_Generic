@@ -12,6 +12,11 @@
 ---
 ---
 
+### Releases v2.7.4
+
+1. Sync with v2.7.4 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk). Check [Change Log](https://github.com/khoih-prog/SinricPro_Generic/blob/master/changelog.md) for more details.
+2. Add examples and support to WIO Terminal, and in general boards with **Realtek RTL8720DN WiFi** using [**Seeed_Arduino_rpcWiFi**](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) and [**Seeed_Arduino_rpcUnified**](https://github.com/khoih-prog/Seeed_Arduino_rpcUnified) libraries. This RTL8720DN supports Dual-Band 2.4GHz / 5GHz Wi-Fi (802.11 a/b/g/n) as well as BLE/BLE 5.0. To be used with [`WebSockets_Generic v2.3.2+`](https://github.com/khoih-prog/WebSockets_Generic).
+
 ### Releases v2.7.0
 
 1. Sync with v2.7.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk) : Added AppKey, AppSecret and DeviceId classes.
@@ -72,7 +77,7 @@
 10. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
 11. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. To install go to Arduino IDE, select Boards Manager, search for **`STM32`**
 12. [`ArduinoJson v6.16.1+`](https://github.com/bblanchon/ArduinoJson)
-13. [`WebSockets_Generic v2.3.1+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+13. [`WebSockets_Generic v2.3.2+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 14. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library).
@@ -81,6 +86,7 @@
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60.
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet LAN8742A on (Nucleo-144, Discovery). To be used with [`STM32duino_LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP).
 15. [`WiFiNINA_Generic library v1.7.2+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+16. [`Seeed_Arduino_rpcWiFi library v1.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. To be used with [`Seeed_Arduino_rpcUnified library v2.0.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified) .
 
 ---
 ---
@@ -405,9 +411,10 @@ Each item is a directory containing many examples designed for different kinds o
 16. [nRF52_WiFiNINA_Switch](examples/Generic/Switch/nRF52_WiFiNINA)
 17. [SAMD_Ethernet_Switch](examples/Generic/Switch/SAMD_Ethernet)
 18. [SAMD_WiFiNINA_Switch](examples/Generic/Switch/SAMD_WiFiNINA)
-19. [TemperatureSensor](examples/Generic/TemperatureSensor)
-20. [Thermostat](examples/Generic/Thermostat)
-21. [TV](examples/Generic/TV)
+19. [WIO_Terminal](examples/Generic/Switch/WIO_Terminal).                      <===== New from v2.7.4
+20. [TemperatureSensor](examples/Generic/TemperatureSensor)
+21. [Thermostat](examples/Generic/Thermostat)
+22. [TV](examples/Generic/TV)
 
 ---
 ---
@@ -511,7 +518,7 @@ Please take a look at other examples, as well.
 #### 1. File [SAMD_WiFiNINA_Switch.ino](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino)
 
 ```cpp
-/ STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
+// STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
 // SAM DUE
 // Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0
 
@@ -551,11 +558,11 @@ bool onPowerState(const String &deviceId, bool &state)
 void handleButtonPress() 
 {
   unsigned long actualMillis = millis(); // get actual millis() and keep it in variable actualMillis
-  if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)
+  if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)  
   { 
     // is button pressed (inverted logic! button pressed = LOW) and debounced?
     if (myPowerState) 
-    {
+    {     
       // flip myPowerState: if it was true, set it to false, vice versa
       myPowerState = false;
     } 
@@ -570,7 +577,7 @@ void handleButtonPress()
     // send powerstate event
     mySwitch.sendPowerStateEvent(myPowerState); // send the new powerState to SinricPro server
     Serial.print("Device ");
-    Serial.print(mySwitch.getDeviceId());
+    Serial.print(mySwitch.getDeviceId().toString());
     Serial.print(myPowerState ? "turned on" : "turn off");
     Serial.println(" (manually via flashbutton)");
 
@@ -627,6 +634,7 @@ void setup()
   while (!Serial);
   
   Serial.println("\nStarting SAMD_WiFiNINA_Switch on " + String(BOARD_NAME));
+  Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
   
   setupWiFi();
   setupSinricPro();
@@ -922,7 +930,6 @@ IPAddress ip(192, 168, 2, 222);
 
 #define BUTTON_PIN        0   // GPIO for BUTTON (inverted: LOW = pressed, HIGH = released)
 #define LED_PIN           2   // GPIO for LED (inverted)
-
 #endif    //defines_h
 ```
 
@@ -935,6 +942,7 @@ IPAddress ip(192, 168, 2, 222);
 
 ```
 Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
+Version : SinricPro_Generic (v2.7.4)
 12 channels configured
 
 [Wifi]: Connecting
@@ -965,6 +973,7 @@ TV turned off
 
 ```
 Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
+Version : SinricPro_Generic (v2.7.4)
 Setup color temperature lookup table
 colorTemperatureIndex[2200] = 0
 colorTemperatureIndex[2700] = 1
@@ -994,6 +1003,7 @@ Device**** brightness level changed to 65
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
+Version : SinricPro_Generic (v2.7.4)
 [SRP] =========== USE_ETHERNET2 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 24
@@ -1029,6 +1039,7 @@ Connected to SinricPro
 
 ```
 Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
+Version : SinricPro_Generic (v2.7.4)
 [SRP] =========== USE_ETHERNET3 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 10
@@ -1065,7 +1076,7 @@ Connected to SinricPro
 
 ```
 Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
-
+Version : SinricPro_Generic (v2.7.4)
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.105
 [SRP] Creating new device. No Device=  _deviceID
 [SRP] add(): Adding device with id=  _deviceID
@@ -1093,6 +1104,7 @@ Connected to SinricPro
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
+Version : SinricPro_Generic (v2.7.4)
 [SRP] =========== USE_ETHERNET_LARGE ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 25
@@ -1184,6 +1196,7 @@ Device 123456789012345678901234 power turned off
 
 ```
 Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
+Version : SinricPro_Generic (v2.7.4)
 Index = 0
 Connected!
 [Ethernet]: IP-Address is 192.168.2.84
@@ -1388,6 +1401,11 @@ Speaker turned on
 ---
 
 ## Releases
+
+### Releases v2.7.4
+
+1. Sync with v2.7.4 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk). Check [Change Log](https://github.com/khoih-prog/SinricPro_Generic/blob/master/changelog.md) for more details.
+2. Add examples and support to WIO Terminal, and in general boards with **Realtek RTL8720DN WiFi** using [**Seeed_Arduino_rpcWiFi**](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) and [**Seeed_Arduino_rpcUnified**](https://github.com/khoih-prog/Seeed_Arduino_rpcUnified) libraries. This RTL8720DN supports Dual-Band 2.4GHz / 5GHz Wi-Fi (802.11 a/b/g/n) as well as BLE/BLE 5.0. To be used with [`WebSockets_Generic v2.3.2+`](https://github.com/khoih-prog/WebSockets_Generic).
 
 ### Releases v2.7.0
 

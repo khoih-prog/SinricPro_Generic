@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.7.0
+  Version: 2.7.4
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -21,6 +21,7 @@
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
+  2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
  **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_ID_H_
@@ -300,7 +301,12 @@ class SinricProId
     operator String() const { return _data.toString(); }
     
     String toString() const { return _data.toString(); };
-    const char* c_str() const { return _data.toString().c_str(); }
+    
+    // From v2.7.4
+    //const char* c_str() const { return _data.toString().c_str(); }
+    const char* c_str() const { static String str = _data.toString(); return str.c_str(); }
+    //////
+    
     bool isValid() const { return !compare(SinricProId<T>()); }
   
   private:

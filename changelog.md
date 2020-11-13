@@ -1,4 +1,14 @@
 # Changelog
+## Version 2.7.4
+- New
+  - Speaker & TV `onAdjustVolume` callback changed:
+    The new format is `bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault);`
+    `volumeDefault`: `false` if the user specified the amount by which to change the volume; otherwise `true`
+
+- Fixed
+  - `.c_str()` for AppKey, AppSecret and DeviceId return now a valid `const char*`
+  - Switch example
+    `SinricProDevice.getDeviceId()` returns `SinricProId` instead of `char*` since version 2.7.0
 
 ## Version 2.7.0
 New:

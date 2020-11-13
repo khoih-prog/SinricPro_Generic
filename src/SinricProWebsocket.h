@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.7.0
+  Version: 2.7.4
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -21,16 +21,19 @@
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
+  2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
  **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_WEBSOCKET_H__
 #define _SINRIC_PRO_WEBSOCKET_H__
 
 #if defined ESP8266
-#include <ESP8266WiFi.h>
-#endif
-#if defined ESP32
-#include <WiFi.h>
+  #include <ESP8266WiFi.h>
+#elif defined(ESP32)
+  #include <WiFi.h>
+#elif (SINRIC_PRO_USING_RTL8720DN)
+  #warning Use SINRIC_PRO_USING_RTL8720DN rpcWiFi Library in SinricProWebSocket
+  #include <rpcWiFi.h>    
 #endif
 
 //KH
@@ -136,8 +139,8 @@ void websocketListener::setExtraHeaders()
   headers += "restoredevicestates:" + String(restoreDeviceStates ? "true" : "false") + "\r\n";
 
 // From v2.5.1 to add mac and IP address at startup
-// To add for Ethernet / WiFiNINA, etc.
-#if (ESP8266 || ESP32)
+// To add for Ethernet / WiFiNINA, etc. Add SINRIC_PRO_USING_RTL8720DN from v2.7.4
+#if (ESP8266 || ESP32 || SINRIC_PRO_USING_RTL8720DN)
   headers += "ip:" + WiFi.localIP().toString() + "\r\n";
   headers += "mac:" + WiFi.macAddress() + "\r\n";
 #elif ( SINRIC_PRO_USING_ETHERNET || SINRIC_PRO_USING_ETHERNET_LARGE || SINRIC_PRO_USING_ETHERNET2 \
@@ -191,6 +194,8 @@ void websocketListener::setExtraHeaders()
   headers += "platform:ESP8266\r\n";
 #elif (ESP32)
   headers += "platform:ESP32\r\n";
+#elif (SINRIC_PRO_USING_RTL8720DN)
+  headers += "platform:WIO_Terminal_RTL8720DN\r\n";
 #elif defined(BOARD_NAME)
   #warning Using BOARD_NAME for WebSockets header
   headers += "platform:";

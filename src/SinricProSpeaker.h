@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.7.0
+  Version: 2.7.4
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -21,6 +21,7 @@
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
+  2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
  *****************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_SPEAKER_H_
@@ -85,20 +86,21 @@ class SinricProSpeaker :  public SinricProDevice
     typedef std::function<bool(const String&, int&)> SetVolumeCallback;
 
     /**
-       @brief Callback definition for onAdjustVolume function
-
-       Gets called when device receive a `adjustVolume` request \n
-       @param[in]   deviceId    String which contains the ID of device
-       @param[in]   volumeDelta Integer with relative volume the device should change about (-100..100)
-       @param[out]  volumeDelta Integer with absolute volume device has been set to
-       @return      the success of the request
-       @retval      true        request handled properly
-       @retval      false       request was not handled properly because of some error
-
-       @section AdjustVolumeCallback Example-Code
-       @snippet callbacks.cpp onAdjustVolume
-     **/
-    typedef std::function<bool(const String&, int&)> AdjustVolumeCallback;
+     * @brief Callback definition for onAdjustVolume function
+     * 
+     * Gets called when device receive a `adjustVolume` request \n
+     * @param[in]   deviceId    String which contains the ID of device
+     * @param[in]   volumeDelta Integer with relative volume the device should change about (-100..100)
+     * @param[out]  volumeDelta Integer with absolute volume device has been set to
+     * @param[in]   volumeDefault Bool `false` if the user specified the amount by which to change the volume; otherwise `true`
+     * @return      the success of the request
+     * @retval      true        request handled properly
+     * @retval      false       request was not handled properly because of some error
+     * 
+     * @section AdjustVolumeCallback Example-Code
+     * @snippet callbacks.cpp onAdjustVolume
+     **/  
+    typedef std::function<bool(const String&, int&, bool)> AdjustVolumeCallback;
 
     /**
        @brief Callback definition for onMute function
@@ -301,7 +303,11 @@ bool SinricProSpeaker::handleRequest(const DeviceId &deviceId, const char* actio
   if (adjustVolumeCallback && actionString == "adjustVolume")
   {
     int volume = request_value["volume"];
-    success = adjustVolumeCallback(deviceId, volume);
+    
+    // From v2.7.4
+    bool volumeDefault = request_value["volumeDefault"] | false;
+    success = adjustVolumeCallback(deviceId, volume, volumeDefault);
+    //////
     
     // From v2.5.1
     response_value["volume"] = limitValue(volume, SPEAKER_MIN_VOLUME_LEVEL, SPEAKER_MAX_VOLUME_LEVEL);

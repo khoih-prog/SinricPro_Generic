@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.7.0
+  Version: 2.7.4
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -21,20 +21,24 @@
                                   Sync with SinricPro v2.5.1: add Speaker SelectInput, Camera. Enable Ethernetx lib support.
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
+  2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
  *****************************************************************************************************************************/
 
 #ifndef __SINRIC_PRO_UDP_H__
 #define __SINRIC_PRO_UDP_H__
 
-#if defined ESP8266
+#if defined(ESP8266)
   #include <ESP8266WiFi.h>
-#endif
-#if defined ESP32
+  #include <WiFiUdp.h>
+#elif defined(ESP32)
   #include <WiFi.h>
-#endif
-
+  #include <WiFiUdp.h>
+#elif (SINRIC_PRO_USING_RTL8720DN)
+  #warning Use SINRIC_PRO_USING_RTL8720DN rpcWiFi Library in SinricProUDP
+  #include <rpcWiFi.h>
+  #include <WiFiUdp.h>
 // KH
-#if (WEBSOCKETS_NETWORK_TYPE == NETWORK_WIFININA)
+#elif (WEBSOCKETS_NETWORK_TYPE == NETWORK_WIFININA)
   #warning Use NETWORK_WIFININA WiFiUdp_Generic in SinricProUDP
   #include <WiFiUdp_Generic.h>
 #elif (WEBSOCKETS_NETWORK_TYPE == NETWORK_W5100)
@@ -57,6 +61,7 @@
   #warning Use default WiFi in SinricProUDP
   #include <WiFiUdp.h>
 #endif
+
 
 #include "SinricProQueue.h"
 
@@ -86,8 +91,7 @@ void udpListener::begin(SinricProQueue_t* receiveQueue)
   this->receiveQueue = receiveQueue;
 #if defined ESP8266
   _udp.beginMulticast(WiFi.localIP(), UDP_MULTICAST_IP, UDP_MULTICAST_PORT);
-#endif
-#if defined ESP32
+#elif ( defined(ESP32) || SINRIC_PRO_USING_RTL8720DN)
   _udp.beginMulticast(UDP_MULTICAST_IP, UDP_MULTICAST_PORT);
 #endif
 }
@@ -118,8 +122,7 @@ void udpListener::sendMessage(String &message)
   // restart UDP??
 #if defined ESP8266
   _udp.beginMulticast(WiFi.localIP(), UDP_MULTICAST_IP, UDP_MULTICAST_PORT);
-#endif
-#if defined ESP32
+#elif (defined(ESP32) || SINRIC_PRO_USING_RTL8720DN)
   _udp.beginMulticast(UDP_MULTICAST_IP, UDP_MULTICAST_PORT);
 #endif
 }

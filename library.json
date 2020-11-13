@@ -1,6 +1,6 @@
 {
   "name": "SinricPro_Generic",
-  "version": "2.7.0",
+  "version": "2.7.4",
   "keywords": "communication, sinric, sinric pro, alexa, iot, websockets",
   "description": "Library for https://sinric.pro - simple way to connect your device to Alexa. For ESP8266, ESP32, SAMD, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, etc using W5x00/ENC28J60 Ethernet or WiFiNINA",
   "authors": [
