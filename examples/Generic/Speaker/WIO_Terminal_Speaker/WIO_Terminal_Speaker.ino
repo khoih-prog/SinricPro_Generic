@@ -59,13 +59,14 @@ bool onSetVolume(const String &deviceId, int &volume)
   return true;
 }
 
-bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
+bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault) 
 {
-  speakerState.volume += volumeDelta;  // calcualte new absolute volume
+  speakerState.volume += volumeDelta;   // calcualte new absolute volume
   
-  Serial.println("Volume changed about " + String() + " to " + String(speakerState.volume));
+  Serial.println("Volume changed about " + String(volumeDelta) + " to " + String(speakerState.volume));
   
-  volumeDelta = speakerState.volume; // return new absolute volume
+  volumeDelta = speakerState.volume;    // return new absolute volume
+  
   return true;
 }
 
