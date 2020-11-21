@@ -6,9 +6,6 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
 
-[![star this repo](https://githubbadges.com/star.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic)
-[![fork this repo](https://githubbadges.com/fork.svg?user=khoih-prog&repo=SinricPro_Generic)](https://github.com/khoih-prog/SinricPro_Generic/fork)
-
 ---
 ---
 
