@@ -172,7 +172,9 @@ void processGUI()
 bool onPowerState(const String &deviceId, bool &state)
 {
   int index = devices[deviceId].deviceIndex;
-  Serial.printf( "Device %d turned %s\r\n", index, String(state ? "ON" : "OFF"));
+  
+  Serial.println( "\n=======================================");
+  Serial.printf( "Device %d turned %s\r\n", index, state ? "ON" : "OFF");
 
   int LED_PIN = devices[deviceId].LED_PIN; // get the relay pin for corresponding device
 
