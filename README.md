@@ -1373,6 +1373,286 @@ Speaker turned on
 ```
 
 ---
+
+#### 7. Debug terminal output (_SRP_LOGLEVEL_ = 3) when running [WIOT_MultiSwitch_LCD](examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD) on SeeedStudio SAMD51 WIO Terminal
+
+```
+Starting WIOT_MultiSwitch_LCD on WIO_TERMINAL
+
+[Wifi]: Connecting
+
+[WiFi]: IP-Address is 192.168.2.150
+Connected to SinricPro
+SinricPro Connected
+isSinricConnected Connected
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceAttributes": [],
+    "deviceId": "5ec47b****************",
+    "replyToken": "bbab5988-ffae-45ca-b1c2-fb13be4d0a48",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "efnmLaucg7UvjHSZiUyv9U1pzbTJqwgBPnX+yziNPAg="
+  }
+}
+=======================================
+Device 1 turned ON
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceId": "5ec47b****************",
+    "message": "OK",
+    "replyToken": "bbab5988-ffae-45ca-b1c2-fb13be4d0a48",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "O0Hc0p2sxD5FzbOPCmw+Ex9NnjVxkMDo9HkNicChoZU="
+  }
+}
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceAttributes": [],
+    "deviceId": "5ec47b****************",
+    "replyToken": "be743078-60ad-4eb8-a6f8-05b13e9509c5",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "a9E1hS2dY7GDE+KCLZFXhcaMwZtMk5YH7yvsVDsPmoQ="
+  }
+}
+=======================================
+Device 3 turned ON
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceId": "5ec47b****************",
+    "message": "OK",
+    "replyToken": "be743078-60ad-4eb8-a6f8-05b13e9509c5",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "NouzX0HUbxAh2/ATHPMpqMrKGfydHEFScu7cU7Qboec="
+  }
+}
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceAttributes": [],
+    "deviceId": "5ec47b****************",
+    "replyToken": "dcbe67e7-6add-44b9-820c-955c7efab625",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "d2T7p0jEUbm0jLs8GOTmqvwpkwSBA27q0UhAVjZ7v28="
+  }
+}
+=======================================
+Device 2 turned ON
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1606952787,
+    "deviceId": "5ec47b****************",
+    "message": "OK",
+    "replyToken": "dcbe67e7-6add-44b9-820c-955c7efab625",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "kFuxIwc5RZr1xAs5oLK66r1dYl4YrbDUcxS804cWQ+k="
+  }
+}
+Device 1 with deviceID :5ec47b9276b86a477f5df3d0turned OFF (manually via flashbutton)
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "cause": {
+      "type": "PHYSICAL_INTERACTION"
+    },
+    "createdAt": 1606952915,
+    "deviceId": "5ec47b****************",
+    "replyToken": "fc3e0648-7535-4765-85b4-f054bc3b2f01",
+    "type": "event",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "0A0OmM/2k6AtUhfb3358c2rohjVHQKOVpu/qid7+A7U="
+  }
+}
+
+
+
+=======================================
+### WIO_Terminal_Blinds on WIO_TERMINAL
+=======================================
+
+Starting WIO_Terminal_Blinds on WIO_TERMINAL
+
+[Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.150
+Connected to SinricPro
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1605736439,
+    "deviceAttributes": [],
+    "deviceId": "5edaaaaaaaaaaaaaaaaaaaaa",
+    "replyToken": "fb14d488-6580-4ce8-91cd-45db6b812981",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "6kxk8L7v8eF6NIJj8BHLHkeJA1fO9K3gOdEjCXm0UJU="
+  }
+}Device 5edaaaaaaaaaaaaaaaaaaaaa power turned off
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1605736439,
+    "deviceId": "5edaaaaaaaaaaaaaaaaaaaaa",
+    "message": "OK",
+    "replyToken": "fb14d488-6580-4ce8-91cd-45db6b812981",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "dy4BDCtCwD1GZUqkVf2TIFtlywN+iU4ggprG4KnXxFw="
+  }
+}
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1605736444,
+    "deviceAttributes": [],
+    "deviceId": "5edaaaaaaaaaaaaaaaaaaaaa",
+    "replyToken": "92461504-765f-492c-be61-d6156013a165",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "9GSWJR0jYYrUj6hb6/i6JJSM/KXcTK5CLiNV/AihDjE="
+  }
+}Device 5edaaaaaaaaaaaaaaaaaaaaa power turned on
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "sinricpro-web",
+    "createdAt": 1605736444,
+    "deviceId": "5edaaaaaaaaaaaaaaaaaaaaa",
+    "message": "OK",
+    "replyToken": "92461504-765f-492c-be61-d6156013a165",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "5t6AIak6NDTrB+CHp1+F09TamYCKxA6QeD6pQOhI/3o="
+  }
+}
+```
+
+and the LCD screenshots
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_1.jpg">
+</p>
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_2.jpg">
+</p>
+
+---
 ---
 
 ### Devices
