@@ -356,6 +356,7 @@ void setup()
   while (!Serial);
 
   Serial.println("\nStarting WIOT_MultiSwitch_LCD on " + String(BOARD_NAME));
+  Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
   setupLEDs();
   setupFlipSwitches();
