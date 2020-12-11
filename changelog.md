@@ -1,5 +1,19 @@
 # Changelog
+
+## Version 2.8.0
+
+- Removed QueueList.h and use std::queue instead
+
+- Many new Examples 
+  - examples / Light / RGB_LED_Stripe_5050
+  - examples / Light / Light_FastLED_WS2812
+- 
+
+  
 ## Version 2.7.4
+
+- Add support and many new examples for SeeedStudio WIO Terminal
+
 - New
   - Speaker & TV `onAdjustVolume` callback changed:
     The new format is `bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault);`

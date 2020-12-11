@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.7.4
+  Version: 2.8.0
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -22,6 +22,7 @@
   2.6.1   K Hoang      15/08/2020 Sync with SinricPro v2.6.1: add AirQualitySensor, Camera Class.
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
   2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
+  2.8.0   K Hoang      10/12/2020 Sync with SinricPro v2.8.0. Add examples. Use std::queue instead of QueueList. SSL Option.
  **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_H_
@@ -467,14 +468,16 @@ void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interfac
 
 void SinricProClass::handleReceiveQueue() 
 {
-  if (receiveQueue.count() == 0) 
+  if (receiveQueue.size() == 0) 
     return;
 
-  SRP_LOGINFO1("handleReceiveQueue(): Message(s) in receiveQueue =", receiveQueue.count());
+  SRP_LOGINFO1("handleReceiveQueue(): Message(s) in receiveQueue =", receiveQueue.size());
   
-  while (receiveQueue.count() > 0) 
+  while (receiveQueue.size() > 0) 
   {
-    SinricProMessage* rawMessage = receiveQueue.pop();
+    SinricProMessage* rawMessage = receiveQueue.front();
+    receiveQueue.pop();
+
     DynamicJsonDocument jsonMessage(1024);
     deserializeJson(jsonMessage, rawMessage->getMessage());
 
@@ -519,12 +522,13 @@ void SinricProClass::handleSendQueue()
     
   if (!baseTimestamp) 
     return;
-    
-  while (sendQueue.count() > 0) 
+   
+  while (sendQueue.size() > 0) 
   {
-    SRP_LOGINFO1("handleSendQueue(): Sending Number of Message(s) in sendQueue =", sendQueue.count());
+    SRP_LOGINFO1("handleSendQueue(): Sending Number of Message(s) in sendQueue =", sendQueue.size());
 
-    SinricProMessage* rawMessage = sendQueue.pop();
+    SinricProMessage* rawMessage = sendQueue.front(); 
+    sendQueue.pop();
 
     DynamicJsonDocument jsonMessage(1024);
     deserializeJson(jsonMessage, rawMessage->getMessage());

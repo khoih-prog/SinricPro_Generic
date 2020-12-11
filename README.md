@@ -9,6 +9,13 @@
 ---
 ---
 
+### Releases v2.8.0
+
+1. Sync with v2.8.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk). Check [Change Log](https://github.com/khoih-prog/SinricPro_Generic/blob/master/changelog.md) for more details.
+2. Use std::queue instead of QueueList.
+3. Add examples [Light_FastLED_WS2812](examples/ESP/Light/Light_FastLED_WS2812) and [RGB_LED_Stripe_5050](examples/ESP/Light/RGB_LED_Stripe_5050) for ESP32/ESP8266.
+4. Add example [WIOT_MultiSwitch_LCD](examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD) for SeeedStudio SAMD51 WIO Terminal
+
 ### Releases v2.7.4
 
 1. Sync with v2.7.4 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk). Check [Change Log](https://github.com/khoih-prog/SinricPro_Generic/blob/master/changelog.md) for more details.
@@ -60,7 +67,7 @@
 ---
 ---
 
-## Prerequisite
+## Prerequisites
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
@@ -74,7 +81,7 @@
 10. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, etc.
 11. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. To install go to Arduino IDE, select Boards Manager, search for **`STM32`**
 12. [`ArduinoJson v6.17.2+`](https://github.com/bblanchon/ArduinoJson)
-13. [`WebSockets_Generic v2.3.2+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+13. [`WebSockets_Generic v2.3.3+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 14. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library).
@@ -83,7 +90,7 @@
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60.
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet LAN8742A on (Nucleo-144, Discovery). To be used with [`STM32duino_LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP).
 15. [`WiFiNINA_Generic library v1.8.0+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-16. [`Seeed_Arduino_rpcWiFi library v1.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. To be used with [`Seeed_Arduino_rpcUnified library v2.0.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified) .
+16. [`Seeed_Arduino_rpcWiFi library v1.0.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. To be used with [`Seeed_Arduino_rpcUnified library v2.0.0+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified) .
 
 ---
 ---
@@ -138,16 +145,18 @@ These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.cpp`
 - **`~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`**
 
- 2. **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+ 2. **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.13/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
+Supposing the Arduino version is 1.8.13. These files must be copied into the directory:
 
-- `./arduino-1.8.12/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.13/hardware/teensy/avr/boards.txt`
+- ***`./arduino-1.8.13/hardware/teensy/avr/cores/teensy4/Stream.h`***
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `./arduino-x.yy.zz/hardware/teensy/avr/boards.txt`
+- ***`./arduino-x.yy.zz/hardware/teensy/avr/cores/teensy4/Stream.h`***
 
  3. **To be able to compile and run on SAM DUE boards**, you have to copy the whole [SAM DUE](Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
 
@@ -365,25 +374,30 @@ See [Many examples](https://github.com/khoih-prog/SinricPro_Generic/tree/master/
 #### [ESP32/ESP8266 examples](https://github.com/khoih-prog/SinricPro_Generic/tree/master/examples/ESP)
 
  1. [AirQualitySensor](examples/ESP/AirQualitySensor)
- 2. [Blinds](examples/ESP/Blinds)
- 3. [Camera](examples/ESP/Camera)
- 4. [ContactSensor](examples/ESP/ContactSensor)
- 5. [DimSwitch](examples/ESP/DimSwitch)
- 6. [DoorBell](examples/ESP/doorbell)
- 7. [Fan](examples/ESP/Fan)
- 8. [GarageDoor](examples/ESP/GarageDoor)
- 9. [Light](examples/ESP/Light)
-10. [Lock](examples/ESP/Lock)
-11. [MotionSensor](examples/ESP/MotionSensor)
-12. [PowerSensor](examples/ESP/PowerSensor)
-13. [Speaker](examples/ESP/Speaker)
-14. [MultiSwitch_advance](examples/ESP/Switch/MultiSwitch_advance)
-15. [MultiSwitch_beginner](examples/ESP/Switch/MultiSwitch_beginner)
-16. [MultiSwitch_intermediate](examples/ESP/Switch/MultiSwitch_intermediate)
-17. [Switch](examples/ESP/Switch/Switch)
-18. [TemperatureSensor](examples/ESP/temperaturesensor)
-19. [Thermostat](examples/ESP/Thermostat)
-20. [TV](examples/ESP/TV)
+ 2. [AirQualitySensor_GP2Y1014AU0F](examples/ESP/AirQualitySensor_GP2Y1014AU0F)
+ 3. [Blinds](examples/ESP/Blinds)
+ 4. [Camera](examples/ESP/Camera)
+ 5. [ContactSensor](examples/ESP/ContactSensor)
+ 6. [DimSwitch](examples/ESP/DimSwitch)
+ 7. [DoorBell](examples/ESP/doorbell)
+ 8. [Fan](examples/ESP/Fan)
+ 9. [GarageDoor](examples/ESP/GarageDoor)
+10. [Light](examples/ESP/Light/Light)
+11. [**Light_FastLED_WS2812**](examples/ESP/Light/Light_FastLED_WS2812). New.
+12. [**RGB_LED_Stripe_5050**](examples/ESP/Light/RGB_LED_Stripe_5050). New.
+13. [Lock](examples/ESP/Lock/Lock)
+14. [Lock_with_feedback](examples/ESP/Lock/Lock_with_feedback)
+15. [MotionSensor](examples/ESP/MotionSensor)
+16. [PowerSensor](examples/ESP/PowerSensor)
+17. [Speaker](examples/ESP/Speaker)
+18. [MultiSwitch_advance](examples/ESP/Switch/MultiSwitch_advance)
+19. [MultiSwitch_beginner](examples/ESP/Switch/MultiSwitch_beginner)
+20. [MultiSwitch_intermediate](examples/ESP/Switch/MultiSwitch_intermediate)
+21. [Switch](examples/ESP/Switch/Switch)
+22. [WeMosD1_mini_relay_shield](examples/ESP/Switch/WeMosD1_mini_relay_shield)
+23. [TemperatureSensor](examples/ESP/temperaturesensor)
+24. [Thermostat](examples/ESP/Thermostat)
+25. [TV](examples/ESP/TV)
 
 ### Examples for Generic Boards (SAMD, nRF52, STM32, SAM DUE, etc.)
 
@@ -409,7 +423,7 @@ Each item is a directory containing many examples designed for different kinds o
 16. [nRF52_WiFiNINA_Switch](examples/Generic/Switch/nRF52_WiFiNINA)
 17. [SAMD_Ethernet_Switch](examples/Generic/Switch/SAMD_Ethernet)
 18. [SAMD_WiFiNINA_Switch](examples/Generic/Switch/SAMD_WiFiNINA)
-19. [WIO_Terminal](examples/Generic/Switch/WIO_Terminal).                      <===== New from v2.7.4
+19. [**WIO_Terminal**](examples/Generic/Switch/WIO_Terminal).                  <===== New from v2.7.4
 20. [TemperatureSensor](examples/Generic/TemperatureSensor)
 21. [Thermostat](examples/Generic/Thermostat)
 22. [TV](examples/Generic/TV)
@@ -940,7 +954,7 @@ IPAddress ip(192, 168, 2, 222);
 
 ```
 Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 12 channels configured
 
 [Wifi]: Connecting
@@ -971,7 +985,7 @@ TV turned off
 
 ```
 Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 Setup color temperature lookup table
 colorTemperatureIndex[2200] = 0
 colorTemperatureIndex[2700] = 1
@@ -1001,7 +1015,7 @@ Device**** brightness level changed to 65
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 [SRP] =========== USE_ETHERNET2 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 24
@@ -1037,7 +1051,7 @@ Connected to SinricPro
 
 ```
 Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 [SRP] =========== USE_ETHERNET3 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 10
@@ -1074,7 +1088,7 @@ Connected to SinricPro
 
 ```
 Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.105
 [SRP] Creating new device. No Device=  _deviceID
 [SRP] add(): Adding device with id=  _deviceID
@@ -1102,7 +1116,7 @@ Connected to SinricPro
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 [SRP] =========== USE_ETHERNET_LARGE ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 25
@@ -1194,7 +1208,7 @@ Device 123456789012345678901234 power turned off
 
 ```
 Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
-Version : SinricPro_Generic (v2.7.4)
+Version : SinricPro_Generic (v2.8.0)
 Index = 0
 Connected!
 [Ethernet]: IP-Address is 192.168.2.84
@@ -1378,7 +1392,7 @@ Speaker turned on
 
 ```
 Starting WIOT_MultiSwitch_LCD on WIO_TERMINAL
-
+Version : SinricPro_Generic (v2.8.0)
 [Wifi]: Connecting
 
 [WiFi]: IP-Address is 192.168.2.150
@@ -1582,6 +1596,13 @@ and the LCD screenshots
 ---
 
 ## Releases
+
+### Releases v2.8.0
+
+1. Sync with v2.8.0 of original [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk). Check [Change Log](https://github.com/khoih-prog/SinricPro_Generic/blob/master/changelog.md) for more details.
+2. Use std::queue instead of QueueList.
+3. Add examples [Light_FastLED_WS2812](examples/ESP/Light/Light_FastLED_WS2812) and [RGB_LED_Stripe_5050](examples/ESP/Light/RGB_LED_Stripe_5050) for ESP32/ESP8266.
+4. Add example [WIOT_MultiSwitch_LCD](examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD) for SeeedStudio SAMD51 WIO Terminal
 
 ### Releases v2.7.4
 
