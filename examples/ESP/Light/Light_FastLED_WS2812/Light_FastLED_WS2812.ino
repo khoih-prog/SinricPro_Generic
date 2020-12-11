@@ -35,6 +35,7 @@
 #include <Arduino.h>
 
 #if (ESP8266)
+  #define WEBSOCKET_SSL       true
   #include <ESP8266WiFi.h>
 #elif (ESP32)
   #define WEBSOCKET_SSL       true
