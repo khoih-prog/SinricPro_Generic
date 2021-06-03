@@ -263,6 +263,38 @@
     #define BOARD_TYPE  "STM32 Unknown"
   #endif
 
+#elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
+      defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) )
+    
+  #warning RASPBERRY_PI_PICO board selected
+
+  #if defined(ARDUINO_ARCH_MBED)
+
+    #warning Using ARDUINO_ARCH_MBED
+    
+    #if ( defined(ARDUINO_NANO_RP2040_CONNECT)    || defined(ARDUINO_RASPBERRY_PI_PICO) || \
+          defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) )
+      // Only undef known BOARD_NAME to use better one
+      #undef BOARD_NAME
+    #endif
+    
+    #if defined(ARDUINO_RASPBERRY_PI_PICO)
+      #define BOARD_NAME      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_NAME      "MBED ADAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_NAME      "MBED GENERIC_RP2040"
+    #elif defined(ARDUINO_NANO_RP2040_CONNECT) 
+      #define BOARD_NAME      "MBED NANO_RP2040_CONNECT"
+    #else
+      // Use default BOARD_NAME if exists
+      #if !defined(BOARD_NAME)
+        #define BOARD_NAME      "MBED Unknown RP2040"
+      #endif
+    #endif
+ 
+  #endif
+  
 #else
   // For Mega
   #define BOARD_TYPE      "AVR Mega"
@@ -277,7 +309,7 @@
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
-#define USE_UIP_ETHERNET   true
+//#define USE_UIP_ETHERNET   true
 //#define USE_UIP_ETHERNET   false
 
 #if USE_UIP_ETHERNET
@@ -298,7 +330,7 @@
   // Only one if the following to be true
   #define USE_ETHERNET2         false //true
   #define USE_ETHERNET3         false //true
-  #define USE_ETHERNET_LARGE    false //true
+  #define USE_ETHERNET_LARGE    true //true
   #define USE_ETHERNET_ESP8266  false //true
   
   #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
