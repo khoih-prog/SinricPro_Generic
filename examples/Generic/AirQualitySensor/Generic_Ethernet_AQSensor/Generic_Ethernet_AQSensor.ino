@@ -32,8 +32,8 @@
 #include "SinricProAirQualitySensor.h"
 
 // Air quality sensor event dispatch time.  Min is every 1 min.
-#define MIN (1000UL * 60 * 1)
-unsigned long dispatchTime = millis() + MIN;
+#define MIN_IN_MS (1000UL * 60 * 1)
+unsigned long dispatchTime = millis() + MIN_IN_MS;
 
 // setup function for setupEthernet connection
 void setupEthernet() 
@@ -147,7 +147,7 @@ void loop()
     int pm10  = 0;
 
     mySinricProAirQualitySensor.sendAirQualityEvent(pm1, pm2_5, pm10, "PERIODIC_POLL");
-    dispatchTime += MIN;
+    dispatchTime += MIN_IN_MS;
     
     Serial.println("Sending Air Quality event ..");
   }
