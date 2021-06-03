@@ -6,7 +6,7 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
-  Version: 2.8.0
+  Version: 2.8.1
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -23,6 +23,7 @@
   2.7.0   K Hoang      06/10/2020 Sync with SinricPro v2.7.0: Added AppKey, AppSecret and DeviceId classes and RTT function.
   2.7.4   K Hoang      12/11/2020 Sync with SinricPro v2.7.4. Add WIO Terminal support and examples
   2.8.0   K Hoang      10/12/2020 Sync with SinricPro v2.8.0. Add examples. Use std::queue instead of QueueList. SSL Option.
+  2.8.1   K Hoang      02/06/2021 Add support to RP2040 using Arduino-mbed or arduino-pico core with WiFiNINA or Ethernet
  **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_WEBSOCKET_H__
@@ -262,7 +263,11 @@ void websocketListener::begin(String server, String socketAuthToken, String devi
   webSocket.enableHeartbeat(WEBSOCKET_PING_INTERVAL, WEBSOCKET_PING_TIMEOUT, WEBSOCKET_RETRY_COUNT);
 
 #if (defined(WEBSOCKET_SSL) && WEBSOCKET_SSL)
-  webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
+  #if (SINRIC_PRO_USING_RTL8720DN)
+    webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
+  #else  
+    webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
+  #endif
 #else
   webSocket.begin(server.c_str(), SINRICPRO_SERVER_PORT, "/"); // server address, port and URL
 #endif
@@ -291,6 +296,8 @@ void websocketListener::sendMessage(String &message)
 
 void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t length)
 {
+  (void) length;
+  
   switch (type)
   {
     case WStype_DISCONNECTED:
