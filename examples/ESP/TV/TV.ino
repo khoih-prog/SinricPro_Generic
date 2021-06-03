@@ -96,6 +96,9 @@ void setupChannelNumbers()
 
 bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
 {
+  (void) deviceId;
+  (void) volumeDefault;
+
   tvVolume += volumeDelta;  // calcualte new absolute volume
   
   Serial.println("Volume changed about " + String(volumeDelta) + " to " + String(tvVolume));
@@ -106,6 +109,8 @@ bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault
 
 bool onChangeChannel(const String &deviceId, String &channel) 
 {
+  (void) deviceId;
+  
   tvChannel = channelNumbers[channel]; // save new channelNumber in tvChannel variable
   
   Serial.println("Change channel to \"" + channel + "\" / channel number " + String(tvChannel));
@@ -115,11 +120,10 @@ bool onChangeChannel(const String &deviceId, String &channel)
 
 bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& channelName) 
 {
-  tvChannel = channelNumber; // update tvChannel to new channel number
+  (void) deviceId;
   
-  if (tvChannel < 0) 
-    tvChannel = 0;
-    
+  tvChannel = channelNumber; // update tvChannel to new channel number
+     
   if (tvChannel > MAX_CHANNELS - 1) 
     tvChannel = MAX_CHANNELS - 1;
 
@@ -131,6 +135,8 @@ bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& ch
 
 bool onMediaControl(const String &deviceId, String &control) 
 {
+  (void) deviceId;
+  
   Serial.println("MediaControl: " + control);
   
   if (control == "Play") {}           // do whatever you want to do here
@@ -146,6 +152,8 @@ bool onMediaControl(const String &deviceId, String &control)
 
 bool onMute(const String &deviceId, bool &mute) 
 {
+  (void) deviceId;
+  
   Serial.println("TV volume is " + String(mute ? "muted" : "unmuted"));
   tvMuted = mute; // set tvMuted state
   return true;
@@ -153,6 +161,8 @@ bool onMute(const String &deviceId, bool &mute)
 
 bool onPowerState(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.println("TV turned " + String(state ? "on" : "off"));
   tvPowerState = state; // set powerState
   return true;
@@ -160,12 +170,16 @@ bool onPowerState(const String &deviceId, bool &state)
 
 bool onSelectInput(const String &deviceId, String &input) 
 {
+  (void) deviceId;
+  
   Serial.println("Input changed to " + input);
   return true;
 }
 
 bool onSetVolume(const String &deviceId, int &volume) 
 {
+  (void) deviceId;
+  
   Serial.println("Volume set to:  " + String(volume));
   tvVolume = volume; // update tvVolume
   return true;
@@ -173,11 +187,10 @@ bool onSetVolume(const String &deviceId, int &volume)
 
 bool onSkipChannels(const String &deviceId, const int channelCount, String &channelName) 
 {
-  tvChannel += channelCount; // calculate new channel number
+  (void) deviceId;
   
-  if (tvChannel < 0) 
-    tvChannel = 0;
-    
+  tvChannel += channelCount; // calculate new channel number
+      
   if (tvChannel > MAX_CHANNELS - 1) 
     tvChannel = MAX_CHANNELS - 1;
     

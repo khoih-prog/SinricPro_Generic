@@ -114,6 +114,8 @@ void setStripe()
 
 bool onPowerState(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   device_state.powerState = state;                  // store the new power state
   setStripe();                                      // update the mosfets
   
@@ -122,6 +124,8 @@ bool onPowerState(const String &deviceId, bool &state)
 
 bool onBrightness(const String &deviceId, int &brightness) 
 {
+  (void) deviceId;
+  
   device_state.brightness = brightness;             // store new brightness level
   setStripe();                                      // update the mosfets
   
@@ -130,6 +134,8 @@ bool onBrightness(const String &deviceId, int &brightness)
 
 bool onAdjustBrightness(const String &deviceId, int &brightnessDelta) 
 {
+  (void) deviceId;
+  
   device_state.brightness += brightnessDelta;       // calculate and store new absolute brightness
   brightnessDelta = device_state.brightness;        // return absolute brightness
   setStripe();                                      // update the mosfets
@@ -139,6 +145,8 @@ bool onAdjustBrightness(const String &deviceId, int &brightnessDelta)
 
 bool onColor(const String &deviceId, byte &r, byte &g, byte &b) 
 {
+  (void) deviceId;
+  
   device_state.color.r = r;                         // store new red value
   device_state.color.g = g;                         // store new green value
   device_state.color.b = b;                         // store new blue value

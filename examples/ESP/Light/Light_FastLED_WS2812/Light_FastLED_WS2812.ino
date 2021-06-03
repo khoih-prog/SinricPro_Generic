@@ -65,6 +65,8 @@ CRGB leds[NUM_LEDS];
 
 bool onPowerState(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   powerState = state;
   
   if (state) 
@@ -83,6 +85,8 @@ bool onPowerState(const String &deviceId, bool &state)
 
 bool onBrightness(const String &deviceId, int &brightness) 
 {
+  (void) deviceId;
+  
   globalBrightness = brightness;
   FastLED.setBrightness(map(brightness, 0, 100, 0, 255));
   FastLED.show();
@@ -92,6 +96,8 @@ bool onBrightness(const String &deviceId, int &brightness)
 
 bool onAdjustBrightness(const String &deviceId, int brightnessDelta) 
 {
+  (void) deviceId;
+  
   globalBrightness += brightnessDelta;
   brightnessDelta = globalBrightness;
   FastLED.setBrightness(map(globalBrightness, 0, 100, 0, 255));
@@ -102,6 +108,8 @@ bool onAdjustBrightness(const String &deviceId, int brightnessDelta)
 
 bool onColor(const String &deviceId, byte &r, byte &g, byte &b) 
 {
+  (void) deviceId;
+  
   fill_solid(leds, NUM_LEDS, CRGB(r, g, b));
   FastLED.show();
   

@@ -58,24 +58,32 @@
 
 bool onPowerState1(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.printf("Device 1 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
 bool onPowerState2(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.printf("Device 2 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
 bool onPowerState3(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.printf("Device 3 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
 bool onPowerState4(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.printf("Device 4 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }

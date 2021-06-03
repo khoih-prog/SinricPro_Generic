@@ -53,6 +53,8 @@
 
 bool onDoorState(const String& deviceId, bool &doorState) 
 {
+  (void) deviceId;
+  
   Serial.printf("Garagedoor is %s now.\r\n", doorState?"closed":"open");
   return true;
 }

@@ -77,6 +77,8 @@ struct
 // Speaker device callbacks
 bool onPowerState(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.printf("Speaker turned %s\r\n", state ? "on" : "off");
   speakerState.power = state; // set powerState
   
@@ -85,6 +87,8 @@ bool onPowerState(const String &deviceId, bool &state)
 
 bool onSetVolume(const String &deviceId, int &volume) 
 {
+  (void) deviceId;
+  
   Serial.printf("Volume set to:  %i\r\n", volume);
   speakerState.volume = volume; // update Volume
   
@@ -93,6 +97,9 @@ bool onSetVolume(const String &deviceId, int &volume)
 
 bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
 {
+  (void) deviceId;
+  (void) volumeDefault;
+  
   speakerState.volume += volumeDelta;  // calcualte new absolute volume
   Serial.printf("Volume changed about %i to %i\r\n", volumeDelta, speakerState.volume);
   volumeDelta = speakerState.volume; // return new absolute volume
@@ -102,6 +109,8 @@ bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault
 
 bool onMute(const String &deviceId, bool &mute) 
 {
+  (void) deviceId;
+  
   Serial.printf("Speaker is %s\r\n", mute ? "muted" : "unmuted");
   speakerState.muted = mute; // update muted state
   
@@ -110,6 +119,8 @@ bool onMute(const String &deviceId, bool &mute)
 
 bool onMediaControl(const String &deviceId, String &control) 
 {
+  (void) deviceId;
+  
   Serial.printf("MediaControl: %s\r\n", control.c_str());
   if (control == "Play") {}           // do whatever you want to do here
   if (control == "Pause") {}          // do whatever you want to do here
@@ -125,6 +136,8 @@ bool onMediaControl(const String &deviceId, String &control)
 
 bool onSetMode(const String &deviceId, String &mode) 
 {
+  (void) deviceId;
+  
   Serial.printf("Speaker mode set to %s\r\n", mode.c_str());
   
   if (mode == "MOVIE") 

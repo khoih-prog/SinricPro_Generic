@@ -104,6 +104,8 @@ unsigned long lastEvent = (-EVENT_WAIT_TIME); // last time event has been sent
 */
 bool onPowerState(const String &deviceId, bool &state) 
 {
+  (void) deviceId;
+  
   Serial.println("TemperatureSensor turned " + String(state ? "on" : "off"));
   deviceIsOn = state; // turn on / off temperature sensor
   return true; // request handled properly
