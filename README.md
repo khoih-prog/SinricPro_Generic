@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v2.8.2](#releases-v282)
   * [Releases v2.8.1](#releases-v281)
   * [Releases v2.8.0](#releases-v280)
   * [Releases v2.7.4](#releases-v274)
@@ -60,6 +61,7 @@
     * [ESP32/ESP8266 examples](examples/ESP)
   * [Examples for Generic Boards (SAMD, nRF52, STM32, SAM DUE, etc.)](#examples-for-generic-boards-samd-nrf52-stm32-sam-due-etc)
     * [Generic Boards examples](examples/Generic)
+  * [Examples for WT32_ETH01](#examples-for-wt32_eth01)
 * [HOWTO Usage](#howto-usage)
   * [Include SinricPro-Library (SinricPro_Generic.h) and SinricPro-Device-Libraries (eg. SinricProSwitch.h)](#include-sinricpro-library-sinricpro_generich-and-sinricpro-device-libraries-eg-sinricproswitchh)
   * [Define your credentials from SinricPro-Portal (portal.sinric.pro)](#define-your-credentials-from-sinricpro-portal-portalsinricpro)
@@ -86,6 +88,7 @@
   * [ 8. WIOT_MultiSwitch_LCD on SeeedStudio SAMD51 WIO Terminal](#8-wiot_multiswitch_lcd-on-seeedstudio-samd51-wio-terminal)
   * [ 9. Generic_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT](#9-generic_wifinina_blinds-on-mbed-nano_rp2040_connect)
   * [10. RP2040_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT](#10-rp2040_wifinina_blinds-on-mbed-nano_rp2040_connect)
+  * [11. Blinds on WT32-ETH01 with ETH_PHY_LAN8720](#11-blinds-on-wt32-eth01-with-eth_phy_lan8720)
 * [Devices](#devices)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
@@ -102,6 +105,10 @@
 ---
 
 ## Changelog
+
+### Releases v2.8.2
+
+1. Add support to WT32_ETH01 (ESP32 + LAN8720A) using WEBSOCKET_SSL or not
 
 ### Releases v2.8.1
 
@@ -171,23 +178,23 @@
 
  1. [`Arduino IDE 1.8.15+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`ESP32 Core 1.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
- 3. [`ESP8266 Core 3.0.0+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
+ 3. [`ESP8266 Core 3.0.1+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
  4. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 5. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. **Ready** from v1.0.0.
+ 5. [`Teensy core v1.54+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. **Ready** from v1.0.0.
  6. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  7. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  8. [`Adafruit SAMD core 1.7.2+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  9. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  
-10. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
+10. [`Adafruit nRF52 v0.24.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
 
   **Warnings** : Use [`Adafruit nRF52 v0.22.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/tag/0.22.0) will create **compiler errors** to some boards. If so, please use the [`Adafruit nRF52 v0.21.0`](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/tag/0.21.0) until the issue fixed.
   
 11. [`Arduino Core for STM32 v2.0.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-12. [`Arduino mbed_rp2040 core 2.1.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-13. [`Earle Philhower's arduino-pico core v1.6.2+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-14. [`ArduinoJson v6.18.0+`](https://github.com/bblanchon/ArduinoJson). [![GitHub release](https://img.shields.io/github/release/bblanchon/ArduinoJson.svg)](https://github.com/bblanchon/ArduinoJson/releases/latest)
-15. [`WebSockets_Generic v2.7.0+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+12. [`Arduino mbed_rp2040 core 2.3.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+13. [`Earle Philhower's arduino-pico core v1.9.2+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+14. [`ArduinoJson v6.18.2+`](https://github.com/bblanchon/ArduinoJson). [![GitHub release](https://img.shields.io/github/release/bblanchon/ArduinoJson.svg)](https://github.com/bblanchon/ArduinoJson/releases/latest)
+15. [`WebSockets_Generic v2.8.0+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 
 16. For built-in LAN8742A Ethernet:
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
@@ -203,8 +210,10 @@
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
 
-19. [`WiFiNINA_Generic library v1.8.10-1+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-20. [`Seeed_Arduino_rpcWiFi library v1.0.4+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.3+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
+19. [`WiFiNINA_Generic library v1.8.12+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+20. [`Seeed_Arduino_rpcWiFi library v1.0.5+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.3+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
+
+21. [`WebServer_WT32_ETH01 library v1.2.0+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
 
 ---
 ---
@@ -652,6 +661,24 @@ Each item is a directory containing many examples designed for different kinds o
 20. [TemperatureSensor](examples/Generic/TemperatureSensor)
 21. [Thermostat](examples/Generic/Thermostat)
 22. [TV](examples/Generic/TV)
+
+#### [Examples for WT32_ETH01](https://github.com/khoih-prog/SinricPro_Generic/tree/master/examples/WT32_ETH01)
+
+ 1. [Blinds](examples/WT32_ETH01/Blinds)
+ 2. [GarageDoor](examples/WT32_ETH01/GarageDoor)
+ 3. [Light](examples/WT32_ETH01/Light/Light)
+ 4. [**Light_FastLED_WS2812**](examples/WT32_ETH01/Light/Light_FastLED_WS2812).
+ 5. [**RGB_LED_Stripe_5050**](examples/WT32_ETH01/Light/RGB_LED_Stripe_5050).
+ 6. [Lock](examples/WT32_ETH01/Lock/Lock)
+ 7. [Lock_with_feedback](examples/WT32_ETH01/Lock/Lock_with_feedback)
+ 8. [MotionSensor](examples/WT32_ETH01/MotionSensor)
+ 9. [PowerSensor](examples/WT32_ETH01/PowerSensor)
+10. [Speaker](examples/WT32_ETH01/Speaker)
+11. [Switch](examples/WT32_ETH01/Switch/Switch)
+12. [TemperatureSensor](examples/WT32_ETH01/temperaturesensor)
+13. [Thermostat](examples/WT32_ETH01/Thermostat)
+14. [TV](examples/WT32_ETH01/TV)
+
 
 ---
 ---
@@ -1181,7 +1208,7 @@ This is the terminal output when running [SAMD_WiFiNINA_TV](examples/Generic/TV/
 
 ```
 Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 12 channels configured
 
 [Wifi]: Connecting
@@ -1215,7 +1242,7 @@ This is the terminal output when running [SAMD_WiFiNINA_Light](examples/Generic/
 
 ```
 Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 Setup color temperature lookup table
 colorTemperatureIndex[2200] = 0
 colorTemperatureIndex[2700] = 1
@@ -1248,7 +1275,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 [SRP] =========== USE_ETHERNET2 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 24
@@ -1287,7 +1314,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 [SRP] =========== USE_ETHERNET3 ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 10
@@ -1327,7 +1354,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.105
 [SRP] Creating new device. No Device=  _deviceID
 [SRP] add(): Adding device with id=  _deviceID
@@ -1358,7 +1385,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 [SRP] =========== USE_ETHERNET_LARGE ===========
 [SRP] Default SPI pinout:
 [SRP] MOSI: 25
@@ -1453,7 +1480,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 Index = 0
 Connected!
 [Ethernet]: IP-Address is 192.168.2.84
@@ -1640,7 +1667,7 @@ This is the terminal output when running terminal output when running [WIOT_Mult
 
 ```
 Starting WIOT_MultiSwitch_LCD on WIO_TERMINAL
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 [Wifi]: Connecting
 
 [WiFi]: IP-Address is 192.168.2.150
@@ -1827,7 +1854,7 @@ This is the terminal output when running terminal output when running [Generic_W
 
 ```
 Starting Generic_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.153
 Connected to SinricPro
@@ -2052,7 +2079,7 @@ This is the terminal output when running terminal output when running [Generic_W
 
 ```
 Starting RP2040_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
-Version : SinricPro_Generic (v2.8.1)
+Version : SinricPro_Generic (v2.8.2)
 
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.153
 [SRP] Creating new device. No current DeviceId = 123456789012345678901234
@@ -2174,6 +2201,108 @@ Device 123456789012345678901234 power turned off
 [SRP] handleSendQueue(): Message sent.
 ```
 
+---
+
+#### 11. [Blinds](examples/WT32_ETH01/Blinds) on WT32-ETH01 with ETH_PHY_LAN8720
+
+This is the terminal output when running terminal output when running [Blinds](examples/WT32_ETH01/Blinds) on **WT32-ETH01 with ETH_PHY_LAN8720**
+
+```
+Start Blinds on WT32-ETH01 with ETH_PHY_LAN8720
+WebServer_WT32_ETH01 v1.2.0
+SinricPro_Generic (v2.8.2)
+[ETH]: Connecting
+ETH Started
+ETH Connected
+ETH MAC: A8:03:2A:A1:61:73, IPv4: 192.168.2.83
+FULL_DUPLEX, 100Mbps
+[ETH]: IP-Address is 192.168.2.83
+Connected to SinricPro
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1626752759,
+    "deviceId": "device-id",
+    "replyToken": "ab499dd7-9846-4944-814e-21262e645809",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "i4exN7P/ScPsul8Cdn2hQa0hZ49zw6nc7TTwiKEVeYw="
+  }
+}Device device-id power turned on 
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1626752759,
+    "deviceId": "device-id",
+    "message": "OK",
+    "replyToken": "ab499dd7-9846-4944-814e-21262e645809",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "3V/YzNA6AjgAj97QlRUguJijMXtlTjq/KQyViulRPrs="
+  }
+}
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1626752762,
+    "deviceId": "device-id",
+    "replyToken": "86d11bc3-1711-48ca-8bdd-f4df119f02f2",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "UrmmYfZM0xcpVg20vVeh0/rdj1hs9K7B93Ge4ZmgYYE="
+  }
+}Device device-id power turned off 
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1626752762,
+    "deviceId": "device-id",
+    "message": "OK",
+    "replyToken": "86d11bc3-1711-48ca-8bdd-f4df119f02f2",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "gHrceMstnanDVixoRloVFalZREux+8CF9q6SnXn4F8Q="
+  }
+}
+```
 
 ---
 ---
@@ -2223,6 +2352,10 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 
 ## Releases
+
+### Releases v2.8.2
+
+1. Add support to WT32_ETH01 (ESP32 + LAN8720A) using WEBSOCKET_SSL or not
 
 ### Releases v2.8.1
 
@@ -2319,6 +2452,7 @@ Submit issues to: [**SinricPro_Generic issues**](https://github.com/khoih-prog/S
 11. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 12. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
 13. Add `Table of Contents`
+14. Add support to **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
 
 ---
 

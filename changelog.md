@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.8.2
+
+1. Add support to WT32_ETH01 (ESP32 + LAN8720A) using WEBSOCKET_SSL or not
+
 ## Version 2.8.1
 
 1. Add support to RP2040-based boards, such as **Nano_RP2040_Connect, RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
