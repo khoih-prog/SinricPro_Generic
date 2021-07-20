@@ -42,12 +42,9 @@
 #include "SinricPro_Generic.h"
 #include "SinricProBlinds.h"
 
-#define APP_KEY           "51c22eb7-fec7-415b-89c1-7c1d4f8d9992"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "b29c62f5-54b7-4c2c-8cf1-28bf09b6d8ae-07d9f1b4-95e4-4576-970f-a0aaf2741576"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-#define BLINDS_ID         "5ed0759b3045f14787e48113"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-//#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-//#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-//#define BLINDS_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
+#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
+#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
+#define BLINDS_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 
 #define BAUD_RATE         115200              // Change baudrate to your need
 
