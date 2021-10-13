@@ -12,7 +12,7 @@
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
-  Version: 2.8.2
+  Version: 2.8.3
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   2.8.0   K Hoang      10/12/2020 Sync with SinricPro v2.8.0. Add examples. Use std::queue instead of QueueList. SSL Option.
   2.8.1   K Hoang      02/06/2021 Add support to RP2040 using Arduino-mbed or arduino-pico core with WiFiNINA or Ethernet
   2.8.2   K Hoang      20/07/2021 Add support to WT32_ETH01 (ESP32 + LAN8720A)
+  2.8.3   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
  **********************************************************************************************************************************/
 
 #ifndef _SINRIC_PRO_ID_H_

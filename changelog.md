@@ -1,4 +1,53 @@
+# SinricPro_Generic
+
+
+[![arduino-library-badge](https://www.ardu-badge.com/badge/SinricPro_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+[![GitHub release](https://img.shields.io/github/release/khoih-prog/SinricPro_Generic.svg)](https://github.com/khoih-prog/SinricPro_Generic/releases)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
+[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
+
+---
+---
+
+## Table of Contents
+
+
+* [Changelog](#changelog)
+  * [Version 2.8.3](#Version-283)
+  * [Version 2.8.2](#Version-282)
+  * [Version 2.8.0](#Version-280)
+  * [Version 2.7.4](#Version-274)
+  * [Version 2.7.0](#Version-270)
+  * [Version 2.6.1](#Version-261)
+  * [Version 2.6.0](#Version-260)
+  * [Version 2.5.0](#Version-250)
+  * [Version 2.4.0](#Version-240)
+  * [Version 2.3.0](#Version-230)
+  * [Version 2.2.7](#Version-227)
+  * [Version 2.2.6](#Version-226)
+  * [Version 2.2.5](#Version-225)
+  * [Version 2.2.4](#Version-224)
+  * [Version 2.2.3](#Version-223)
+  * [Version 2.2.2](#Version-222)
+  * [Version 2.2.1](#Version-221)
+  * [Version 2.2.0](#Version-220)
+  * [Version 2.1.1](#Version-211)
+  * [Version 2.1.0](#Version-210)
+  * [Version 2.0.5](#Version-205)
+  * [Version 2.0.4](#Version-204)
+  * [Version 2.0.2](#Version-202) 
+  
+---
+---
+
+
 # Changelog
+
+## Version 2.8.3
+
+1. Update `platform.ini` and `library.json` to use original `khoih-prog` instead of `khoih.prog` after PIO fix
+2. Update `Packages' Patches`
 
 ## Version 2.8.2
 
@@ -242,6 +291,7 @@ fixed UDP problems on ESP32
 added deviceId validation check to avoid wrong deviceId's
 
 ---
+
 ## Version 2.0.2
 
 **Devices**: Thermostat & WindowAC
