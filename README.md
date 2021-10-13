@@ -11,7 +11,7 @@
 
 ## Table of Contents
 
-* [Changelog](changelog.d)
+* [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
