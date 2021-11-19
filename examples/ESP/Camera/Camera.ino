@@ -8,7 +8,6 @@
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
  **********************************************************************************************************************************/
- 
 /*
 
    Example for how to use SinricPro Camera device:
@@ -27,9 +26,7 @@
    - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
 */
 
-#if !defined(ESP32)
-  #error This code is intended to run on the ESP32 boards ! Please check your Tools->Board setting.
-#endif
+
 
 // Uncomment the following line to enable serial debug output
 //#define ENABLE_DEBUG
@@ -47,27 +44,35 @@
 #include "SinricPro_Generic.h"
 #include "SinricProCamera.h"
 
-// Micro-RTSP from https://github.com/geeksville/Micro-RTSP 
+// Micro-RTSP from https://github.com/geeksville/Micro-RTSP
 #include "SimStreamer.h"
 #include "OV2640Streamer.h"
 #include "CRtspSession.h"
 
 // Select your camera model
 
-//#define CAMERA_MODEL_WROVER_KIT
-#define T_Camera_V17_VERSION
+//#define T_Camera_V16_VERSION
+//#define T_Camera_V05_VERSION
+//#define T_Camera_JORNAL_VERSION
+//#define T_Camera_PLUS_VERSION
+//#define T_Camera_V162_VERSION
+//#define T_Camera_MINI_VERSION
+//#define T_Camera_V17_VERSION
+//#define ESPRESSIF_ESP_EYE
+#define CAMERA_MODEL_AI_THINKER
 //#define CAMERA_MODEL_M5STACK_PSRAM
-//#define CAMERA_MODEL_M5STACK_WIDE
-//#define CAMERA_MODEL_AI_THINKER
+//#define CAMERA_MODEL_M5STACK_WITHOUT_PSRAM
+//#define CAMERA_MODEL_M5STACK_PSRAM_B
 
 #include "select_pins.h"
 
-#define WIFI_SSID         "YOUR-WIFI-SSID"
-#define WIFI_PASSWD       "YOUR-WIFI-PASSWORD"
+#define WIFI_SSID  "YOUR-WIFI-SSID"
+#define WIFI_PASSWD "YOUR-WIFI-PASSWORD"
 
 #define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx". Get it from https://portal.sinric.pro/ -> Credentials
 #define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx" . Get it from https://portal.sinric.pro/ -> Credentials
 #define CAMERA_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx". Get it from https://portal.sinric.pro/ -> Devices
+
 #define BAUD_RATE         115200              // Change baudrate to your need
 
 OV2640 cam;
@@ -81,6 +86,7 @@ IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 IPAddress primaryDNS(8, 8, 8, 8);   //optional
 IPAddress secondaryDNS(8, 8, 4, 4); //optional
+
 
 bool onPowerState(const String &deviceId, bool &state)
 {
