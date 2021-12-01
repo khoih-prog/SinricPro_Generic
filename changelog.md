@@ -14,6 +14,7 @@
 
 
 * [Changelog](#changelog)
+  * [Version 2.8.4](#Version-284)
   * [Version 2.8.3](#Version-283)
   * [Version 2.8.2](#Version-282)
   * [Version 2.8.0](#Version-280)
@@ -43,6 +44,12 @@
 
 
 # Changelog
+
+## Version 2.8.4
+
+1. Auto detect ESP32 core version.
+2. Fix bug in examples for WT32_ETH01
+3. Update `Packages' Patches`
 
 ## Version 2.8.3
 
