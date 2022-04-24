@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
   defines.h
-  For SAMD21/SAMD51 boards, running W5x00 or ENC28J60 Ethernet shield
+  For Generic boards, running W5x00 or ENC28J60 Ethernet shield
 
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as  SAMD21, SAMD51, Adafruit's nRF52 boards, etc.
@@ -18,13 +18,13 @@
 #define defines_h
 
 #if defined(ESP8266) || defined(ESP32)
-  #error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
+#error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
 #endif
 
 #define SRP_DEBUG_PORT                Serial
 
 // Debug Level from 0 to 4
-#define _SRP_LOGLEVEL_                1
+#define _SRP_LOGLEVEL_                3
 
 // Uncomment the following line to enable serial debug output
 #define ENABLE_DEBUG    true
@@ -33,6 +33,25 @@
   #define DEBUG_PORT Serial
   #define NODEBUG_WEBSOCKETS
   #define NDEBUG
+#endif
+
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+
+  #if defined(BOARD_NAME)
+    #undef BOARD_NAME
+  #endif
+  
+  #if defined(CORE_CM7)
+    #warning Using Portenta H7 M7 core
+    #define BOARD_NAME              "PORTENTA_H7_M7"
+  #else
+    #warning Using Portenta H7 M4 core
+    #define BOARD_NAME              "PORTENTA_H7_M4"
+  #endif
+  
+  #define ETHERNET_USE_PORTENTA_H7  true
+  #define USE_ETHERNET_PORTENTA_H7  true
+
 #endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
@@ -44,7 +63,7 @@
     #undef ETHERNET_USE_SAMD
   #endif
   #define ETHERNET_USE_SAMD      true
-  #endif
+#endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
@@ -60,6 +79,13 @@
     #undef ETHERNET_USE_SAM_DUE
   #endif
   #define ETHERNET_USE_SAM_DUE      true
+#endif
+
+#if ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+  #if defined(ETHERNET_USE_RPIPICO)
+    #undef ETHERNET_USE_RPIPICO
+  #endif
+  #define ETHERNET_USE_RPIPICO      true
 #endif
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
@@ -263,6 +289,48 @@
     #define BOARD_TYPE  "STM32 Unknown"
   #endif
 
+#elif ETHERNET_USE_RPIPICO
+    
+  #warning RASPBERRY_PI_PICO board selected
+
+  // Default pin 5 (in Mbed) or 17 to SS/CS
+  #if defined(ARDUINO_ARCH_MBED)
+    // For RPI Pico using Arduino Mbed RP2040 core
+    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+    
+    #define USE_THIS_SS_PIN       17
+    
+    #if defined(BOARD_NAME)
+      #undef BOARD_NAME
+    #endif
+    
+    #if defined(ARDUINO_RASPBERRY_PI_PICO)
+      #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_TYPE      "MBED GENERIC_RP2040"
+    #else
+      #define BOARD_TYPE      "MBED Unknown RP2040"
+    #endif
+  
+  #else
+    // For RPI Pico using E. Philhower RP2040 core
+    #if (USING_SPI2)
+      // SCK: GPIO14,  MOSI: GPIO15, MISO: GPIO12, SS/CS: GPIO13 for SPI1
+      #define USE_THIS_SS_PIN       13
+    #else
+      // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17 for SPI0
+      #define USE_THIS_SS_PIN       17
+    #endif
+  
+  #endif
+  
+  #define SS_PIN_DEFAULT        USE_THIS_SS_PIN
+  
+  // For RPI Pico
+  #warning Use RPI-Pico RP2040 architecture
+  
 #else
   // For Mega
   #define BOARD_TYPE      "AVR Mega"
@@ -277,80 +345,113 @@
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
-#define USE_UIP_ETHERNET   true
-//#define USE_UIP_ETHERNET   false
-
-#if USE_UIP_ETHERNET
-  #include <UIPEthernet.h>
-  #define WEBSOCKETS_NETWORK_TYPE           NETWORK_ENC28J60
-  #define SINRIC_PRO_USING_ENC28J60         true
-#endif
-
-//#define USE_CUSTOM_ETHERNET     true
+//#define USE_UIP_ETHERNET   true
+#define USE_UIP_ETHERNET   false
 
 // Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
 // In order to USE_ETHERNET_ESP8266
 #if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
 
   // To override the default CS/SS pin. Don't use unless you know exactly which pin to use
-  //#define USE_THIS_SS_PIN   27//22  //21  //5 //4 //2 //15
+  // You can define here or customize for each board at same place with BOARD_TYPE
+  // Check @ defined(SEEED_XIAO_M0)
+  //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET2         false //true
-  #define USE_ETHERNET3         false //true
-  #define USE_ETHERNET_LARGE    false //true
-  #define USE_ETHERNET_ESP8266  false //true
+  #define USE_ETHERNET_GENERIC  true
+  #define USE_ETHERNET_ESP8266  false
+  #define USE_ETHERNET_ENC      false
+  #define USE_CUSTOM_ETHERNET   false
   
-  #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
+  ////////////////////////////
+  
+  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
+          USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
     #ifdef USE_CUSTOM_ETHERNET
       #undef USE_CUSTOM_ETHERNET
     #endif
-    #define USE_CUSTOM_ETHERNET   true
+    #define USE_CUSTOM_ETHERNET   false
   #endif
   
-  #ifdef WEBSOCKETS_NETWORK_TYPE
-    #undef WEBSOCKETS_NETWORK_TYPE
-  #endif
-  #define WEBSOCKETS_NETWORK_TYPE     NETWORK_W5100
+  #if USE_ETHERNET_PORTENTA_H7
+    #include <Portenta_Ethernet.h>
+    #include <Ethernet.h>
+    #warning Using Portenta_Ethernet lib for Portenta_H7.
+    #define SHIELD_TYPE           "Ethernet using Portenta_Ethernet Library"
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_PORTENTA_H7_ETHERNET
+  #elif USE_NATIVE_ETHERNET
+    #include "NativeEthernet.h"
+    #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+    #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_NATIVEETHERNET
+  #elif USE_ETHERNET_GENERIC
+    
+    #if USING_SPI2
+      #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library on SPI1"
+    #else
+      #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library on SPI0/SPI"
+    #endif
+      
+    #define ETHERNET_LARGE_BUFFERS
+    
+    #define _ETG_LOGLEVEL_                      2
+    
+    #include "Ethernet_Generic.h"
+    #warning Using Ethernet_Generic lib
+
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_W5100
   
-  #if USE_ETHERNET3
-    #include "Ethernet3.h"
-     #warning Use Ethernet3 lib
-    #define SINRIC_PRO_USING_ETHERNET3          true
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET3_
-  #elif USE_ETHERNET2
-    #include "Ethernet2.h"
-    #warning Use Ethernet2 lib
-    #define SINRIC_PRO_USING_ETHERNET2          true
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET2_
-  #elif USE_ETHERNET_LARGE
-    #include "EthernetLarge.h"
-    #warning Use EthernetLarge lib
-    #define SINRIC_PRO_USING_ETHERNET_LARGE     true
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET_LARGE_
   #elif USE_ETHERNET_ESP8266
     #include "Ethernet_ESP8266.h"
-    #warning Use Ethernet_ESP8266 lib
-    #define SINRIC_PRO_USING_ETHERNET_ESP8266   true
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET_ESP8266_
+    #warning Using Ethernet_ESP8266 lib
+    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library"
+
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_W5100
+    
+  #elif USE_ETHERNET_ENC
+    #include "EthernetENC.h"
+    #warning Using EthernetENC lib
+    #define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
+
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_ETHERNET_ENC
+    
   #elif USE_CUSTOM_ETHERNET
-    #include "Ethernet_XYZ.h"
-    #define SINRIC_PRO_USING_ETHERNET_CUSTOM    true
-    #warning Use Custom Ethernet library from EthernetWrapper. You must include a library here or error.
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET_CUSTOM_
+    //#include "Ethernet_XYZ.h"
+    #include "EthernetENC.h"
+    #warning Using Custom Ethernet library. You must include a library and initialize.
+    #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
   #else
-    #define USE_ETHERNET          true
-    #include "Ethernet.h"
-    #warning Use Ethernet lib
-    #define SINRIC_PRO_USING_ETHERNET           true
-    #define WEBSOCKETS_NETWORK_LIB              _ETHERNET_
+    #ifdef USE_ETHERNET_GENERIC
+      #undef USE_ETHERNET_GENERIC
+    #endif
+    #define USE_ETHERNET_GENERIC   true
+    #include "Ethernet_Generic.h"
+    #warning Using default Ethernet_Generic lib
+    #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
+
+    #ifdef WEBSOCKETS_NETWORK_TYPE
+      #undef WEBSOCKETS_NETWORK_TYPE
+    #endif
+    
+    #define WEBSOCKETS_NETWORK_TYPE     NETWORK_W5100
+  
   #endif
   
   // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
   // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
   // Otherwise, standard Ethernet library will be used for W5x00
+  
+  ////////////////////////////
+  
+#elif USE_UIP_ETHERNET
+  #include "UIPEthernet.h"
+  #warning Using UIPEthernet library
+  #define WEBSOCKETS_NETWORK_TYPE           NETWORK_ENC28J60
+  #define SINRIC_PRO_USING_ENC28J60         true
+  #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
+#endif      // #if !USE_UIP_ETHERNET
 
-#endif    //#if !USE_UIP_ETHERNET
+#define SINRIC_PRO_USING_ETHERNET   true
 
 // Enter a MAC address and IP address for your controller below.
 #define NUMBER_OF_MAC      20
