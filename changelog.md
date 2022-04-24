@@ -14,6 +14,7 @@
 
 
 * [Changelog](#changelog)
+  * [Version 2.8.5](#Version-285)
   * [Version 2.8.4](#Version-284)
   * [Version 2.8.3](#Version-283)
   * [Version 2.8.2](#Version-282)
@@ -44,6 +45,13 @@
 
 
 # Changelog
+
+## Version 2.8.5
+
+1. Use [Ethernet_Generic](https://github.com/khoih-prog/Ethernet_Generic) library as default for W5x00 Ethernet.
+2. Add support to Portenta_H7
+3. Add support to WIZNet W5100S, such as  [**WIZnet Ethernet HAT**](https://docs.wiznet.io/Product/Open-Source-Hardware/wiznet_ethernet_hat) and [**W5100S-EVB-Pico**](https://docs.wiznet.io/Product/iEthernet/W5100S/w5100s-evb-pico)
+4. Update `Packages' Patches`
 
 ## Version 2.8.4
 

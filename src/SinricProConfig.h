@@ -12,7 +12,7 @@
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
-  Version: 2.8.4
+  Version: 2.8.5
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   2.8.2   K Hoang      20/07/2021 Add support to WT32_ETH01 (ESP32 + LAN8720A)
   2.8.3   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
   2.8.4   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
+  2.8.5   K Hoang      23/04/2022 Use Ethernet_Generic library as default. Add support to Portenta_H7, etc.
  **********************************************************************************************************************************/
  
 #ifndef _SINRIC_PRO_CONFIG_H_
@@ -50,7 +51,7 @@
 // Version Configuration
 #define SINRICPRO_VERSION_MAJOR     2
 #define SINRICPRO_VERSION_MINOR     8
-#define SINRICPRO_VERSION_REVISION  4
+#define SINRICPRO_VERSION_REVISION  5
 #define SINRICPRO_VERSION           STR(SINRICPRO_VERSION_MAJOR) "." STR(SINRICPRO_VERSION_MINOR) "." STR(SINRICPRO_VERSION_REVISION)
 #define SINRICPRO_VERSION_STR       "SinricPro_Generic (v" SINRICPRO_VERSION ")"
 

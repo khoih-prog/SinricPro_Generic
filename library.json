@@ -1,7 +1,7 @@
 {
   "name": "SinricPro_Generic",
-  "version": "2.8.4",
-  "keywords": "communication, sinric, sinric-pro, alexa, iot, websockets, ethernet, wifi, wifinina, rp2040, rpi-pico, samd, sam-due, nrf52, stm32, nano-rp2040-connect, mbed, control, nano-33-iot, wt32-eth01, device",
+  "version": "2.8.5",
+  "keywords": "communication, sinric, sinric-pro, alexa, iot, websockets, ethernet, wifi, wifinina, rp2040, rpi-pico, samd, sam-due, nrf52, stm32, nano-rp2040-connect, mbed, nano-33-iot, wt32-eth01, portenha-h7",
   "description": "Library for https://sinric.pro - simple way to connect your device to Alexa. For ESP8266, ESP32, WT32_ETH01, SAMD, SAMD21, SAMD51, nRF52, STM32F/L/H/G/WB/MP1, Teensy, SAM DUE, RP2040-based (Nano_RP2040_Connect, RASPBERRY_PI_PICO) boards, etc. using W5x00/ENC28J60 Ethernet, WiFiNINA or RTL8720DN",
   "authors": [
     {
@@ -32,19 +32,19 @@
     {
       "owner": "bblanchon",
       "name": "ArduinoJson",
-      "version": ">=6.18.5",
+      "version": ">=6.19.4",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "WebSockets_Generic",
-      "version": ">=2.11.0",
+      "version": ">=2.15.0",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "WiFiNINA_Generic",
-      "version": ">=1.8.14-1",
+      "version": ">=1.8.14-3",
       "platforms": ["*"]
     },
     {
@@ -68,44 +68,25 @@
     {
       "owner": "uipethernet",
       "name": "UIPEthernet",
-      "version": ">=2.0.8",
+      "version": ">=2.0.11",
       "platforms": ["*"]
     },
     {
       "owner": "jandrassy",
       "name": "EthernetENC",
-      "version": ">=2.0.1",
+      "version": ">=2.0.2",
       "platforms": ["*"]
     },
     {
       "owner": "jandrassy",
       "name": "WiFiEspAT",
-      "version": ">=1.3.1",
+      "version": ">=1.3.2",
       "platforms": ["*"]
     },
     {
-      "owner": "adafruit",
-      "name": "Ethernet2",
-      "version": ">=1.0.4",
-      "platforms": ["*"]
-    },
-    {
-      "owner": "sstaub",
-      "name": "Ethernet3",
-      "version": ">=1.5.5",
-      "platforms": ["*"]
-    },
-    {
-      "owner": "arduino-libraries",
-      "name": "Ethernet",
-      "version": ">=2.0.0",
-      "platforms": ["*"]
-    },
-    {
-      "owner": "openslab-osu",
-      "name": "EthernetLarge",
-      "version": ">=2.0.0",
-      "platforms": ["*"]
+      "owner": "khoih-prog",
+      "name": "Ethernet_Generic",
+      "version": "^2.1.0"
     }
   ],
   "license": "CC-BY-SA-4.0",

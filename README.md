@@ -6,13 +6,15 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
 ---
 ---
 
 ## Table of Contents
 
+* [Full user documentation](#full-user-documentation)
 * [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
@@ -36,6 +38,8 @@
     * [8.2. To avoid compile error relating to microsecondsToClockCycles](#82-to-avoid-compile-error-relating-to-microsecondstoclockcycles)
   * [9. For Portenta_H7 boards using Arduino IDE in Linux](#9-for-portenta_h7-boards-using-arduino-ide-in-linux)
   * [10. For RTL8720DN boards using AmebaD core](#10-for-rtl8720dn-boards-using-amebad-core)
+  * [11. For SAMD21 and SAMD51 boards using ArduinoCore-fab-sam core](#11-For-SAMD21-and-SAMD51-boards-using-ArduinoCore-fab-sam-core)
+  * [12. For Seeeduino RP2040 boards](#12-For-Seeeduino-RP2040-boards)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -50,7 +54,15 @@
   * [2. ESP32 ADCs functions](#2-esp32-adcs-functions)
   * [3. ESP32 WiFi uses ADC2 for WiFi functions](#3-esp32-wifi-uses-adc2-for-wifi-functions)
 * [Important Notes](#important-notes)
-* [Full user documentation](#full-user-documentation)
+* [Configuration Notes](#configuration-notes)
+  * [1. How to select which built-in Ethernet or shield to use](#1-how-to-select-which-built-in-ethernet-or-shield-to-use)
+  * [Important](#important)
+  * [2. How to select another CS/SS pin to use](#2-how-to-select-another-csss-pin-to-use)
+  * [3. How to use W5x00 with ESP8266](#3-how-to-use-w5x00-with-esp8266)
+  * [4. How to increase W5x00 TX/RX buffer](#4-how-to-increase-w5x00-txrx-buffer)
+  * [5. How to adjust sendContent_P() and send_P() buffer size](#5-how-to-adjust-sendcontent_p-and-send_p-buffer-size)
+  * [6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library](#6-How-to-use-SPI2-for-ESP32-using-W5x00-and-Ethernet_Generic-Library)
+  * [7. How to use SPI1 for RP2040 using W5x00 and Ethernet_Generic Library](#7-How-to-use-SPI1-for-RP2040-using-W5x00-and-Ethernet_Generic-Library)
 * [Important Notes](#important-notes)
 * [Examples](#examples)
   * [Examples for ESP32/ESP8266](#examples-for-esp32esp8266)
@@ -101,22 +113,30 @@
 ---
 
 
+## Full user documentation
+
+Please check [**Full User Documentation**](https://sinricpro.github.io/esp8266-esp32-sdk)
+
+ 
+---
+---
+
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
  3. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
- 4. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
+ 4. [`Arduino AVR core 1.8.5+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  5. [`Teensy core v1.56+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards..
  6. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
- 7. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 8. [`Adafruit SAMD core 1.7.8+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 7. [`Arduino SAMD core 1.8.13+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
+ 8. [`Adafruit SAMD core 1.7.10+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  9. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
 10. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
 11. [`Arduino Core for STM32 v2.2.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-12. [`Arduino mbed_rp2040 core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino RP2040-based boards, such as **Arduino Nano RP2040 Connect, RASPBERRY_PI_PICO, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-13. [`Earle Philhower's arduino-pico core v1.10.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-14. [`ArduinoJson v6.19.1+`](https://github.com/bblanchon/ArduinoJson). [![GitHub release](https://img.shields.io/github/release/bblanchon/ArduinoJson.svg)](https://github.com/bblanchon/ArduinoJson/releases/latest)
+12. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.0.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+13. [`Earle Philhower's arduino-pico core v1.13.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+14. [`ArduinoJson v6.19.4+`](https://github.com/bblanchon/ArduinoJson). [![GitHub release](https://img.shields.io/github/release/bblanchon/ArduinoJson.svg)](https://github.com/bblanchon/ArduinoJson/releases/latest)
 15. [`WebSockets_Generic v2.12.0+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 
 16. For built-in LAN8742A Ethernet:
@@ -124,17 +144,14 @@
    - [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest)
    
 17. For W5x00 Ethernet:
-   - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
-   - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
-   - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
-   - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
+   - [`Ethernet_Generic library v2.0.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5100S, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
    
 18. For ENC28J60 Ethernet:
    - [`EthernetENC library v2.0.2+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.11+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
 
 19. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-20. [`Seeed_Arduino_rpcWiFi library v1.0.5+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.3+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
+20. [`Seeed_Arduino_rpcWiFi library v1.0.5+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.4+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
 
 21. [`WebServer_WT32_ETH01 library v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
 
@@ -161,7 +178,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**SinricPro_Generic** library](https://platformio.org/lib/show/11243/SinricPro_Generic) by using [**Library Manager**](https://platformio.org/lib/show/11243/SinricPro_Generic/installation). Search for [**SinricPro_Generic**](https://platformio.org/lib/show/11243/SinricPro_Generic) in [Platform.io **Author's Libraries**](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**SinricPro_Generic** library](https://registry.platformio.org/libraries/khoih-prog/SinricPro_Generic) by using [**Library Manager**](https://registry.platformio.org/libraries/khoih-prog/SinricPro_Generic/installation). Search for [**SinricPro_Generic**](https://platformio.org/lib/show/11243/SinricPro_Generic) in [Platform.io **Author's Libraries**](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 
@@ -171,19 +188,19 @@ Another way to install is to:
 
 #### 1. For Adafruit nRF52840 and nRF52832 boards
 
-**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.2.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0). 
+**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 Packages_Patches](Packages_Patches/adafruit/hardware/nrf52/1.3.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0). 
 
-Supposing the Adafruit nRF52 version is 1.2.0. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Print.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.2.0/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 1.3.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/cores/nRF5/Udp.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/cores/nRF5/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/cores/nRF5/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.3.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -201,14 +218,14 @@ These files must be copied into the directory:
 
 #### 2. For Teensy boards
  
- **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.16/hardware/teensy/avr/boards.txt). 
+ **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.19/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.16. These files must be copied into the directory:
+Supposing the Arduino version is 1.8.19. These files must be copied into the directory:
 
-- `./arduino-1.8.16/hardware/teensy/avr/boards.txt`
-- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy/Stream.h`
-- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy3/Stream.h`
-- `./arduino-1.8.16/hardware/teensy/avr/cores/teensy4/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy3/Stream.h`
+- `./arduino-1.8.19/hardware/teensy/avr/cores/teensy4/Stream.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 These files must be copied into the directory:
@@ -233,13 +250,13 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.12) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.12).
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD Packages_Patches](Packages_Patches/arduino/hardware/samd/1.8.13) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.13).
  
 #### For core version v1.8.10+
 
-Supposing the Arduino SAMD version is 1.8.12. Now only one file must be copied into the directory:
+Supposing the Arduino SAMD version is 1.8.13. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.12/platform.txt`
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.13/platform.txt`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -272,13 +289,13 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.5) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.5). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.9) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.9). 
 
-Supposing the Adafruit SAMD core version is 1.7.5. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.9. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -316,12 +333,12 @@ To use LAN8720 on some STM32 boards
 - **Discovery (DISCO_F746NG)**
 - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
-you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system) to overwrite the old files.
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system) to overwrite the old files.
 
-Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
@@ -332,12 +349,12 @@ theses files must be copied into the corresponding directory:
 
 #### 7.2 For STM32 boards to use Serial1
 
-**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.1.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.2.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
-Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
@@ -380,12 +397,12 @@ With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add
 
 #### 9. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -398,9 +415,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.0.0. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -409,19 +426,48 @@ This file must be copied into the directory:
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/x.yy.zz/portenta_post_install.sh`
 
 
-
 #### 10. For RTL8720DN boards using AmebaD core
  
- To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.0.10/cores/arduino/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.0.10/cores/arduino/avr/pgmspace.h). 
+ To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h). 
 
-Supposing the Realtek AmebaD core version is 3.0.10. This file must be copied into the directory:
+Supposing the Realtek AmebaD core version is 3.1.2. This file must be copied into the directory:
 
-- `~/.arduino15/packages/realtek/hardware/AmebaD/3.0.10/cores/arduino/avr/pgmspace.h`
+- `~/.arduino15/packages/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/realtek/hardware/AmebaD/x.yy.zz/cores/arduino/avr/pgmspace.h`
+
+
+#### 11. For SAMD21 and SAMD51 boards using ArduinoCore-fab-sam core
+ 
+ To avoid compile error relating to SAMD21/SAMD51, you have to copy the file [ArduinoCore-fab-sam core pgmspace.h](Packages_Patches/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt) into `ArduinoCore-fab-sam` samd directory (~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt). 
+
+Supposing the `ArduinoCore-fab-sam` samd core version is 1.6.18-alpha2. This file must be copied into the directory:
+
+- `~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/x.yy.zz/boards.txt`
+
+
+#### 12. For Seeeduino RP2040 boards
+ 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino RP2040 (XIAO RP2040, Wio RP2040 Mini) boards***, you have to copy the whole [Seeeduino RP2040 Packages_Patches](Packages_Patches/Seeeduino/hardware/rp2040/2.7.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2). 
+
+Supposing the Seeeduino SAMD core version is 2.7.2. This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/boards.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/variants/Seeed_XIAO_RP2040/pins_arduino.h`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/boards.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/variants/Seeed_XIAO_RP2040/pins_arduino.h`
 
 ---
 ---
@@ -573,12 +619,290 @@ To know the default CS/SS pins of not listed boards, check the related `variant.
     <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/pics/ICSP_connector.jpg">
 </p>
   
+  
+
 ---
 ---
 
-## Full user documentation
-Please see here for [**Full User Documentation**](https://sinricpro.github.io/esp8266-esp32-sdk)
+### Configuration Notes
 
+#### 1. How to select which built-in Ethernet or shield to use
+
+The easiest way is to use 
+
+```cpp
+#define USE_ETHERNET_WRAPPER    true
+```
+
+then select **one and only one** Ethernet library to use as follows:
+
+- Standard W5x00 Ethernet_Generic library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
+
+```cpp
+
+// Only one if the following to be true
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET_GENERIC      false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
+```
+
+To use W5x00 Ethernet, for example using Ethernet_Generic library
+
+```cpp
+// Only one if the following to be true
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET_GENERIC      true
+#define USE_ETHERNET_ESP8266      false
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
+```
+
+- To use ENC28J60 Ethernet, using EthernetENC library (**NEW and Better**)
+
+```cpp
+// Only one if the following to be true
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET_GENERIC      false
+#define USE_ETHERNET_ESP8266      false
+#define USE_ETHERNET_ENC          true
+#define USE_CUSTOM_ETHERNET       false
+```
+
+- To use ENC28J60 Ethernet, using UIPEthernet library:
+
+```cpp
+// Only one if the following to be true
+#define USE_UIP_ETHERNET          true
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET_GENERIC      false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
+```
+
+
+- To use another Ethernet library
+For example, EthernetLarge library
+
+```cpp
+// Only one if the following to be true
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET_GENERIC      false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       true
+
+//Must be placed before #include <EthernetWebServer.h>
+#include <EthernetLarge.h>
+...
+
+#include <EthernetWebServer.h>
+```
+
+- Only for Teensy 4.1, to use NativeEthernet library
+
+```
+#if defined(__IMXRT1062__)
+    // For Teensy 4.1/4.0
+    #if defined(ARDUINO_TEENSY41)
+      #define BOARD_TYPE      "TEENSY 4.1"
+      // Use true for NativeEthernet Library, false if using other Ethernet libraries
+      #define USE_NATIVE_ETHERNET     true
+      #define USE_QN_ETHERNET         false
+    #elif defined(ARDUINO_TEENSY40)
+      #define BOARD_TYPE      "TEENSY 4.0"
+    #else
+      #define BOARD_TYPE      "TEENSY 4.x"
+    #endif      
+  #elif defined(__MK66FX1M0__)
+  ....
+```
+
+- Only for Teensy 4.1, to use another Ethernet library, for example Ethernet_Generic library
+
+```
+#if defined(__IMXRT1062__)
+  // For Teensy 4.1/4.0
+  #if defined(ARDUINO_TEENSY41)
+    #define BOARD_TYPE      "TEENSY 4.1"
+    // Use true for NativeEthernet Library, false if using other Ethernet libraries
+    #define USE_NATIVE_ETHERNET     false
+    #define USE_QN_ETHERNET         false
+  #elif defined(ARDUINO_TEENSY40)
+    #define BOARD_TYPE      "TEENSY 4.0"
+  #else
+    #define BOARD_TYPE      "TEENSY 4.x"
+  #endif      
+#elif defined(__MK66FX1M0__)
+  ....
+  
+#define USE_UIP_ETHERNET        false
+
+// Only one if the following to be true
+#define USE_ETHERNET_GENERIC    true
+#define USE_ETHERNET_ESP8266    false
+#define USE_ETHERNET_ENC        false
+#define USE_CUSTOM_ETHERNET     false  
+```
+
+- Only for Teensy 4.1, to use QNEthernet library
+
+```
+#if ( defined(CORE_TEENSY) && defined(__IMXRT1062__) && defined(ARDUINO_TEENSY41) ) 
+  // For Teensy 4.1
+  #define BOARD_TYPE      "TEENSY 4.1"
+  // Use true for NativeEthernet Library, false if using other Ethernet libraries
+  #define USE_NATIVE_ETHERNET     false
+  #define USE_QN_ETHERNET         true
+#else
+  #error Only Teensy 4.1 supported
+#endif
+
+#define USE_ETHERNET_WRAPPER    false
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+
+#define USE_UIP_ETHERNET        false
+#define USE_ETHERNET_GENERIC    false
+#define USE_ETHERNET_ESP8266    false 
+#define USE_ETHERNET_ENC        false
+#define USE_CUSTOM_ETHERNET     false
+
+#if USE_NATIVE_ETHERNET
+  #include "NativeEthernet.h"
+  #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+  #define SHIELD_TYPE           "using NativeEthernet"
+#elif USE_QN_ETHERNET
+  #include "QNEthernet.h"
+  using namespace qindesign::network;
+  #warning Using QNEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+  #define SHIELD_TYPE           "using QNEthernet"  
+#endif 
+```
+
+---
+
+#### Important:
+
+- The **Ethernet_Shield_W5200, EtherCard, EtherSia  libraries are not supported**. Don't use unless you know how to modify those libraries.
+- Requests to support for any future custom Ethernet library will be ignored. **Use at your own risk**.
+
+---
+
+#### 2. How to select another CS/SS pin to use
+
+The default CS/SS pin is GPIO4(D2) for ESP8266, GPIO22 for ESP32, 10 for all other boards.
+
+If the default pin is not correct, the easiest way is to select the CS/SS pin (e.g. 22) to use as follows:
+
+```cpp
+// To override the default CS/SS pin. Don't use unless you know exactly which pin to use
+#define USE_THIS_SS_PIN   22
+```
+
+#### 3. How to use W5x00 with ESP8266
+
+To avoid using the default but not-working Ethernet library of ESP8266, rename the Ethernet.h/cpp to Ethernet_ESP8266.h/cpp to avoid library conflict if you're using the Arduino Ethernet library. The Ethernet_Generic, Ethernet2, Ethernet3, EthernetLarge library can be used without conflict.
+
+These pins are tested OK with ESP8266 and W5x00
+
+```cpp
+  // For ESP8266
+  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+  // Ethernet           0                 X            X            X            X        0
+  // Ethernet2          X                 X            X            X            X        0
+  // Ethernet3          X                 X            X            X            X        0
+  // EthernetLarge      X                 X            X            X            X        0
+  // Ethernet_ESP8266   0                 0            0            0            0        0
+  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  //Ethernet.setCsPin (USE_THIS_SS_PIN);
+  Ethernet.init (USE_THIS_SS_PIN);
+
+```
+
+#### 4. How to increase W5x00 TX/RX buffer
+
+- For **Ethernet_Generic** library only,  simply use as follows to have large buffer similar to EthernetLarge library
+```
+#define ETHERNET_LARGE_BUFFERS
+```
+
+- For **Ethernet3** library only,  use as follows
+
+```cpp
+  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+  #ifndef ETHERNET3_MAX_SOCK_NUM
+    #define ETHERNET3_MAX_SOCK_NUM      4
+  #endif
+  
+  Ethernet.setCsPin (USE_THIS_SS_PIN);
+  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+```
+
+### 5. How to adjust sendContent_P() and send_P() buffer size
+
+sendContent_P() and send_P() buffer size is set default at 4 Kbytes, and minimum is 256 bytes. If you need to change, just add a definition, e.g.:
+
+```cpp
+#define SENDCONTENT_P_BUFFER_SZ     2048
+```
+
+Note that the buffer size must be larger than 256 bytes. See [Sending GZIP HTML ~ 120kb+ (suggested enhancement)](https://github.com/khoih-prog/EthernetWebServer_STM32/issues/3).
+
+
+### 6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library
+
+- For **Ethernet_Generic** library only, to use `SPI2` for ESP32
+
+```
+#define USING_SPI2                          true
+```
+
+Pin to use for `SPI2`
+
+```
+MOSI:  13
+MISO:  12
+SCK:   14
+SS:    5
+```
+
+### 7. How to use SPI1 for RP2040 using W5x00 and Ethernet_Generic Library
+
+- For **Ethernet_Generic** library only, to use `SPI1` for RP2040 using [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
+
+```
+#define USING_SPI2                          true
+```
+
+Pin to use for `SPI1`
+
+```
+MOSI:  15
+MISO:  12
+SCK:   14
+SS:    13
+```
+
+---
 ---
 
 ## Examples
@@ -760,425 +1084,15 @@ Syntax is
 
 ### Example [SAMD_WiFiNINA_Switch](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch)
 
-Please take a look at other examples, as well.
-
 #### 1. File [SAMD_WiFiNINA_Switch.ino](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino)
 
-```cpp
-// STM32 Boards supported: Nucleo-144, Nucleo-64, Nucleo-32, Discovery, STM32F1, STM32F3, STM32F4, STM32H7, STM32L0, etc.
-// SAM DUE
-// Teensy 4.1, 4.0, 3.6, 3.5, 3.2/3.1, 3.0
-
-#include "defines.h"
-
-#include "SinricPro_Generic.h"
-#include "SinricProSwitch.h"
-
-bool myPowerState = false;
-unsigned long lastBtnPress = 0;
-
-/* bool onPowerState(String deviceId, bool &state)
-
-   Callback for setPowerState request
-   parameters
-    String deviceId (r)
-      contains deviceId (useful if this callback used by multiple devices)
-    bool &state (r/w)
-      contains the requested state (true:on / false:off)
-      must return the new state
-
-   return
-    true if request should be marked as handled correctly / false if not
-*/
-bool onPowerState(const String &deviceId, bool &state) 
-{
-  Serial.print("Device ");
-  Serial.print(deviceId.c_str());
-  Serial.print(state ? " turned on" : " turn off");
-  Serial.println(" (via SinricPro)");
-  
-  myPowerState = state;
-  digitalWrite(LED_PIN, myPowerState ? LOW : HIGH);
-  return true; // request handled properly
-}
-
-void handleButtonPress() 
-{
-  unsigned long actualMillis = millis(); // get actual millis() and keep it in variable actualMillis
-  if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)  
-  { 
-    // is button pressed (inverted logic! button pressed = LOW) and debounced?
-    if (myPowerState) 
-    {     
-      // flip myPowerState: if it was true, set it to false, vice versa
-      myPowerState = false;
-    } 
-    else 
-    {
-      myPowerState = true;
-    }
-    digitalWrite(LED_PIN, myPowerState ? LOW : HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
-
-    // get Switch device back
-    SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
-    // send powerstate event
-    mySwitch.sendPowerStateEvent(myPowerState); // send the new powerState to SinricPro server
-    Serial.print("Device ");
-    Serial.print(mySwitch.getDeviceId().toString());
-    Serial.print(myPowerState ? "turned on" : "turn off");
-    Serial.println(" (manually via flashbutton)");
-
-    lastBtnPress = actualMillis;  // update last button press variable
-  }
-}
-
-// setup function for WiFi connection
-void setupWiFi() 
-{
-  Serial.println("\n[Wifi]: Connecting");
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-
-  while (WiFi.status() != WL_CONNECTED) 
-  {
-     Serial.print(".");
-    delay(250);
-  }
-  Serial.print("\n[WiFi]: IP-Address is ");
-  Serial.println(WiFi.localIP());
-}
-
-// setup function for SinricPro
-void setupSinricPro() 
-{
-  // add device to SinricPro
-  SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
-
-  // set callback function to device
-  mySwitch.onPowerState(onPowerState);
-
-  // setup SinricPro
-  SinricPro.onConnected([]() 
-  {
-    Serial.println("Connected to SinricPro");
-  });
-  
-  SinricPro.onDisconnected([]() 
-  {
-    Serial.println("Disconnected from SinricPro");
-  });
-  
-  SinricPro.begin(APP_KEY, APP_SECRET);
-}
-
-// main setup function
-void setup()
-{
-  pinMode(BUTTON_PIN, INPUT_PULLUP); // GPIO 0 as input, pulled high
-  pinMode(LED_PIN, OUTPUT); // define LED GPIO as output
-  digitalWrite(LED_PIN, HIGH); // turn off LED on bootup
-
-  Serial.begin(BAUD_RATE); 
-  while (!Serial);
-  
-  Serial.println("\nStarting SAMD_WiFiNINA_Switch on " + String(BOARD_NAME));
-  Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
-  setupWiFi();
-  setupSinricPro();
-}
-
-void loop() 
-{
-  handleButtonPress();
-  SinricPro.handle();
-}
-
-```
+https://github.com/khoih-prog/SinricPro_Generic/blob/9411cd6a5b6a0c4841074f7de9739798d0fe2ddd/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino#L21-L143
 
 ---
 
 #### 2. File [defines.h](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/defines.h)
 
-```cpp
-#ifndef defines_h
-#define defines_h
-
-#define WEBSOCKETS_NETWORK_TYPE   NETWORK_WIFININA
-
-#if defined(ESP8266) || defined(ESP32)
-  #error This code is not intended to run on the ESP32/ESP8266 boards ! Please check your Tools->Board setting.
-#endif
-
-#define SRP_DEBUG_PORT                Serial
-
-// Debug Level from 0 to 4
-#define _SRP_LOGLEVEL_                1
-
-// Uncomment the following line to enable serial debug output
-#define ENABLE_DEBUG    true
-
-#if ENABLE_DEBUG
-  #define DEBUG_PORT Serial
-  #define NODEBUG_WEBSOCKETS
-  #define NDEBUG
-#endif
-
-#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-  #if defined(WIFININA_USE_SAMD)
-    #undef WIFININA_USE_SAMD
-  #endif
-  #define WIFININA_USE_SAMD      true
-  #endif
-
-#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-  #if defined(WIFININA_USE_NRF528XX)
-    #undef WIFININA_USE_NRF528XX
-  #endif
-  #define WIFININA_USE_NRF528XX      true
-#endif
-
-#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-  #if defined(WIFININA_USE_SAM_DUE)
-    #undef WIFININA_USE_SAM_DUE
-  #endif
-  #define WIFININA_USE_SAM_DUE      true
-#endif
-
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
-       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
-  #if defined(WIFININA_USE_STM32)
-    #undef WIFININA_USE_STM32
-  #endif
-  #define WIFININA_USE_STM32        true
-#endif
-
-#if defined(WIFININA_USE_SAMD)
-  // For SAMD
-  
-  #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
-    #define BOARD_TYPE      "SAMD Zero"
-  #elif defined(ARDUINO_SAMD_MKR1000)
-    #define BOARD_TYPE      "SAMD MKR1000"
-  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
-    #define BOARD_TYPE      "SAMD MKRWIFI1010"
-  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
-    #define BOARD_TYPE      "SAMD NANO_33_IOT"
-  #elif defined(ARDUINO_SAMD_MKRFox1200)
-    #define BOARD_TYPE      "SAMD MKRFox1200"
-  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
-    #define BOARD_TYPE      "SAMD MKRWAN13X0"
-  #elif defined(ARDUINO_SAMD_MKRGSM1400)
-    #define BOARD_TYPE      "SAMD MKRGSM1400"
-  #elif defined(ARDUINO_SAMD_MKRNB1500)
-    #define BOARD_TYPE      "SAMD MKRNB1500"
-  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
-    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
-  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
-    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
-  #elif defined(ADAFRUIT_FEATHER_M0_EXPRESS)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_FEATHER_M0_EXPRESS"
-  #elif defined(ADAFRUIT_METRO_M0_EXPRESS)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_METRO_M0_EXPRESS"
-  #elif defined(ADAFRUIT_CIRCUITPLAYGROUND_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_CIRCUITPLAYGROUND_M0"
-  #elif defined(ADAFRUIT_GEMMA_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_GEMMA_M0"
-  #elif defined(ADAFRUIT_TRINKET_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_TRINKET_M0"
-  #elif defined(ADAFRUIT_ITSYBITSY_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_ITSYBITSY_M0"
-  #elif defined(ARDUINO_SAMD_HALLOWING_M0)
-    #define BOARD_TYPE      "SAMD21 ARDUINO_SAMD_HALLOWING_M0"
-  #elif defined(ADAFRUIT_METRO_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_EXPRESS"
-  #elif defined(ADAFRUIT_GRAND_CENTRAL_M4)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_GRAND_CENTRAL_M4"
-  #elif defined(ADAFRUIT_FEATHER_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_FEATHER_M4_EXPRESS"
-  #elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS"
-  #elif defined(ADAFRUIT_TRELLIS_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_TRELLIS_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYPORTAL)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL"
-  #elif defined(ADAFRUIT_PYPORTAL_M4_TITANO)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL_M4_TITANO"
-  #elif defined(ADAFRUIT_PYBADGE_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_M4_EXPRESS"
-  #elif defined(ADAFRUIT_METRO_M4_AIRLIFT_LITE)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_AIRLIFT_LITE"
-  #elif defined(ADAFRUIT_PYGAMER_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYBADGE_AIRLIFT_M4)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_AIRLIFT_M4"
-  #elif defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_MONSTER_M4SK_EXPRESS"
-  #elif defined(ADAFRUIT_HALLOWING_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_HALLOWING_M4_EXPRESS"
-  #elif defined(SEEED_WIO_TERMINAL)
-    #define BOARD_TYPE      "SAMD SEEED_WIO_TERMINAL"
-  #elif defined(SEEED_FEMTO_M0)
-    #define BOARD_TYPE      "SAMD SEEED_FEMTO_M0"
-  #elif defined(SEEED_XIAO_M0)
-    #define BOARD_TYPE      "SAMD SEEED_XIAO_M0"
-    #define USE_THIS_SS_PIN       A1
-    #warning define SEEED_XIAO_M0 USE_THIS_SS_PIN == A1
-  #elif defined(Wio_Lite_MG126)
-    #define BOARD_TYPE      "SAMD SEEED Wio_Lite_MG126"
-  #elif defined(WIO_GPS_BOARD)
-    #define BOARD_TYPE      "SAMD SEEED WIO_GPS_BOARD"
-  #elif defined(SEEEDUINO_ZERO)
-    #define BOARD_TYPE      "SAMD SEEEDUINO_ZERO"
-  #elif defined(SEEEDUINO_LORAWAN)
-    #define BOARD_TYPE      "SAMD SEEEDUINO_LORAWAN"
-  #elif defined(SEEED_GROVE_UI_WIRELESS)
-    #define BOARD_TYPE      "SAMD SEEED_GROVE_UI_WIRELESS"
-  #elif defined(__SAMD21E18A__)
-    #define BOARD_TYPE      "SAMD21E18A"
-  #elif defined(__SAMD21G18A__)
-    #define BOARD_TYPE      "SAMD21G18A"
-  #elif defined(__SAMD51G19A__)
-    #define BOARD_TYPE      "SAMD51G19A"
-  #elif defined(__SAMD51J19A__)
-    #define BOARD_TYPE      "SAMD51J19A"
-  #elif defined(__SAMD51J20A__)
-    #define BOARD_TYPE      "SAMD51J20A"
-  #elif defined(__SAM3X8E__)
-    #define BOARD_TYPE      "SAM3X8E"
-  #elif defined(__CPU_ARC__)
-    #define BOARD_TYPE      "CPU_ARC"
-  #elif defined(__SAMD51__)
-    #define BOARD_TYPE      "SAMD51"
-  #else
-    #define BOARD_TYPE      "SAMD Unknown"
-  #endif
-
-#elif (WIFININA_USE_SAM_DUE)
-  #define BOARD_TYPE      "SAM DUE"
-
-#elif (WIFININA_USE_NRF528XX)
-
-  #if defined(NRF52840_FEATHER)
-    #define BOARD_TYPE      "NRF52840_FEATHER"
-  #elif defined(NRF52832_FEATHER)
-    #define BOARD_TYPE      "NRF52832_FEATHER"
-  #elif defined(NRF52840_FEATHER_SENSE)
-    #define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
-  #elif defined(NRF52840_ITSYBITSY)
-    #define BOARD_TYPE      "NRF52840_ITSYBITSY"
-  #elif defined(NRF52840_CIRCUITPLAY)
-    #define BOARD_TYPE      "NRF52840_CIRCUITPLAY"
-  #elif defined(NRF52840_CLUE)
-    #define BOARD_TYPE      "NRF52840_CLUE"
-  #elif defined(NRF52840_METRO)
-    #define BOARD_TYPE      "NRF52840_METRO"
-  #elif defined(NRF52840_PCA10056)
-    #define BOARD_TYPE      "NRF52840_PCA10056"
-  #elif defined(NINA_B302_ublox)
-    #define BOARD_TYPE      "NINA_B302_ublox"
-  #elif defined(NINA_B112_ublox)
-    #define BOARD_TYPE      "NINA_B112_ublox"
-  #elif defined(PARTICLE_XENON)
-    #define BOARD_TYPE      "PARTICLE_XENON"
-  #elif defined(ARDUINO_NRF52_ADAFRUIT)
-    #define BOARD_TYPE      "ARDUINO_NRF52_ADAFRUIT"
-  #else
-    #define BOARD_TYPE      "nRF52 Unknown"
-  #endif
-
-#elif ( defined(CORE_TEENSY) )
-  #if defined(__IMXRT1062__)
-    // For Teensy 4.1/4.0
-    #define BOARD_TYPE      "TEENSY 4.1/4.0"
-  #elif defined(__MK66FX1M0__)
-    #define BOARD_TYPE "Teensy 3.6"
-  #elif defined(__MK64FX512__)
-    #define BOARD_TYPE "Teensy 3.5"
-  #elif defined(__MKL26Z64__)
-    #define BOARD_TYPE "Teensy LC"
-  #elif defined(__MK20DX256__)
-    #define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
-  #elif defined(__MK20DX128__)
-    #define BOARD_TYPE "Teensy 3.0"
-  #elif defined(__AVR_AT90USB1286__)
-    #error Teensy 2.0++ not supported yet
-  #elif defined(__AVR_ATmega32U4__)
-    #error Teensy 2.0 not supported yet
-  #else
-    // For Other Boards
-    #define BOARD_TYPE      "Unknown Teensy Board"
-  #endif
-
-#elif (WIFININA_USE_STM32)
-  #if defined(STM32F0)
-    #define BOARD_TYPE  "STM32F0"
-  #elif defined(STM32F1)
-    #define BOARD_TYPE  "STM32F1"
-  #elif defined(STM32F2)
-    #define BOARD_TYPE  "STM32F2"
-  #elif defined(STM32F3)
-    #define BOARD_TYPE  "STM32F3"
-  #elif defined(STM32F4)
-    #define BOARD_TYPE  "STM32F4"
-  #elif defined(STM32F7)
-    #define BOARD_TYPE  "STM32F7"
-  #elif defined(STM32L0)
-    #define BOARD_TYPE  "STM32L0"
-  #elif defined(STM32L1)
-    #define BOARD_TYPE  "STM32L1"
-  #elif defined(STM32L4)
-    #define BOARD_TYPE  "STM32L4"
-  #elif defined(STM32H7)
-    #define BOARD_TYPE  "STM32H7"
-  #elif defined(STM32G0)
-    #define BOARD_TYPE  "STM32G0"
-  #elif defined(STM32G4)
-    #define BOARD_TYPE  "STM32G4"
-  #elif defined(STM32WB)
-    #define BOARD_TYPE  "STM32WB"
-  #elif defined(STM32MP1)
-    #define BOARD_TYPE  "STM32MP1"
-  #else
-    #define BOARD_TYPE  "STM32 Unknown"
-  #endif
-
-#else
-  // For Mega
-  #define BOARD_TYPE      "AVR Mega"
-#endif
-
-#ifndef BOARD_NAME
-  #define BOARD_NAME    BOARD_TYPE
-#endif
-
-#include "WiFiNINA_Generic.h"
-
-// Select the IP address according to your local network
-IPAddress ip(192, 168, 2, 222);
-
-#define WIFI_SSID         "YOUR-WIFI-SSID"
-#define WIFI_PASS         "YOUR-WIFI-PASSWORD"
-
-#define APP_KEY           "YOUR-APP-KEY"      // Should look like "de0bxxxx-1x3x-4x3x-ax2x-5dabxxxxxxxx"
-#define APP_SECRET        "YOUR-APP-SECRET"   // Should look like "5f36xxxx-x3x7-4x3x-xexe-e86724a9xxxx-4c4axxxx-3x3x-x5xe-x9x3-333d65xxxxxx"
-
-#define SWITCH_ID         "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
-
-#define BAUD_RATE         115200                // Change baudrate to your need
-
-#define BUTTON_PIN        0   // GPIO for BUTTON (inverted: LOW = pressed, HIGH = released)
-#define LED_PIN           2   // GPIO for LED (inverted)
-#endif    //defines_h
-```
+https://github.com/khoih-prog/SinricPro_Generic/blob/9411cd6a5b6a0c4841074f7de9739798d0fe2ddd/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/defines.h#L17-L294
 
 ---
 ---
@@ -1191,7 +1105,7 @@ This is the terminal output when running [SAMD_WiFiNINA_TV](examples/Generic/TV/
 
 ```
 Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 12 channels configured
 
@@ -1226,7 +1140,7 @@ This is the terminal output when running [SAMD_WiFiNINA_Light](examples/Generic/
 
 ```
 Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 Setup color temperature lookup table
 colorTemperatureIndex[2200] = 0
@@ -1260,7 +1174,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [SRP] =========== USE_ETHERNET2 ===========
 [SRP] Default SPI pinout:
@@ -1300,7 +1214,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [SRP] =========== USE_ETHERNET3 ===========
 [SRP] Default SPI pinout:
@@ -1341,7 +1255,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.105
 [SRP] Creating new device. No Device=  _deviceID
@@ -1373,7 +1287,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [SRP] =========== USE_ETHERNET_LARGE ===========
 [SRP] Default SPI pinout:
@@ -1469,7 +1383,7 @@ This is the terminal output when running terminal output when running [Generic_E
 
 ```
 Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 Index = 0
 Connected!
@@ -1657,7 +1571,7 @@ This is the terminal output when running terminal output when running [WIOT_Mult
 
 ```
 Starting WIOT_MultiSwitch_LCD on WIO_TERMINAL
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [Wifi]: Connecting
 
@@ -1845,7 +1759,7 @@ This is the terminal output when running terminal output when running [Generic_W
 
 ```
 Starting Generic_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.153
 Connected to SinricPro
@@ -2070,7 +1984,7 @@ This is the terminal output when running terminal output when running [Generic_W
 
 ```
 Starting RP2040_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 
 [Wifi]: Connecting[WiFi]: IP-Address is 192.168.2.153
 [SRP] Creating new device. No current DeviceId = 123456789012345678901234
@@ -2201,7 +2115,7 @@ This is the terminal output when running terminal output when running [Blinds](e
 ```
 Start Blinds on WT32-ETH01 with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1
-SinricPro_Generic (v2.8.4)
+SinricPro_Generic (v2.8.5)
 [ETH]: Connecting
 ETH Started
 ETH Connected
@@ -2295,6 +2209,323 @@ Connected to SinricPro
 }
 ```
 
+
+---
+
+#### 12. [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on RASPBERRY_PI_PICO
+
+This is the terminal output when running terminal output when running [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on **RASPBERRY_PI_PICO** with [**WIZnet Ethernet HAT**](https://docs.wiznet.io/Product/Open-Source-Hardware/wiznet_ethernet_hat)
+
+
+```
+Starting Generic_Ethernet_Light on RASPBERRY_PI_PICO
+Version : SinricPro_Generic (v2.8.5)
+Setup color temperature lookup table
+colorTemperatureIndex[2200] = 0
+colorTemperatureIndex[2700] = 1
+colorTemperatureIndex[4000] = 2
+colorTemperatureIndex[5500] = 3
+colorTemperatureIndex[7000] = 4
+[SRP] =========== USE_ETHERNET_GENERIC ===========
+[SRP] Default SPI pinout:
+[SRP] MOSI: 19
+[SRP] MISO: 16
+[SRP] SCK: 18
+[SRP] SS: 17
+[SRP] =========================
+[SRP] RPIPICO setCsPin: 17
+[ETG] W5100 init, using SS_PIN_DEFAULT = 17 , new ss_pin =  10 , W5100Class::ss_pin =  17
+[ETG] Chip is W5100S
+[ETG] W5100::init: W5100S, SSIZE = 4096
+[SRP] =========================
+[SRP] Currently Used SPI pinout:
+[SRP] MOSI: 19
+[SRP] MISO: 16
+[SRP] SCK: 18
+[SRP] SS: 17
+[SRP] =========================
+Using mac index = 0
+Connected! IP address: 192.168.2.98
+[SRP] Creating new device. No current DeviceId = Device_ID
+[SRP] add(): Adding DeviceId = Device_ID
+[SRP] begin(): App-Key = App_Key
+[SRP] begin(): App-Secret = App_Secret
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+Websocket: headers:
+appkey:App_Key
+deviceids:Device_ID
+restoredevicestates:false
+ip:192.168.2.98
+mac:DE:AD:BE:EF:FE:01
+platform:RASPBERRY_PI_PICO
+version:2.8.4
+Connected to SinricPro
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650769456
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650769562
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650769562,
+    "deviceId": "Device_ID",
+    "replyToken": "fdbf1cc6-5e32-4d8f-81dc-43ad905116e6",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "5u64RTTXqgQiHNVZFo7hmA0ora3XYKzethOg3C/li8c="
+  }
+}
+Device Device_ID turned on (via SinricPro)
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650769562,
+    "deviceId": "Device_ID",
+    "message": "OK",
+    "replyToken": "fdbf1cc6-5e32-4d8f-81dc-43ad905116e6",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "gYvvaar7x4BwJbkofSOkjDHeP9uBU/SL81db++BzE8s="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650769564
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650769564,
+    "deviceId": "Device_ID",
+    "replyToken": "9453bef8-4c4e-47fb-9df9-e1a2cb5be795",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "M9NIE+Bp4I/+o9D9pQoQFguLxiNBebGJKN9A/k+i7bQ="
+  }
+}
+Device Device_ID turn off (via SinricPro)
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650769564,
+    "deviceId": "Device_ID",
+    "message": "OK",
+    "replyToken": "9453bef8-4c4e-47fb-9df9-e1a2cb5be795",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "aRT3TNQmSDMlOzZ91OncVkzEZwbFxMC/BahmjHT8QEQ="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+```
+
+
+---
+
+#### 13. [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on PORTENTA_H7_M7
+
+This is the terminal output when running terminal output when running [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on **WT32-PORTENTA_H7_M7 with Portenta Ethernet**
+
+
+```
+Starting Generic_Ethernet_Light on PORTENTA_H7_M7
+Version : SinricPro_Generic (v2.8.5)
+Setup color temperature lookup table
+colorTemperatureIndex[2200] = 0
+colorTemperatureIndex[2700] = 1
+colorTemperatureIndex[4000] = 2
+colorTemperatureIndex[5500] = 3
+colorTemperatureIndex[7000] = 4
+[SRP] ======== USE_PORTENTA_H7_ETHERNET ========
+Using mac index = 14
+Connected! IP address: 192.168.2.106
+[SRP] Creating new device. No current DeviceId = 
+[SRP] add(): Invalid DeviceId = 
+[SRP] begin(): App-Key = 
+[SRP] begin(): App-Secret = 
+[SRP] begin(): Invalid App-Key = 
+[SRP] begin(): Invalid App-Secret = 
+[SRP] handle(): ERROR! begin() failed or was not called prior to event handler
+[SRP] -Reasons: Invalid app-key, app-secret or deviceIds
+[SRP] -SinricPro is disabled! Check earlier log messages for details.
+
+Starting Generic_Ethernet_Light on PORTENTA_H7_M7
+Version : SinricPro_Generic (v2.8.5)
+Setup color temperature lookup table
+colorTemperatureIndex[2200] = 0
+colorTemperatureIndex[2700] = 1
+colorTemperatureIndex[4000] = 2
+colorTemperatureIndex[5500] = 3
+colorTemperatureIndex[7000] = 4
+[SRP] ======== USE_PORTENTA_H7_ETHERNET ========
+Using mac index = 8
+Connected! IP address: 192.168.2.106
+[SRP] Creating new device. No current DeviceId = Device_ID
+[SRP] add(): Adding DeviceId = Device_ID
+[SRP] begin(): App-Key = App_Key
+[SRP] begin(): App-Secret = App_Secret
+[SRP] Websocket: Connecting to WebSocket Server:  ws.sinric.pro
+Websocket: headers:
+appkey:App_Key
+deviceids:Device_ID
+restoredevicestates:false
+ip:192.168.2.106
+mac:40:00:29:E1:80:00
+platform:PORTENTA_H7_M7
+version:2.8.4
+Connected to SinricPro
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650770708
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650770720
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650770720,
+    "deviceId": "Device_ID",
+    "replyToken": "29af8102-3437-4379-b024-900d970a0d1e",
+    "type": "request",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "OdAt4FLchxe0ot6vO4Ihb6dLnP+KC2fwLcnUykyZyLc="
+  }
+}
+Device Device_ID turned on (via SinricPro)
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650770720,
+    "deviceId": "Device_ID",
+    "message": "OK",
+    "replyToken": "29af8102-3437-4379-b024-900d970a0d1e",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "On"
+    }
+  },
+  "signature": {
+    "HMAC": "YfuVMX1kCssKymi8UiYcbY0ELkIUnSElMttlG0Sp/cU="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+[SRP] handleReceiveQueue(): Message(s) in receiveQueue = 1
+[SRP] handleReceiveQueue(): Valid Signature. Processing message...
+[SRP] extractTimestamp(): Got Timestamp = 1650770722
+[SRP] handleRequest(): handling request
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650770722,
+    "deviceId": "Device_ID",
+    "replyToken": "db211e3d-4334-4f3f-8dd6-2aa4a82aa801",
+    "type": "request",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "m1EXS1JvUP/pI7HDSoOwE1Zc1r7JZMaCf9y8hsnZeFI="
+  }
+}
+Device Device_ID turn off (via SinricPro)
+[SRP] handleSendQueue(): Sending Number of Message(s) in sendQueue = 1
+{
+  "header": {
+    "payloadVersion": 2,
+    "signatureVersion": 1
+  },
+  "payload": {
+    "action": "setPowerState",
+    "clientId": "portal",
+    "createdAt": 1650770722,
+    "deviceId": "Device_ID",
+    "message": "OK",
+    "replyToken": "db211e3d-4334-4f3f-8dd6-2aa4a82aa801",
+    "success": true,
+    "type": "response",
+    "value": {
+      "state": "Off"
+    }
+  },
+  "signature": {
+    "HMAC": "mQxdqwFZ09QOXY63Qlckhbkgsygi0jDM/TYh1JHEZYw="
+  }
+}
+[SRP] handleSendQueue: Sending to WebSocket
+[SRP] handleSendQueue(): Message sent.
+```
+
+
 ---
 ---
 
@@ -2354,10 +2585,10 @@ Submit issues to: [**SinricPro_Generic issues**](https://github.com/khoih-prog/S
 
 1. Bug Searching and Killing
 2. Support more types of new boards
-3. Support more types of Ethernet modules/shields, such as **LAN8742A, LAN8720, etc.**
-4. Support more types of WiFi modules/shields, such as WiFi101, **ESP8266-AT, ESP32-AT**
-5. Support **GSM/GPRS** modules/shields.
-6. Support ENC28J60 Ethernet modules/shields, using new [EthernetENC](https://github.com/jandrassy/EthernetENC) library.
+3. Support **GSM/GPRS** modules/shields
+4. Sync with latest [**SinricPro library**](https://github.com/sinricpro/esp8266-esp32-sdk)
+
+---
 
 ### DONE
 
@@ -2374,8 +2605,12 @@ Submit issues to: [**SinricPro_Generic issues**](https://github.com/khoih-prog/S
 11. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 12. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
 13. Add `Table of Contents`
-14. Add support to **WT32_ETH01 boards** using ESP32-based boards and LAN8720 Ethernet
+14. Use [Ethernet_Generic](https://github.com/khoih-prog/Ethernet_Generic) library as default for W5x00 Ethernet.
+15. Add support to **Portenta_H7**
+16. Add support to WIZNet W5100S, such as  [**WIZnet Ethernet HAT**](https://docs.wiznet.io/Product/Open-Source-Hardware/wiznet_ethernet_hat) and [**W5100S-EVB-Pico**](https://docs.wiznet.io/Product/iEthernet/W5100S/w5100s-evb-pico)
 
+
+---
 ---
 
 ### Contributions and Thanks
