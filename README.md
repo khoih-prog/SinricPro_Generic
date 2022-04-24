@@ -2644,7 +2644,7 @@ If you want to contribute to this project:
 
 - Most of the credits go to original author [**Boris Jaeger**](https://github.com/sivar2311).
 
-- The library is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by/2.0/) and [MIT](https://github.com/khoih-prog/SinricPro_Generic/blob/master/LICENSE)
+- The library is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by/2.0/)
 
 ---
 
