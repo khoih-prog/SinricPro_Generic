@@ -268,7 +268,7 @@ New features:
   Request last known device states from server
 
 Changed:
-- Processing of incomming messages
+- Processing of incoming messages
   Prepared for client-sided requests and server-sided responses
 - Processing of outgoing messages
   Messages stored without signature / timestamp in sendQueue
