@@ -212,7 +212,7 @@ New :
 Code optimizations:
 - Changed callbacks to use `const String&` in callback functions
   to avoid unnecessary string copying
-- Changed event limitiation to prevent server flooding
+- Changed event limitation to prevent server flooding
 
 ---
 
@@ -229,7 +229,7 @@ Code optimization
 
 - SinricProSwitch is now a typedef to SinricProDevice since SinricProDevice handles onPowerState
 
-- removed unneccessary includes
+- removed unnecessary includes
 
 Bug fixes
 - Fixed json protocol on events
@@ -268,7 +268,7 @@ New features:
   Request last known device states from server
 
 Changed:
-- Processessing of incomming messages
+- Processing of incomming messages
   Prepared for client-sided requests and server-sided responses
 - Processing of outgoing messages
   Messages stored without signature / timestamp in sendQueue
