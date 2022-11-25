@@ -46,12 +46,13 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProAirQualitySensor& mySinricProAirQualitySensor = SinricPro[DEVICE_ID];
@@ -59,36 +60,37 @@ void setupSinricPro()
   // set callback function to device
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Generic_WiFiNINA_AQSensor on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 
-  if ((long)(millis() - dispatchTime) >= 0) 
+  if ((long)(millis() - dispatchTime) >= 0)
   {
     SinricProAirQualitySensor &mySinricProAirQualitySensor = SinricPro[DEVICE_ID]; // get sensor device
 
@@ -98,7 +100,7 @@ void loop()
 
     mySinricProAirQualitySensor.sendAirQualityEvent(pm1, pm2_5, pm10, "PERIODIC_POLL");
     dispatchTime += MIN_IN_MS;
-    
+
     Serial.println("Sending Air Quality event ..");
   }
 }

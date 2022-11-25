@@ -24,35 +24,36 @@
 #include "SinricProDimSwitch.h"
 
 // we use a struct to store all states and values for our dimmable switch
-struct 
+struct
 {
   bool powerState = false;
   int powerLevel = 0;
 } device_state;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Device " + deviceId + " power turned " + String(state ? "on" : "off"));
-  
+
   device_state.powerState = state;
   return true; // request handled properly
 }
 
-bool onPowerLevel(const String &deviceId, int &powerLevel) 
+bool onPowerLevel(const String &deviceId, int &powerLevel)
 {
   device_state.powerLevel = powerLevel;
-  
+
   Serial.println("Device " + deviceId + " power level level changed to " + String(device_state.powerLevel));
-  
+
   return true;
 }
 
-bool onAdjustPowerLevel(const String &deviceId, int &levelDelta) 
+bool onAdjustPowerLevel(const String &deviceId, int &levelDelta)
 {
   device_state.powerLevel += levelDelta;
-  
-  Serial.println("Device " + deviceId + " power level level changed about " + String(levelDelta) + " to " + String(device_state.powerLevel));
-  
+
+  Serial.println("Device " + deviceId + " power level level changed about " + String(levelDelta) + " to " + String(
+                   device_state.powerLevel));
+
   levelDelta = device_state.powerLevel;
   return true;
 }
@@ -68,11 +69,12 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProDimSwitch &myDimSwitch = SinricPro[DIMSWITCH_ID];
 
@@ -96,9 +98,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIO_Terminal_DimSwitch on " + String(BOARD_NAME));
@@ -108,7 +111,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

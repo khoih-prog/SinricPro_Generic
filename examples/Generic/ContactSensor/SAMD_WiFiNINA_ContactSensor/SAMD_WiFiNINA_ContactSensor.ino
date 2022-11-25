@@ -45,24 +45,24 @@ unsigned long lastChange = 0;
         HIGH = contactsensor is closed
         LOW  = contactsensor is open
 */
-void handleContactsensor() 
+void handleContactsensor()
 {
-  if (!myPowerState) 
+  if (!myPowerState)
     return;                            // if device switched off...do nothing
 
   unsigned long actualMillis = millis();
 
   // debounce contact state transitions (same as debouncing a pushbutton)
-  if (actualMillis - lastChange < 250) 
+  if (actualMillis - lastChange < 250)
     return;
 
   bool actualContactState = digitalRead(CONTACT_PIN);   // read actual state of contactsensor
 
-  if (actualContactState != lastContactState) 
-  {         
+  if (actualContactState != lastContactState)
+  {
     // if state has changed
     Serial.println("ContactSensor is now " + String(actualContactState ? "open" : "closed"));
-    
+
     lastContactState = actualContactState;              // update last known state
     lastChange = actualMillis;                          // update debounce time
     SinricProContactsensor &myContact = SinricPro[CONTACT_ID]; // get contact sensor device
@@ -79,12 +79,12 @@ void handleContactsensor()
    @return true         request handled properly
    @return false        request can't be handled because some kind of error happened
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Device " + deviceId + " turned " + String(state ? "on" : "off"));
-  
+
   myPowerState = state;
-  
+
   return true; // request handled properly
 }
 
@@ -100,12 +100,13 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProContactsensor& myContact = SinricPro[CONTACT_ID];
@@ -128,9 +129,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting SAMD_WiFiNINA_ContactSensor on " + String(BOARD_NAME));
@@ -140,7 +142,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   handleContactsensor();
   SinricPro.handle();

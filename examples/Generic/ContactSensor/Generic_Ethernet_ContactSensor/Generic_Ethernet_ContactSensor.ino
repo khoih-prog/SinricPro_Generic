@@ -45,24 +45,24 @@ unsigned long lastChange = 0;
         HIGH = contactsensor is closed
         LOW  = contactsensor is open
 */
-void handleContactsensor() 
+void handleContactsensor()
 {
-  if (!myPowerState) 
+  if (!myPowerState)
     return;                            // if device switched off...do nothing
 
   unsigned long actualMillis = millis();
 
   // debounce contact state transitions (same as debouncing a pushbutton)
-  if (actualMillis - lastChange < 250) 
+  if (actualMillis - lastChange < 250)
     return;
 
   bool actualContactState = digitalRead(CONTACT_PIN);   // read actual state of contactsensor
 
-  if (actualContactState != lastContactState) 
-  {         
+  if (actualContactState != lastContactState)
+  {
     // if state has changed
     Serial.println("ContactSensor is now " + String(actualContactState ? "open" : "closed"));
-    
+
     lastContactState = actualContactState;              // update last known state
     lastChange = actualMillis;                          // update debounce time
     SinricProContactsensor &myContact = SinricPro[CONTACT_ID]; // get contact sensor device
@@ -79,65 +79,65 @@ void handleContactsensor()
    @return true         request handled properly
    @return false        request can't be handled because some kind of error happened
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Device " + deviceId + " turned " + String(state ? "on" : "off"));
-  
+
   myPowerState = state;
-  
+
   return true; // request handled properly
 }
 
 
 // setup function for setupEthernet connection
-void setupEthernet() 
+void setupEthernet()
 {
-  #if USE_ETHERNET
-    LOGWARN(F("=========== USE_ETHERNET ==========="));
-  #elif USE_ETHERNET2
-    LOGWARN(F("=========== USE_ETHERNET2 ==========="));
-  #elif USE_ETHERNET3
-    LOGWARN(F("=========== USE_ETHERNET3 ==========="));
-  #elif USE_ETHERNET_LARGE
-    LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
-  #elif USE_ETHERNET_ESP8266
-    LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
-  #else
-    LOGWARN(F("========================="));
-  #endif
- 
+#if USE_ETHERNET
+  LOGWARN(F("=========== USE_ETHERNET ==========="));
+#elif USE_ETHERNET2
+  LOGWARN(F("=========== USE_ETHERNET2 ==========="));
+#elif USE_ETHERNET3
+  LOGWARN(F("=========== USE_ETHERNET3 ==========="));
+#elif USE_ETHERNET_LARGE
+  LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+#elif USE_ETHERNET_ESP8266
+  LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+#else
+  LOGWARN(F("========================="));
+#endif
+
   LOGWARN(F("Default SPI pinout:"));
   LOGWARN1(F("MOSI:"), MOSI);
   LOGWARN1(F("MISO:"), MISO);
   LOGWARN1(F("SCK:"),  SCK);
   LOGWARN1(F("SS:"),   SS);
   LOGWARN(F("========================="));
-   
+
   // unknown board, do nothing, use default SS = 10
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   10    // For other boards
-  #endif
-       
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   10    // For other boards
+#endif
+
   LOGWARN1(F("Use default CS/SS pin : "), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
-    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+  // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
 
-    Ethernet.init (USE_THIS_SS_PIN);
+  Ethernet.init (USE_THIS_SS_PIN);
 
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-    
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-                    
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+#elif USE_ETHERNET3
+  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+#ifndef ETHERNET3_MAX_SOCK_NUM
+#define ETHERNET3_MAX_SOCK_NUM      4
+#endif
 
-    // start the ethernet connection and the server:
+  Ethernet.setCsPin (USE_THIS_SS_PIN);
+  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+
+#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
+  // start the ethernet connection and the server:
   // Use Static IP
   //Ethernet.begin(mac, ip);
   // Use DHCP dynamic IP and random mac
@@ -148,13 +148,13 @@ void setupEthernet()
   Serial.println(index);
 
   Ethernet.begin(mac[index]);
-  
+
   Serial.print("Connected!\n[Ethernet]: IP-Address is ");
   Serial.println(Ethernet.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProContactsensor& myContact = SinricPro[CONTACT_ID];
@@ -177,9 +177,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting Generic_Ethernet_ContactSensor on " + String(BOARD_NAME));
@@ -189,7 +190,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   handleContactsensor();
   SinricPro.handle();

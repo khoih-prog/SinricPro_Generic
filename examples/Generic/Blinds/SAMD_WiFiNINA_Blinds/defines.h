@@ -39,19 +39,19 @@
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-  #if defined(WIFININA_USE_SAMD)
-    #undef WIFININA_USE_SAMD
-  #endif
-  #define WIFININA_USE_SAMD      true
-  #endif
+#if defined(WIFININA_USE_SAMD)
+  #undef WIFININA_USE_SAMD
+#endif
+#define WIFININA_USE_SAMD      true
+#endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-  #if defined(WIFININA_USE_NRF528XX)
-    #undef WIFININA_USE_NRF528XX
-  #endif
-  #define WIFININA_USE_NRF528XX      true
+#if defined(WIFININA_USE_NRF528XX)
+  #undef WIFININA_USE_NRF528XX
+#endif
+#define WIFININA_USE_NRF528XX      true
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
@@ -64,15 +64,15 @@
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
        defined(STM32WB) || defined(STM32MP1) )
-  #if defined(WIFININA_USE_STM32)
-    #undef WIFININA_USE_STM32
-  #endif
-  #define WIFININA_USE_STM32        true
+#if defined(WIFININA_USE_STM32)
+  #undef WIFININA_USE_STM32
+#endif
+#define WIFININA_USE_STM32        true
 #endif
 
 #if defined(WIFININA_USE_SAMD)
   // For SAMD
-  
+
   #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
     #define BOARD_TYPE      "SAMD Zero"
   #elif defined(ARDUINO_SAMD_MKR1000)

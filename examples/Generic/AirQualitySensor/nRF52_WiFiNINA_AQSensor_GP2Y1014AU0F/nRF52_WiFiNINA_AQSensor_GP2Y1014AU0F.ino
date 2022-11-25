@@ -8,7 +8,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
  **********************************************************************************************************************************/
- 
+
 /*
    Example for how to use SinricPro Air Quality Sensor with Sharp Dust Sensor (GP2Y1014AU0F) connected to WemosD1 Mini
    More information is here
@@ -55,12 +55,13 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProAirQualitySensor& mySinricProAirQualitySensor = SinricPro[DEVICE_ID];
@@ -68,43 +69,44 @@ void setupSinricPro()
   // set callback function to device
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
-void setupDustSensor() 
+void setupDustSensor()
 {
   //dustSensor.setBaseline(0.4); // set no dust voltage according to your own experiments
   //dustSensor.setCalibrationFactor(1.1); // calibrate against precision instrument
   dustSensor.begin();
 }
 
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting nRF52_WiFiNINA_AQSensor_GP2Y1014AU0F on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 
-  if ((long)(millis() - dispatchTime) >= 0) 
+  if ((long)(millis() - dispatchTime) >= 0)
   {
     Serial.print("Dust density: ");
     Serial.print(dustSensor.getDustDensity());

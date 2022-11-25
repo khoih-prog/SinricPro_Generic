@@ -26,27 +26,28 @@
 int blindsPosition = 0;
 bool powerState = false;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Device " + deviceId + " power turned " + String(state ? "on" : "off"));
-  
+
   powerState = state;
   return true; // request handled properly
 }
 
-bool onSetPosition(const String &deviceId, int &position) 
+bool onSetPosition(const String &deviceId, int &position)
 {
   Serial.println("Device " + deviceId + " set position to " + String(position));
-  
+
   return true; // request handled properly
 }
 
-bool onAdjustPosition(const String &deviceId, int &positionDelta) 
+bool onAdjustPosition(const String &deviceId, int &positionDelta)
 {
   blindsPosition += positionDelta;
-  
-  Serial.println("Device " + deviceId + " position changed about " + String(positionDelta) + " to " + String(blindsPosition));
-  
+
+  Serial.println("Device " + deviceId + " position changed about " + String(positionDelta) + " to " + String(
+                   blindsPosition));
+
   positionDelta = blindsPosition; // calculate and return absolute position
   return true; // request handled properly
 }
@@ -63,11 +64,12 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   // get a new Blinds device from SinricPro
   SinricProBlinds &myBlinds = SinricPro[BLINDS_ID];
@@ -90,9 +92,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIO_Terminal_Blinds on " + String(BOARD_NAME));
@@ -102,7 +105,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
