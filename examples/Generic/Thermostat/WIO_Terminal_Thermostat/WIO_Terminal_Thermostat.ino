@@ -26,38 +26,39 @@
 float globalTemperature;
 bool globalPowerState;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Thermostat " + deviceId + " turned " + String(state ? "on" : "off"));
-  
+
   globalPowerState = state;
   return true; // request handled properly
 }
 
-bool onTargetTemperature(const String &deviceId, float &temperature) 
+bool onTargetTemperature(const String &deviceId, float &temperature)
 {
   // Use 1 decimal point
-  Serial.println("Thermostat " + deviceId + " set temperature to " +String(temperature, 1));
-  
+  Serial.println("Thermostat " + deviceId + " set temperature to " + String(temperature, 1));
+
   globalTemperature = temperature;
   return true;
 }
 
-bool onAdjustTargetTemperature(const String & deviceId, float &temperatureDelta) 
+bool onAdjustTargetTemperature(const String & deviceId, float &temperatureDelta)
 {
   globalTemperature += temperatureDelta;  // calculate absolut temperature
 
   // Use 1 decimal point
-  Serial.println("Thermostat " + deviceId + " changed temperature about " + String(temperatureDelta, 1) + " to " + String(globalTemperature, 1));
-  
+  Serial.println("Thermostat " + deviceId + " changed temperature about " + String(temperatureDelta,
+                                                                                   1) + " to " + String(globalTemperature, 1));
+
   temperatureDelta = globalTemperature; // return absolut temperature
   return true;
 }
 
-bool onThermostatMode(const String &deviceId, String &mode) 
+bool onThermostatMode(const String &deviceId, String &mode)
 {
   Serial.println("Thermostat " + deviceId + " set to mode " + mode);
-  
+
   return true;
 }
 
@@ -73,11 +74,12 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProThermostat &myThermostat = SinricPro[THERMOSTAT_ID];
   myThermostat.onPowerState(onPowerState);
@@ -100,9 +102,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIO_Terminal_Thermostat on " + String(BOARD_NAME));
@@ -112,7 +115,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

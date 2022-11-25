@@ -50,7 +50,7 @@ unsigned long lastEvent = (-EVENT_WAIT_TIME);   // last time event has been sent
    return
     true if request should be marked as handled correctly / false if not
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("TemperatureSensor turned " + String(state ? "on" : "off"));
   deviceIsOn = state; // turn on / off temperature sensor
@@ -64,15 +64,15 @@ bool onPowerState(const String &deviceId, bool &state)
    - Compares actual temperature and humidity to last known temperature and humidity
    - Send event to SinricPro Server if temperature or humidity changed
 */
-void handleTemperaturesensor() 
+void handleTemperaturesensor()
 {
   // device is off...do nothing
-  if (deviceIsOn == false) 
-    return; 
+  if (deviceIsOn == false)
+    return;
 
   unsigned long actualMillis = millis();
-  
-  if (actualMillis - lastEvent < EVENT_WAIT_TIME) 
+
+  if (actualMillis - lastEvent < EVENT_WAIT_TIME)
     return; //only check every EVENT_WAIT_TIME milliseconds
 
   // Reading temperature or humidity takes about 250 milliseconds!
@@ -83,27 +83,27 @@ void handleTemperaturesensor()
   //  temperature = dht.readTemperature(true);
   humidity = dht.readHumidity();                          // get actual humidity
 
-  if (isnan(temperature) || isnan(humidity)) 
-  { 
+  if (isnan(temperature) || isnan(humidity))
+  {
     // reading failed...
     Serial.println("DHT reading failed");       // print error message
     return;                                     // try again next time
   }
 
   // Check if any reads failed and exit early (to try again).
-  if (temperature == lastTemperature || humidity == lastHumidity) 
-    return; 
+  if (temperature == lastTemperature || humidity == lastHumidity)
+    return;
 
   SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];     // get temperaturesensor device
   bool success = mySensor.sendTemperatureEvent(temperature, humidity);  // send event
-  
-  if (success) 
-  {  
+
+  if (success)
+  {
     // if event was sent successfuly, print temperature and humidity to serial
     Serial.println("Temperature: " + String(temperature, 1) + " Celsius\tHumidity: " + String(humidity, 1) + " %");
-  } 
-  else 
-  {  
+  }
+  else
+  {
     // if sending event failed, print error message
     Serial.println("Something went wrong...Could not send Event to server!");
   }
@@ -125,12 +125,13 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];
@@ -148,14 +149,15 @@ void setupSinricPro()
   });
 
   SinricPro.begin(APP_KEY, APP_SECRET);
-  
+
   SinricPro.restoreDeviceStates(true); // get latest known deviceState from server (is device turned on?)
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIO_Terminal_TemperatureSensor on " + String(BOARD_NAME));
@@ -167,7 +169,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
   handleTemperaturesensor();

@@ -104,13 +104,21 @@ bool onMediaControl(const String &deviceId, String &control)
   Serial.println("MediaControl: " + control);
 
   if (control == "Play") {}           // do whatever you want to do here
+
   if (control == "Pause") {}          // do whatever you want to do here
+
   if (control == "Stop") {}           // do whatever you want to do here
+
   if (control == "StartOver") {}      // do whatever you want to do here
+
   if (control == "Previous") {}       // do whatever you want to do here
+
   if (control == "Next") {}           // do whatever you want to do here
+
   if (control == "Rewind") {}         // do whatever you want to do here
+
   if (control == "FastForward") {}    // do whatever you want to do here
+
   return true;
 }
 
@@ -153,7 +161,8 @@ bool onSkipChannels(const String &deviceId, const int channelCount, String &chan
 
   channelName = String(channelNames[tvChannel]); // return channel name
 
-  Serial.println("Skip channel: " + String(channelCount) + " (number: " + String(tvChannel) + " / name: \"" + channelName + "\"");
+  Serial.println("Skip channel: " + String(channelCount) + " (number: " + String(tvChannel) + " / name: \"" + channelName
+                 + "\"");
 
   return true;
 }
@@ -169,6 +178,7 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
@@ -208,6 +218,7 @@ void setupSinricPro()
 void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting Generic_WiFiNINA_TV on " + String(BOARD_NAME));

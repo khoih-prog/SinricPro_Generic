@@ -32,7 +32,7 @@ bool tvMuted;
 // please put in your TV channel names
 // channel numbers starts counting from 0!
 // so "CBC" is channel 2
-const char* channelNames[] = 
+const char* channelNames[] =
 {
   "A/V",
   "CTV",
@@ -54,9 +54,9 @@ const char* channelNames[] =
 // This map is initialized in "setupChannelNumbers()" function by using the "channelNames" array
 std::map<String, unsigned int> channelNumbers;
 
-void setupChannelNumbers() 
+void setupChannelNumbers()
 {
-  for (unsigned int i = 0; i < MAX_CHANNELS; i++) 
+  for (unsigned int i = 0; i < MAX_CHANNELS; i++)
   {
     channelNumbers[channelNames[i]] = i;
   }
@@ -67,30 +67,30 @@ void setupChannelNumbers()
 bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
 {
   tvVolume += volumeDelta;  // calcualte new absolute volume
-  
+
   Serial.println("Volume changed about " + String(volumeDelta) + " to " + String(tvVolume));
-  
+
   volumeDelta = tvVolume; // return new absolute volume
   return true;
 }
 
-bool onChangeChannel(const String &deviceId, String &channel) 
+bool onChangeChannel(const String &deviceId, String &channel)
 {
   tvChannel = channelNumbers[channel]; // save new channelNumber in tvChannel variable
-  
+
   Serial.println("Change channel to \"" + channel + "\" / channel number " + String(tvChannel));
-  
+
   return true;
 }
 
-bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& channelName) 
+bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& channelName)
 {
   tvChannel = channelNumber; // update tvChannel to new channel number
-  
-  if (tvChannel < 0) 
+
+  if (tvChannel < 0)
     tvChannel = 0;
-    
-  if (tvChannel > MAX_CHANNELS - 1) 
+
+  if (tvChannel > MAX_CHANNELS - 1)
     tvChannel = MAX_CHANNELS - 1;
 
   channelName = channelNames[tvChannel]; // return the channelName
@@ -99,82 +99,92 @@ bool onChangeChannelNumber(const String& deviceId, int channelNumber, String& ch
   return true;
 }
 
-bool onMediaControl(const String &deviceId, String &control) 
+bool onMediaControl(const String &deviceId, String &control)
 {
   Serial.println("MediaControl: " + control);
-  
+
   if (control == "Play") {}           // do whatever you want to do here
+
   if (control == "Pause") {}          // do whatever you want to do here
+
   if (control == "Stop") {}           // do whatever you want to do here
+
   if (control == "StartOver") {}      // do whatever you want to do here
+
   if (control == "Previous") {}       // do whatever you want to do here
+
   if (control == "Next") {}           // do whatever you want to do here
+
   if (control == "Rewind") {}         // do whatever you want to do here
+
   if (control == "FastForward") {}    // do whatever you want to do here
+
   return true;
 }
 
-bool onMute(const String &deviceId, bool &mute) 
+bool onMute(const String &deviceId, bool &mute)
 {
   Serial.println("TV volume is " + String(mute ? "muted" : "unmuted"));
   tvMuted = mute; // set tvMuted state
   return true;
 }
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("TV turned " + String(state ? "on" : "off"));
   tvPowerState = state; // set powerState
   return true;
 }
 
-bool onSelectInput(const String &deviceId, String &input) 
+bool onSelectInput(const String &deviceId, String &input)
 {
   Serial.println("Input changed to " + input);
   return true;
 }
 
-bool onSetVolume(const String &deviceId, int &volume) 
+bool onSetVolume(const String &deviceId, int &volume)
 {
   Serial.println("Volume set to:  " + String(volume));
   tvVolume = volume; // update tvVolume
   return true;
 }
 
-bool onSkipChannels(const String &deviceId, const int channelCount, String &channelName) 
+bool onSkipChannels(const String &deviceId, const int channelCount, String &channelName)
 {
   tvChannel += channelCount; // calculate new channel number
-  
-  if (tvChannel < 0) 
+
+  if (tvChannel < 0)
     tvChannel = 0;
-    
-  if (tvChannel > MAX_CHANNELS - 1) 
+
+  if (tvChannel > MAX_CHANNELS - 1)
     tvChannel = MAX_CHANNELS - 1;
-    
+
   channelName = String(channelNames[tvChannel]); // return channel name
 
-  Serial.println("Skip channel: " + String(channelCount) + " (number: " + String(tvChannel) + " / name: \"" + channelName + "\"");
+  Serial.println("Skip channel: " + String(channelCount) + " (number: " + String(tvChannel) + " / name: \"" + channelName
+                 + "\"");
 
   return true;
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProTV& myTV = SinricPro[TV_ID];
@@ -191,25 +201,26 @@ void setupSinricPro()
   myTV.onSkipChannels(onSkipChannels);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting SAMD_WiFiNINA_TV on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -220,7 +231,7 @@ void setup()
   setupChannelNumbers();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
