@@ -23,7 +23,7 @@
 #include "SinricPro_Generic.h"
 #include "SinricProGarageDoor.h"
 
-bool onDoorState(const String& deviceId, bool &doorState) 
+bool onDoorState(const String& deviceId, bool &doorState)
 {
   Serial.print("Garage Door is now ");
   Serial.println(doorState ? "closed" : "open");
@@ -33,36 +33,37 @@ bool onDoorState(const String& deviceId, bool &doorState)
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProGarageDoor &myGarageDoor = SinricPro[GARAGEDOOR_ID];
   myGarageDoor.onDoorState(onDoorState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
@@ -72,17 +73,18 @@ void setup()
   pinMode(LED_PIN, OUTPUT);       // define LED GPIO as output
   digitalWrite(LED_PIN, LOW);     // turn off LED on bootup
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting SAMD_WiFiNINA_GarageDoor on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

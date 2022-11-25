@@ -25,13 +25,13 @@
 
 // we use a struct to store all states and values for our fan
 // fanSpeed (1..3)
-struct 
+struct
 {
   bool powerState = false;
   int fanSpeed = 1;
 } device_state;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Fan turned " + String(state ? "on" : "off"));
   device_state.powerState = state;
@@ -39,20 +39,20 @@ bool onPowerState(const String &deviceId, bool &state)
 }
 
 // Fan rangeValue is from 1..3
-bool onRangeValue(const String &deviceId, int &rangeValue) 
+bool onRangeValue(const String &deviceId, int &rangeValue)
 {
   device_state.fanSpeed = rangeValue;
-  
+
   Serial.println("Fan speed changed to " + String(device_state.fanSpeed));
-  
+
   return true;
 }
 
 // Fan rangeValueDelta is from -3..+3
-bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta) 
+bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta)
 {
   device_state.fanSpeed += rangeValueDelta;
-  
+
   Serial.println("Fan speed changed about " + String(rangeValueDelta) + " to " + String(device_state.fanSpeed));
 
   rangeValueDelta = device_state.fanSpeed; // return absolute fan speed
@@ -60,21 +60,22 @@ bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta)
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProFanUS &myFan = SinricPro[FAN_ID];
 
@@ -84,25 +85,26 @@ void setupSinricPro()
   myFan.onAdjustRangeValue(onAdjustRangeValue);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting SAMD_WiFiNINA_Fan on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -110,7 +112,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

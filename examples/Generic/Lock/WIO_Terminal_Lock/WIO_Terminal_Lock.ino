@@ -23,10 +23,10 @@
 #include "SinricPro_Generic.h"
 #include "SinricProLock.h"
 
-bool onLockState(String deviceId, bool &lockState) 
+bool onLockState(String deviceId, bool &lockState)
 {
   Serial.println("Device " + deviceId + String(lockState ? "locked" : "unlocked"));
-  
+
   return true;
 }
 
@@ -41,11 +41,12 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProLock &myLock = SinricPro[LOCK_ID];
   myLock.onLockState(onLockState);
@@ -65,9 +66,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIO_Terminal_Lock on " + String(BOARD_NAME));
@@ -77,7 +79,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

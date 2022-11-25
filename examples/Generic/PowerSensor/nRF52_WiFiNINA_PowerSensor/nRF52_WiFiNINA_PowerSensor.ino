@@ -26,7 +26,7 @@
 bool powerState = false;
 
 // struct to store measurement from powersensor
-struct 
+struct
 {
   float voltage;
   float current;
@@ -38,7 +38,7 @@ struct
 
 // this is where you read from power sensor
 // in this example, random values are used
-void doPowerMeasure() 
+void doPowerMeasure()
 {
   powerMeasure.voltage = random(2200, 2300) / 10.0f;
   powerMeasure.current = random(1, 20) / 10.0f;
@@ -46,41 +46,42 @@ void doPowerMeasure()
   powerMeasure.apparentPower = powerMeasure.power + (random(10, 20) / 10.0f);
 }
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Device " + deviceId + " power turned " + String(state ? "on" : "off"));
-  
+
   powerState = state;
-  
-  if (powerState) 
+
+  if (powerState)
     doPowerMeasure(); // start a measurement when device is turned on
-    
+
   return true; // request handled properly
 }
 
-bool sendPowerSensorData() 
+bool sendPowerSensorData()
 {
   // dont send data if device is turned off
-  if (!powerState) 
+  if (!powerState)
     return false;
 
   // limit data rate to SAMPLE_EVERY_SEC
   static unsigned long lastEvent = 0;
   unsigned long actualMillis = millis();
-  
-  if (actualMillis - lastEvent < (SAMPLE_EVERY_SEC * 1000)) 
+
+  if (actualMillis - lastEvent < (SAMPLE_EVERY_SEC * 1000))
     return false;
-    
+
   lastEvent = actualMillis;
 
   // send measured data
   SinricProPowerSensor &myPowerSensor = SinricPro[POWERSENSOR_ID];
-  bool success = myPowerSensor.sendPowerSensorEvent(powerMeasure.voltage, powerMeasure.current, powerMeasure.power, powerMeasure.apparentPower);
-  
+  bool success = myPowerSensor.sendPowerSensorEvent(powerMeasure.voltage, powerMeasure.current, powerMeasure.power,
+                                                    powerMeasure.apparentPower);
+
   // if measured data was sent do a new measure
-  if (success) 
+  if (success)
     doPowerMeasure();
-    
+
   return success;
 }
 
@@ -95,11 +96,12 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProPowerSensor &myPowerSensor = SinricPro[POWERSENSOR_ID];
 
@@ -121,9 +123,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting nRF52_WiFiNINA_PowerSensor on " + String(BOARD_NAME));
@@ -133,7 +136,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
   sendPowerSensorData();

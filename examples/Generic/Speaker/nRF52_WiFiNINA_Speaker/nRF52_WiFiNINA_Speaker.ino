@@ -23,7 +23,7 @@
 #include "SinricPro_Generic.h"
 #include "SinricProSpeaker.h"
 
-enum speakerModes 
+enum speakerModes
 {
   mode_movie,
   mode_music,
@@ -33,7 +33,7 @@ enum speakerModes
 };
 
 // we use a struct to store all states and values for our speaker
-struct 
+struct
 {
   bool power;
   unsigned int volume;
@@ -43,115 +43,151 @@ struct
 } speakerState;
 
 // Speaker device callbacks
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.println("Speaker turned " + String(state ? "on" : "off"));
-  
+
   speakerState.power = state; // set powerState
   return true;
 }
 
-bool onSetVolume(const String &deviceId, int &volume) 
+bool onSetVolume(const String &deviceId, int &volume)
 {
   Serial.println("Volume set to: " + String(volume));
-  
+
   speakerState.volume = volume; // update Volume
   return true;
 }
 
-bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault) 
+bool onAdjustVolume(const String &deviceId, int &volumeDelta, bool volumeDefault)
 {
   speakerState.volume += volumeDelta;   // calcualte new absolute volume
-  
+
   Serial.println("Volume changed about " + String(volumeDelta) + " to " + String(speakerState.volume));
-  
+
   volumeDelta = speakerState.volume;    // return new absolute volume
-  
+
   return true;
 }
 
-bool onMute(const String &deviceId, bool &mute) 
+bool onMute(const String &deviceId, bool &mute)
 {
   Serial.println("Speaker is " + String(mute ? "muted" : "unmuted"));
-  
+
   speakerState.muted = mute; // update muted state
   return true;
 }
 
-bool onMediaControl(const String &deviceId, String &control) 
+bool onMediaControl(const String &deviceId, String &control)
 {
   Serial.println("MediaControl: " + control);
-  
+
   if (control == "Play") {}           // do whatever you want to do here
+
   if (control == "Pause") {}          // do whatever you want to do here
+
   if (control == "Stop") {}           // do whatever you want to do here
+
   if (control == "StartOver") {}      // do whatever you want to do here
+
   if (control == "Previous") {}       // do whatever you want to do here
+
   if (control == "Next") {}           // do whatever you want to do here
+
   if (control == "Rewind") {}         // do whatever you want to do here
+
   if (control == "FastForward") {}    // do whatever you want to do here
+
   return true;
 }
 
-bool onSelectInput(const String &deviceId, String &input) 
+bool onSelectInput(const String &deviceId, String &input)
 {
   Serial.println("Input changed to " + input);
   return true;
 }
 
-bool onSetMode(const String &deviceId, String &mode) 
+bool onSetMode(const String &deviceId, String &mode)
 {
   Serial.println("Speaker mode set to " + mode);
-  
-  if (mode == "MOVIE") speakerState.mode = mode_movie;
-  if (mode == "MUSIC") speakerState.mode = mode_music;
-  if (mode == "NIGHT") speakerState.mode = mode_night;
-  if (mode == "SPORT") speakerState.mode = mode_sport;
-  if (mode == "TV") speakerState.mode = mode_tv;
+
+  if (mode == "MOVIE")
+    speakerState.mode = mode_movie;
+
+  if (mode == "MUSIC")
+    speakerState.mode = mode_music;
+
+  if (mode == "NIGHT")
+    speakerState.mode = mode_night;
+
+  if (mode == "SPORT")
+    speakerState.mode = mode_sport;
+
+  if (mode == "TV")
+    speakerState.mode = mode_tv;
+
   return true;
 }
 
-bool onSetBands(const String& deviceId, const String &bands, int &level) 
+bool onSetBands(const String& deviceId, const String &bands, int &level)
 {
   Serial.println("Device " + deviceId + " bands " + bands + " set to " + String(level));
-  
+
   int index;
-  
-  if (bands == "BASS") index = BANDS_INDEX_BASS;
-  if (bands == "MIDRANGE") index = BANDS_INDEX_MIDRANGE;
-  if (bands == "TREBBLE") index = BANDS_INDEX_TREBBLE;
-  
+
+  if (bands == "BASS")
+    index = BANDS_INDEX_BASS;
+
+  if (bands == "MIDRANGE")
+    index = BANDS_INDEX_MIDRANGE;
+
+  if (bands == "TREBBLE")
+    index = BANDS_INDEX_TREBBLE;
+
   speakerState.bands[index] = level;
   return true;
 }
 
-bool onAdjustBands(const String &deviceId, const String &bands, int &levelDelta) 
+bool onAdjustBands(const String &deviceId, const String &bands, int &levelDelta)
 {
   int index;
-  
-  if (bands == "BASS") index = BANDS_INDEX_BASS;
-  if (bands == "MIDRANGE") index = BANDS_INDEX_MIDRANGE;
-  if (bands == "TREBBLE") index = BANDS_INDEX_TREBBLE;
+
+  if (bands == "BASS")
+    index = BANDS_INDEX_BASS;
+
+  if (bands == "MIDRANGE")
+    index = BANDS_INDEX_MIDRANGE;
+
+  if (bands == "TREBBLE")
+    index = BANDS_INDEX_TREBBLE;
+
   speakerState.bands[index] += levelDelta;
   levelDelta = speakerState.bands[index]; // return absolute trebble level
 
-  Serial.println("Device " + deviceId + " bands \"" + bands + "\" adjusted about " + String(levelDelta) + " to " + String(speakerState.bands[index]));
-  
+  Serial.println("Device " + deviceId + " bands \"" + bands + "\" adjusted about " + String(levelDelta) + " to " + String(
+                   speakerState.bands[index]));
+
   return true; // request handled properly
 }
 
-bool onResetBands(const String &deviceId, const String &bands, int &level) 
+bool onResetBands(const String &deviceId, const String &bands, int &level)
 {
   int index;
-  
-  if (bands == "BASS") index = BANDS_INDEX_BASS;
-  if (bands == "MIDRANGE") index = BANDS_INDEX_MIDRANGE;
-  if (bands == "TREBBLE") index = BANDS_INDEX_TREBBLE;
+
+  if (bands == "BASS")
+    index = BANDS_INDEX_BASS;
+
+  if (bands == "MIDRANGE")
+    index = BANDS_INDEX_MIDRANGE;
+
+  if (bands == "TREBBLE")
+    index = BANDS_INDEX_TREBBLE;
+
   speakerState.bands[index] = 0;
   level = speakerState.bands[index]; // return new level
 
   Serial.println("Device " + deviceId + " bands \"" + bands + "\" reset to " + String(speakerState.bands[index]));
-  
+
   return true; // request handled properly
 }
 
@@ -167,12 +203,13 @@ void setupWiFi()
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProSpeaker& speaker = SinricPro[SPEAKER_ID];
@@ -204,9 +241,10 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting nRF52_WiFiNINA_Speaker on " + String(BOARD_NAME));
@@ -215,7 +253,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
