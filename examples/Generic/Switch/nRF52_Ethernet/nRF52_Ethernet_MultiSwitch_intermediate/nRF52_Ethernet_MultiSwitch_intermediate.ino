@@ -23,8 +23,8 @@
 #include "SinricPro_Generic.h"
 #include "SinricProSwitch.h"
 
-String SWITCH_IDs[DEVICES] = 
-{                
+String SWITCH_IDs[DEVICES] =
+{
   // define deviceIds in an array
   SWITCH_ID_1,    // Office Lamp
   SWITCH_ID_2,    // Toy Car
@@ -32,33 +32,34 @@ String SWITCH_IDs[DEVICES] =
   SWITCH_ID_4     // TV
 };
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
-  for (int i = 0; i < DEVICES; i++) 
-  {   
+  for (int i = 0; i < DEVICES; i++)
+  {
     // go through the devices
-    if (deviceId == SWITCH_IDs[i]) 
-    {    
+    if (deviceId == SWITCH_IDs[i])
+    {
       // if deviceId matches, print power state for device
       Serial.println("Device " + String(i) + " turned " + String(state ? "on" : "off"));
     }
   }
+
   return true; // request handled properly
 }
 
 // setup function for setupEthernet connection
-void setupEthernet() 
+void setupEthernet()
 {
 #if USE_ETHERNET_PORTENTA_H7
   SRP_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
 #elif USE_NATIVE_ETHERNET
   SRP_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
 #elif USE_ETHERNET_GENERIC
-  SRP_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));  
+  SRP_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));
 #elif USE_ETHERNET_ESP8266
   SRP_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
 #elif USE_ETHERNET_ENC
-  SRP_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));  
+  SRP_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
 #else
   SRP_LOGWARN(F("========================="));
 #endif
@@ -66,14 +67,14 @@ void setupEthernet()
 #if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
 
 #if (USING_SPI2)
-  #if defined(CUR_PIN_MISO)
-    SRP_LOGWARN(F("Default SPI pinout:"));
-    SRP_LOGWARN1(F("MOSI:"), CUR_PIN_MOSI);
-    SRP_LOGWARN1(F("MISO:"), CUR_PIN_MISO);
-    SRP_LOGWARN1(F("SCK:"),  CUR_PIN_SCK);
-    SRP_LOGWARN1(F("SS:"),   CUR_PIN_SS);
-    SRP_LOGWARN(F("========================="));
-  #endif
+#if defined(CUR_PIN_MISO)
+  SRP_LOGWARN(F("Default SPI pinout:"));
+  SRP_LOGWARN1(F("MOSI:"), CUR_PIN_MOSI);
+  SRP_LOGWARN1(F("MISO:"), CUR_PIN_MISO);
+  SRP_LOGWARN1(F("SCK:"),  CUR_PIN_SCK);
+  SRP_LOGWARN1(F("SS:"),   CUR_PIN_SS);
+  SRP_LOGWARN(F("========================="));
+#endif
 #else
   SRP_LOGWARN(F("Default SPI pinout:"));
   SRP_LOGWARN1(F("MOSI:"), MOSI);
@@ -87,57 +88,57 @@ void setupEthernet()
 
   pinMode(USE_THIS_SS_PIN, OUTPUT);
   digitalWrite(USE_THIS_SS_PIN, HIGH);
-  
+
   // ETHERNET_USE_RPIPICO, use default SS = 5 or 17
-  #ifndef USE_THIS_SS_PIN
-    #if defined(ARDUINO_ARCH_MBED)
-      #define USE_THIS_SS_PIN   5     // For Arduino Mbed core
-    #else  
-      #define USE_THIS_SS_PIN   17    // For E.Philhower core
-    #endif
-  #endif
+#ifndef USE_THIS_SS_PIN
+#if defined(ARDUINO_ARCH_MBED)
+#define USE_THIS_SS_PIN   5     // For Arduino Mbed core
+#else
+#define USE_THIS_SS_PIN   17    // For E.Philhower core
+#endif
+#endif
 
   SRP_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    // For RPI Pico using Arduino Mbed RP2040 core
-    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
-    // For RPI Pico using E. Philhower RP2040 core
-    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
-    // Default pin 5/17 to SS/CS
-  
-    //Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (USE_THIS_SS_PIN);
-     
-  #endif    //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  // For RPI Pico using Arduino Mbed RP2040 core
+  // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+  // For RPI Pico using E. Philhower RP2040 core
+  // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+  // Default pin 5/17 to SS/CS
+
+  //Ethernet.setCsPin (USE_THIS_SS_PIN);
+  Ethernet.init (USE_THIS_SS_PIN);
+
+#endif    //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #else   // ETHERNET_USE_RPIPICO
   // unknown board, do nothing, use default SS = 10
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   10    // For other boards
-  #endif
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   10    // For other boards
+#endif
 
-  #if defined(BOARD_NAME)
-    SRP_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
-  #else
-    SRP_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
-  #endif
+#if defined(BOARD_NAME)
+  SRP_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
+#else
+  SRP_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+#endif
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
-    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-  
-    Ethernet.init (USE_THIS_SS_PIN);
-  
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN);
-    
-  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
+  // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+
+  Ethernet.init (USE_THIS_SS_PIN);
+
+#elif USE_CUSTOM_ETHERNET
+
+  // You have to add initialization for your Custom Ethernet here
+  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+  Ethernet.init(USE_THIS_SS_PIN);
+
+#endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #endif    // ETHERNET_USE_RPIPICO
 
@@ -152,38 +153,40 @@ void setupEthernet()
 
 #if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   SRP_LOGWARN(F("========================="));
-  
-  #if defined(CUR_PIN_MISO)
-    SRP_LOGWARN(F("Currently Used SPI pinout:"));
-    SRP_LOGWARN1(F("MOSI:"), CUR_PIN_MOSI);
-    SRP_LOGWARN1(F("MISO:"), CUR_PIN_MISO);
-    SRP_LOGWARN1(F("SCK:"),  CUR_PIN_SCK);
-    SRP_LOGWARN1(F("SS:"),   CUR_PIN_SS);
-  #else
-    SRP_LOGWARN(F("Currently Used SPI pinout:"));
-    SRP_LOGWARN1(F("MOSI:"), MOSI);
-    SRP_LOGWARN1(F("MISO:"), MISO);
-    SRP_LOGWARN1(F("SCK:"),  SCK);
-    SRP_LOGWARN1(F("SS:"),   SS);
-  #endif
-  
+
+#if defined(CUR_PIN_MISO)
+  SRP_LOGWARN(F("Currently Used SPI pinout:"));
+  SRP_LOGWARN1(F("MOSI:"), CUR_PIN_MOSI);
+  SRP_LOGWARN1(F("MISO:"), CUR_PIN_MISO);
+  SRP_LOGWARN1(F("SCK:"),  CUR_PIN_SCK);
+  SRP_LOGWARN1(F("SS:"),   CUR_PIN_SS);
+#else
+  SRP_LOGWARN(F("Currently Used SPI pinout:"));
+  SRP_LOGWARN1(F("MOSI:"), MOSI);
+  SRP_LOGWARN1(F("MISO:"), MISO);
+  SRP_LOGWARN1(F("SCK:"),  SCK);
+  SRP_LOGWARN1(F("SS:"),   SS);
+#endif
+
   SRP_LOGWARN(F("========================="));
 
 #elif (USE_ETHERNET_PORTENTA_H7)
-  if (Ethernet.hardwareStatus() == EthernetNoHardware) 
+
+  if (Ethernet.hardwareStatus() == EthernetNoHardware)
   {
     Serial.println("No Ethernet found. Stay here forever");
-    
-    while (true) 
+
+    while (true)
     {
       delay(1); // do nothing, no point running without Ethernet hardware
     }
   }
-  
-  if (Ethernet.linkStatus() == LinkOFF) 
+
+  if (Ethernet.linkStatus() == LinkOFF)
   {
     Serial.println("Not connected Ethernet cable");
   }
+
 #endif
 
   Serial.print(F("Using mac index = "));
@@ -194,43 +197,44 @@ void setupEthernet()
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add devices to SinricPro and set callback function
-  for (int i = 0; i < DEVICES; i++) 
+  for (int i = 0; i < DEVICES; i++)
   {
     SinricProSwitch& mySwitch = SinricPro[SWITCH_IDs[i]];
     mySwitch.onPowerState(onPowerState);
   }
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
 void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting nRF52_Ethernet_MultiSwitch_intermediate on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupEthernet();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

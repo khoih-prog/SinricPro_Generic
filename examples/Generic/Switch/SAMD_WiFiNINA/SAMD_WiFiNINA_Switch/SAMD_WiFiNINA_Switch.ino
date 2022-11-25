@@ -39,34 +39,37 @@ unsigned long lastBtnPress = 0;
    return
     true if request should be marked as handled correctly / false if not
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.print("Device ");
   Serial.print(deviceId.c_str());
   Serial.print(state ? " turned on" : " turn off");
   Serial.println(" (via SinricPro)");
-  
+
   myPowerState = state;
   digitalWrite(LED_PIN, myPowerState ? LOW : HIGH);
   return true; // request handled properly
 }
 
-void handleButtonPress() 
+void handleButtonPress()
 {
   unsigned long actualMillis = millis(); // get actual millis() and keep it in variable actualMillis
-  if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)  
-  { 
+
+  if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)
+  {
     // is button pressed (inverted logic! button pressed = LOW) and debounced?
-    if (myPowerState) 
-    {     
+    if (myPowerState)
+    {
       // flip myPowerState: if it was true, set it to false, vice versa
       myPowerState = false;
-    } 
-    else 
+    }
+    else
     {
       myPowerState = true;
     }
-    digitalWrite(LED_PIN, myPowerState ? LOW : HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
+
+    digitalWrite(LED_PIN, myPowerState ? LOW :
+                 HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
 
     // get Switch device back
     SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
@@ -82,22 +85,23 @@ void handleButtonPress()
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
-     Serial.print(".");
+    Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
@@ -106,16 +110,16 @@ void setupSinricPro()
   mySwitch.onPowerState(onPowerState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
@@ -126,17 +130,18 @@ void setup()
   pinMode(LED_PIN, OUTPUT); // define LED GPIO as output
   digitalWrite(LED_PIN, HIGH); // turn off LED on bootup
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting SAMD_WiFiNINA_Switch on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   handleButtonPress();
   SinricPro.handle();

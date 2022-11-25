@@ -13,7 +13,7 @@
 
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
  **********************************************************************************************************************************/
- 
+
 #include "defines.h"
 #include "SinricPro_Generic.h"          // https://github.com/khoih-prog/SinricPro_Generic
 #include "SinricProSwitch.h"
@@ -23,7 +23,7 @@
 #if USING_LCD
 
   #include <LovyanGFX.hpp>              // https://github.com/lovyan03/LovyanGFX
-  
+
   LGFX lcd;
   LGFX_Sprite spr = LGFX_Sprite(&lcd);
 
@@ -33,7 +33,7 @@
 
   #include <TFT_eSPI.h>                 // https://github.com/Bodmer/TFT_eSPI
   #include <SPI.h>
-  
+
   TFT_eSPI tft = TFT_eSPI();            // Invoke custom library
   TFT_eSprite spr = TFT_eSprite(&tft);  // Sprite
 
@@ -142,12 +142,12 @@ void processSinricProGUI()
   if (isSinricConnected)
   {
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("Connected   ", ON_OFF_X_COORDINATE , Y_Coordinate[SINRIC] + 5, FONT_SIZE);
+    tft.drawString("Connected   ", ON_OFF_X_COORDINATE, Y_Coordinate[SINRIC] + 5, FONT_SIZE);
   }
   else
   {
     tft.setTextColor(TFT_RED, TFT_BLACK);
-    tft.drawString("Disconnect", ON_OFF_X_COORDINATE , Y_Coordinate[SINRIC] + 5, FONT_SIZE);
+    tft.drawString("Disconnect", ON_OFF_X_COORDINATE, Y_Coordinate[SINRIC] + 5, FONT_SIZE);
   }
 }
 
@@ -156,10 +156,10 @@ void processGUI()
   spr.fillSprite(TFT_BLACK);
   spr.setFreeFont(&FreeSansBoldOblique12pt7b);
   spr.setTextColor(TFT_WHITE, TFT_BLACK);
-  spr.drawString("WIFI :", START_Y_COORDINATE , Y_Coordinate[WIFI]);
-  spr.drawString("Sinric:", START_Y_COORDINATE , Y_Coordinate[SINRIC]);
+  spr.drawString("WIFI :", START_Y_COORDINATE, Y_Coordinate[WIFI]);
+  spr.drawString("Sinric:", START_Y_COORDINATE, Y_Coordinate[SINRIC]);
   spr.setTextColor(TFT_GREEN, TFT_BLACK);
-  spr.drawString(isWiFiConnected ? "Connected" : "Disconnect", WIFI_STATUS_COORDINATE , FONT_SIZE);
+  spr.drawString(isWiFiConnected ? "Connected" : "Disconnect", WIFI_STATUS_COORDINATE, FONT_SIZE);
 
   processSinricProGUI();
 
@@ -172,7 +172,7 @@ void processGUI()
 bool onPowerState(const String &deviceId, bool &state)
 {
   int index = devices[deviceId].deviceIndex;
-  
+
   Serial.println( "\n=======================================");
   Serial.printf( "Device %d turned %s\r\n", index, state ? "ON" : "OFF");
 
@@ -185,7 +185,7 @@ bool onPowerState(const String &deviceId, bool &state)
   processGUI();
 
   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-  tft.drawString(state ? " ON  " : "OFF", ON_OFF_X_COORDINATE , Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
+  tft.drawString(state ? " ON  " : "OFF", ON_OFF_X_COORDINATE, Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
 
   return true; // request handled properly
 }
@@ -198,7 +198,8 @@ void handleFlipSwitches()
   for (auto &flipSwitch : flipSwitches)
   {
     // for each flipSwitch in flipSwitches map
-    unsigned long lastFlipSwitchChange = flipSwitch.second.lastFlipSwitchChange;  // get the timestamp when flipSwitch was pressed last time (used to debounce / limit events)
+    unsigned long lastFlipSwitchChange =
+      flipSwitch.second.lastFlipSwitchChange;  // get the timestamp when flipSwitch was pressed last time (used to debounce / limit events)
 
     if (actualMillis - lastFlipSwitchChange > DEBOUNCE_TIME)
     {
@@ -222,6 +223,7 @@ void handleFlipSwitches()
 
 #ifdef TACTILE_BUTTON
         }
+
 #endif
         flipSwitch.second.lastFlipSwitchState = flipSwitchState;                  // update lastFlipSwitchState
       }
@@ -245,7 +247,7 @@ void handleButtonPress(const String &deviceId)
     spr.fillSprite(TFT_BLACK);
     spr.setFreeFont(&FreeSansBoldOblique12pt7b);
     tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-    tft.drawString("OFF", ON_OFF_X_COORDINATE , Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
+    tft.drawString("OFF", ON_OFF_X_COORDINATE, Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
   }
   else
   {
@@ -253,10 +255,12 @@ void handleButtonPress(const String &deviceId)
     spr.fillSprite(TFT_BLACK);
     spr.setFreeFont(&FreeSansBoldOblique12pt7b);
     tft.setTextColor(TFT_YELLOW, TFT_BLACK);
-    tft.drawString(" ON  ", ON_OFF_X_COORDINATE , Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
+    tft.drawString(" ON  ", ON_OFF_X_COORDINATE, Y_Coordinate[index + DEVICE1 - 1] + 5, FONT_SIZE);
   }
 
-  digitalWrite(devices[deviceId].LED_PIN, powerState ? HIGH : LOW); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
+  digitalWrite(devices[deviceId].LED_PIN,
+               powerState ? HIGH :
+               LOW); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
 
   // get Switch device back
   SinricProSwitch &mySwitch = SinricPro[deviceId];
@@ -277,6 +281,7 @@ void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
+
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
@@ -346,13 +351,14 @@ void setupTFT()
   spr.fillSprite(TFT_BLACK);
 
   processGUI();
-  
+
   spr.pushSprite(0, 0);
 }
 
 void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);
 
   Serial.println("\nStarting WIOT_MultiSwitch_LCD on " + String(BOARD_NAME));

@@ -23,8 +23,8 @@
 #include "SinricPro_Generic.h"
 #include "SinricProSwitch.h"
 
-String SWITCH_IDs[DEVICES] = 
-{                
+String SWITCH_IDs[DEVICES] =
+{
   // define deviceIds in an array
   SWITCH_ID_1,    // Office Lamp
   SWITCH_ID_2,    // Toy Car
@@ -32,65 +32,68 @@ String SWITCH_IDs[DEVICES] =
   SWITCH_ID_4     // TV
 };
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
-  for (int i = 0; i < DEVICES; i++) 
-  {   
+  for (int i = 0; i < DEVICES; i++)
+  {
     // go through the devices
-    if (deviceId == SWITCH_IDs[i]) 
-    {    
+    if (deviceId == SWITCH_IDs[i])
+    {
       // if deviceId matches, print power state for device
       Serial.println("Device " + String(i) + " turned " + String(state ? "on" : "off"));
     }
   }
+
   return true; // request handled properly
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.println("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add devices to SinricPro and set callback function
-  for (int i = 0; i < DEVICES; i++) 
+  for (int i = 0; i < DEVICES; i++)
   {
     SinricProSwitch& mySwitch = SinricPro[SWITCH_IDs[i]];
     mySwitch.onPowerState(onPowerState);
   }
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting nRF52_WiFiNINA_MultiSwitch_intermediate on " + String(BOARD_NAME));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -98,7 +101,7 @@ Serial.begin(BAUD_RATE);
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
