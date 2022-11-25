@@ -146,7 +146,7 @@ Please check [**Full User Documentation**](https://sinricpro.github.io/esp8266-e
 15. [`WebSockets_Generic v2.16.1+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 
 16. For built-in LAN8742A Ethernet:
-   - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
+   - [`STM32Ethernet library v1.3.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
    - [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest)
    
 17. For W5x00 Ethernet:
@@ -1774,11 +1774,11 @@ Device 1 with deviceID :5ec47b9276b86a477f5df3d0turned OFF (manually via flashbu
 and the LCD screenshots
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_1.jpg">
+    <img src="https://github.com/khoih-prog/SinricPro_Generic/raw/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_1.jpg">
 </p>
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_2.jpg">
+    <img src="https://github.com/khoih-prog/SinricPro_Generic/raw/master/examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD/WIOT_MultiSwitch_LCD_2.jpg">
 </p>
 
 
