@@ -644,9 +644,9 @@ To know the default CS/SS pins of not listed boards, check the related `variant.
 4. For **Arduino SAM DUE**, use the SPI's  pin as follows:
 
   - SS/CS     = 10
-  - SPI_MOSI  = 75 ( pin 4 @ [ICSP connector](pics/ICSP_connector.jpg) )
-  - SPI_MISO  = 74 ( pin 1 @ [ICSP connector](pics/ICSP_connector.jpg) )
-  - SPI_SCK   = 76 ( pin 3 @ [ICSP connector](pics/ICSP_connector.jpg) )
+  - SPI_MOSI  = 75 ( pin 4 @ `ICSP connector` )
+  - SPI_MISO  = 74 ( pin 1 @ `ICSP connector` )
+  - SPI_SCK   = 76 ( pin 3 @ `ICSP connector` )
   
 <p align="center">
     <img src="https://github.com/khoih-prog/SinricPro_Generic/raw/master/pics/ICSP_connector.jpg">
