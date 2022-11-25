@@ -91,7 +91,7 @@ IPAddress secondaryDNS(8, 8, 4, 4); //optional
 bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.printf("Device %s turned %s (via SinricPro) \r\n", deviceId.c_str(), state ? "on" : "off");
-  
+
   return true; // request handled properly
 }
 
@@ -105,12 +105,12 @@ void setupSinricPro()
   mySwitch.onPowerState(onPowerState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
@@ -146,7 +146,7 @@ void setupCamera()
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer   = LEDC_TIMER_0;
-  
+
   config.pin_d0 = Y2_GPIO_NUM;
   config.pin_d1 = Y3_GPIO_NUM;
   config.pin_d2 = Y4_GPIO_NUM;
@@ -155,7 +155,7 @@ void setupCamera()
   config.pin_d5 = Y7_GPIO_NUM;
   config.pin_d6 = Y8_GPIO_NUM;
   config.pin_d7 = Y9_GPIO_NUM;
-  
+
   config.pin_xclk     = XCLK_GPIO_NUM;
   config.pin_pclk     = PCLK_GPIO_NUM;
   config.pin_vsync    = VSYNC_GPIO_NUM;
@@ -180,7 +180,7 @@ void setupCamera()
   if (psramFound())
   {
     Serial.println("psram found");
-    
+
     config.frame_size = FRAMESIZE_UXGA;
     config.jpeg_quality = 40; //10-63 lower number means higher quality
     config.fb_count = 2;
@@ -247,6 +247,7 @@ void handleStreaming()
 void setup()
 {
   Serial.begin(BAUD_RATE);
+
   while (!Serial);            //wait for serial connection.
 
   Serial.println("\nStarting Camera on " + String(ARDUINO_BOARD));

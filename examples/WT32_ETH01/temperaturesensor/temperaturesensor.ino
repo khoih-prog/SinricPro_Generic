@@ -102,10 +102,10 @@ unsigned long lastEvent = (-EVENT_WAIT_TIME); // last time event has been sent
    return
     true if request should be marked as handled correctly / false if not
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.println("TemperatureSensor turned " + String(state ? "on" : "off"));
   deviceIsOn = state; // turn on / off temperature sensor
   return true; // request handled properly
@@ -118,15 +118,15 @@ bool onPowerState(const String &deviceId, bool &state)
    - Compares actual temperature and humidity to last known temperature and humidity
    - Send event to SinricPro Server if temperature or humidity changed
 */
-void handleTemperaturesensor() 
+void handleTemperaturesensor()
 {
   // device is off...do nothing
-  if (deviceIsOn == false) 
-    return; 
+  if (deviceIsOn == false)
+    return;
 
   unsigned long actualMillis = millis();
-  
-  if (actualMillis - lastEvent < EVENT_WAIT_TIME) 
+
+  if (actualMillis - lastEvent < EVENT_WAIT_TIME)
     return; //only check every EVENT_WAIT_TIME milliseconds
 
   // Reading temperature or humidity takes about 250 milliseconds!
@@ -137,27 +137,27 @@ void handleTemperaturesensor()
   //  temperature = dht.readTemperature(true);
   humidity = dht.readHumidity();                          // get actual humidity
 
-  if (isnan(temperature) || isnan(humidity)) 
-  { 
+  if (isnan(temperature) || isnan(humidity))
+  {
     // reading failed...
     Serial.println("DHT reading failed");       // print error message
     return;                                     // try again next time
   }
 
   // Check if any reads failed and exit early (to try again).
-  if (temperature == lastTemperature || humidity == lastHumidity) 
-    return; 
+  if (temperature == lastTemperature || humidity == lastHumidity)
+    return;
 
   SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];     // get temperaturesensor device
   bool success = mySensor.sendTemperatureEvent(temperature, humidity);  // send event
-  
-  if (success) 
-  {  
+
+  if (success)
+  {
     // if event was sent successfuly, print temperature and humidity to serial
     Serial.println("Temperature: " + String(temperature, 1) + " Celsius\tHumidity: " + String(humidity, 1) + " %");
-  } 
-  else 
-  {  
+  }
+  else
+  {
     // if sending event failed, print error message
     Serial.println("Something went wrong...Could not send Event to server!");
   }
@@ -168,14 +168,14 @@ void handleTemperaturesensor()
 }
 
 // setup function for ETH connection
-void setupETH() 
+void setupETH()
 {
   Serial.print("[ETH]: Connecting");
-  
+
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();
 
-  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO, 
+  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO,
   //           eth_phy_type_t type=ETH_PHY_TYPE, eth_clock_mode_t clk_mode=ETH_CLK_MODE);
   //ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_TYPE, ETH_CLK_MODE);
   ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER);
@@ -185,50 +185,53 @@ void setupETH()
   ETH.config(myIP, myGW, mySN, myDNS);
 
   WT32_ETH01_waitForConnect();
-  
+
   Serial.print("[ETH]: IP-Address is ");
   Serial.println(ETH.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];
   mySensor.onPowerState(onPowerState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
-  Serial.print(F("\nStart temperaturesensor on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+
+  Serial.print(F("\nStart temperaturesensor on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(SINRICPRO_VERSION_STR);
-  
+
   dht.begin();
 
   setupETH();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
   handleTemperaturesensor();

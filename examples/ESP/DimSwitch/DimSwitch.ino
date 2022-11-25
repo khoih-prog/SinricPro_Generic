@@ -49,51 +49,52 @@
 #define BAUD_RATE         115200              // Change baudrate to your need
 
 // we use a struct to store all states and values for our dimmable switch
-struct 
+struct
 {
   bool powerState = false;
   int powerLevel = 0;
 } device_state;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.printf("Device %s power turned %s \r\n", deviceId.c_str(), state ? "on" : "off");
   device_state.powerState = state;
   return true; // request handled properly
 }
 
-bool onPowerLevel(const String &deviceId, int &powerLevel) 
+bool onPowerLevel(const String &deviceId, int &powerLevel)
 {
   device_state.powerLevel = powerLevel;
   Serial.printf("Device %s power level changed to %d\r\n", deviceId.c_str(), device_state.powerLevel);
   return true;
 }
 
-bool onAdjustPowerLevel(const String &deviceId, int &levelDelta) 
+bool onAdjustPowerLevel(const String &deviceId, int &levelDelta)
 {
   device_state.powerLevel += levelDelta;
-  Serial.printf("Device %s power level changed about %i to %d\r\n", deviceId.c_str(), levelDelta, device_state.powerLevel);
+  Serial.printf("Device %s power level changed about %i to %d\r\n", deviceId.c_str(), levelDelta,
+                device_state.powerLevel);
   levelDelta = device_state.powerLevel;
   return true;
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProDimSwitch &myDimSwitch = SinricPro[DIMSWITCH_ID];
 
@@ -103,33 +104,34 @@ void setupSinricPro()
   myDimSwitch.onAdjustPowerLevel(onAdjustPowerLevel);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting DimSwitch on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

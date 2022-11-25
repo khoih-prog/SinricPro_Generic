@@ -67,8 +67,8 @@
 
 #define DEBOUNCE_TIME 250
 
-typedef struct 
-{      
+typedef struct
+{
   // struct for the std::map below
   int relayPIN;
   int flipSwitchPIN;
@@ -88,16 +88,16 @@ typedef struct
 
 #elif (ESP8266)
 
-//PIN_D0 can't be used for PWM/I2C
-#define PIN_D0              16        // Pin D0 mapped to pin GPIO16/USER/WAKE of ESP8266. This pin is also used for Onboard-Blue LED. PIN_D0 = 0 => LED ON
-#define PIN_D1              5         // Pin D1 mapped to pin GPIO5 of ESP8266
-#define PIN_D2              4         // Pin D2 mapped to pin GPIO4 of ESP8266
-#define PIN_D3              0         // Pin D3 mapped to pin GPIO0/FLASH of ESP8266
-#define PIN_D4              2         // Pin D4 mapped to pin GPIO2/TXD1 of ESP8266
-#define PIN_D5              14        // Pin D5 mapped to pin GPIO14/HSCLK of ESP8266
-#define PIN_D6              12        // Pin D6 mapped to pin GPIO12/HMISO of ESP8266
-#define PIN_D7              13        // Pin D7 mapped to pin GPIO13/RXD2/HMOSI of ESP8266
-#define PIN_D8              15        // Pin D8 mapped to pin GPIO15/TXD2/HCS of ESP8266
+  //PIN_D0 can't be used for PWM/I2C
+  #define PIN_D0              16        // Pin D0 mapped to pin GPIO16/USER/WAKE of ESP8266. This pin is also used for Onboard-Blue LED. PIN_D0 = 0 => LED ON
+  #define PIN_D1              5         // Pin D1 mapped to pin GPIO5 of ESP8266
+  #define PIN_D2              4         // Pin D2 mapped to pin GPIO4 of ESP8266
+  #define PIN_D3              0         // Pin D3 mapped to pin GPIO0/FLASH of ESP8266
+  #define PIN_D4              2         // Pin D4 mapped to pin GPIO2/TXD1 of ESP8266
+  #define PIN_D5              14        // Pin D5 mapped to pin GPIO14/HSCLK of ESP8266
+  #define PIN_D6              12        // Pin D6 mapped to pin GPIO12/HMISO of ESP8266
+  #define PIN_D7              13        // Pin D7 mapped to pin GPIO13/RXD2/HMOSI of ESP8266
+  #define PIN_D8              15        // Pin D8 mapped to pin GPIO15/TXD2/HCS of ESP8266
 
 #endif    //ESP32
 
@@ -105,7 +105,7 @@ typedef struct
 // please put in your deviceId, the PIN for Relay and PIN for flipSwitch
 // this can be up to N devices...depending on how much pin's available on your device ;)
 // right now we have 4 devicesIds going to 4 relays and 4 flip switches to switch the relay manually
-std::map<String, deviceConfig_t> devices = 
+std::map<String, deviceConfig_t> devices =
 {
   //{deviceId, {relayPIN,  flipSwitchPIN}}
   {"SWITCH_ID_NO_1_HERE", {   PIN_D1,  PIN_D8 }},
@@ -114,31 +114,32 @@ std::map<String, deviceConfig_t> devices =
   {"SWITCH_ID_NO_4_HERE", {   PIN_D4,  PIN_D5 }}
 };
 
-typedef struct 
-{      
+typedef struct
+{
   // struct for the std::map below
   String deviceId;
   bool lastFlipSwitchState;
   unsigned long lastFlipSwitchChange;
 } flipSwitchConfig_t;
 
-std::map<int, flipSwitchConfig_t> flipSwitches;    // this map is used to map flipSwitch PINs to deviceId and handling debounce and last flipSwitch state checks
+std::map<int, flipSwitchConfig_t>
+flipSwitches;    // this map is used to map flipSwitch PINs to deviceId and handling debounce and last flipSwitch state checks
 // it will be setup in "setupFlipSwitches" function, using informations from devices map
 
-void setupRelays() 
+void setupRelays()
 {
-  for (auto &device : devices) 
-  {           
+  for (auto &device : devices)
+  {
     // for each device (relay, flipSwitch combination)
     int relayPIN = device.second.relayPIN; // get the relay pin
     pinMode(relayPIN, OUTPUT);             // set relay pin to OUTPUT
   }
 }
 
-void setupFlipSwitches() 
+void setupFlipSwitches()
 {
-  for (auto &device : devices)  
-  {                     
+  for (auto &device : devices)
+  {
     // for each device (relay / flipSwitch combination)
     flipSwitchConfig_t flipSwitchConfig;              // create a new flipSwitch configuration
 
@@ -158,35 +159,36 @@ bool onPowerState(String deviceId, bool &state)
   Serial.printf("%s: %s\r\n", deviceId.c_str(), state ? "on" : "off");
   int relayPIN = devices[deviceId].relayPIN; // get the relay pin for corresponding device
   digitalWrite(relayPIN, state);             // set the new relay state
-  
+
   return true;
 }
 
-void handleFlipSwitches() 
+void handleFlipSwitches()
 {
   unsigned long actualMillis = millis();                                          // get actual millis
-  
-  for (auto &flipSwitch : flipSwitches) 
-  {                                         
-    // for each flipSwitch in flipSwitches map
-    unsigned long lastFlipSwitchChange = flipSwitch.second.lastFlipSwitchChange;  // get the timestamp when flipSwitch was pressed last time (used to debounce / limit events)
 
-    if (actualMillis - lastFlipSwitchChange > DEBOUNCE_TIME) 
-    {                    
+  for (auto &flipSwitch : flipSwitches)
+  {
+    // for each flipSwitch in flipSwitches map
+    unsigned long lastFlipSwitchChange =
+      flipSwitch.second.lastFlipSwitchChange;  // get the timestamp when flipSwitch was pressed last time (used to debounce / limit events)
+
+    if (actualMillis - lastFlipSwitchChange > DEBOUNCE_TIME)
+    {
       // if time is > debounce time...
 
       int flipSwitchPIN = flipSwitch.first;                                       // get the flipSwitch pin from configuration
       bool lastFlipSwitchState = flipSwitch.second.lastFlipSwitchState;           // get the lastFlipSwitchState
       bool flipSwitchState = digitalRead(flipSwitchPIN);                          // read the current flipSwitch state
-      
-      if (flipSwitchState != lastFlipSwitchState) 
-      {                               
+
+      if (flipSwitchState != lastFlipSwitchState)
+      {
         // if the flipSwitchState has changed...
-        
+
 #ifdef TACTILE_BUTTON
         // if the tactile button is pressed
-        if (flipSwitchState) 
-        {                                                          
+        if (flipSwitchState)
+        {
 #endif
           flipSwitch.second.lastFlipSwitchChange = actualMillis;                  // update lastFlipSwitchChange time
           String deviceId = flipSwitch.second.deviceId;                           // get the deviceId from config
@@ -198,6 +200,7 @@ void handleFlipSwitches()
           mySwitch.sendPowerStateEvent(newRelayState);                            // send the event
 #ifdef TACTILE_BUTTON
         }
+
 #endif
         flipSwitch.second.lastFlipSwitchState = flipSwitchState;                  // update lastFlipSwitchState
       }
@@ -206,17 +209,17 @@ void handleFlipSwitches()
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
@@ -235,14 +238,15 @@ void setupSinricPro()
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting MultiSwitch_advance on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupRelays();
   setupFlipSwitches();
   setupWiFi();

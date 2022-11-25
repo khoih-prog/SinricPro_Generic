@@ -51,61 +51,62 @@
 #define BAUD_RATE         115200                   // Change baudrate to your need
 
 
-bool onLockState(String deviceId, bool &lockState) 
+bool onLockState(String deviceId, bool &lockState)
 {
   Serial.printf("Device %s is %s\r\n", deviceId.c_str(), lockState ? "locked" : "unlocked");
   return true;
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProLock &myLock = SinricPro[LOCK_ID];
   myLock.onLockState(onLockState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Lock on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

@@ -72,11 +72,11 @@
 #endif
 
 // Stores current device state with following initial values:
-struct 
-{                                            
+struct
+{
   bool powerState = false;                          // initial state is off
   int brightness = 100;                             // initial brightness is set to 100
-  struct 
+  struct
   {
     byte r = 255;                                   // color
     byte g = 255;                                   // is set
@@ -85,22 +85,25 @@ struct
 } device_state;
 
 // setStripe: sets the mosfets values corresponding to values stored in device_state
-void setStripe() 
+void setStripe()
 {
-  int rValue = map(device_state.color.r * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate red value and map between 0 and 1023 for analogWrite
-  int gValue = map(device_state.color.g * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate green value and map between 0 and 1023 for analogWrite
-  int bValue = map(device_state.color.b * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate blue value and map between 0 and 1023 for analogWrite
+  int rValue = map(device_state.color.r * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate red value and map between 0 and 1023 for analogWrite
+  int gValue = map(device_state.color.g * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate green value and map between 0 and 1023 for analogWrite
+  int bValue = map(device_state.color.b * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate blue value and map between 0 and 1023 for analogWrite
 
-  if (device_state.powerState == false) 
-  {           
+  if (device_state.powerState == false)
+  {
     // turn off?
     digitalWrite(RED_PIN,   LOW);                   // set
     digitalWrite(GREEN_PIN, LOW);                   // mosfets
     digitalWrite(BLUE_PIN,  LOW);                   // low
-  } 
-  else 
+  }
+  else
   {
-#if (ESP8266)    
+#if (ESP8266)
     analogWrite(RED_PIN,   rValue);                 // write red value to pin
     analogWrite(GREEN_PIN, gValue);                 // write green value to pin
     analogWrite(BLUE_PIN,  bValue);                 // write blue value to pin
@@ -112,66 +115,66 @@ void setStripe()
   }
 }
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   device_state.powerState = state;                  // store the new power state
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onBrightness(const String &deviceId, int &brightness) 
+bool onBrightness(const String &deviceId, int &brightness)
 {
   (void) deviceId;
-  
+
   device_state.brightness = brightness;             // store new brightness level
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onAdjustBrightness(const String &deviceId, int &brightnessDelta) 
+bool onAdjustBrightness(const String &deviceId, int &brightnessDelta)
 {
   (void) deviceId;
-  
+
   device_state.brightness += brightnessDelta;       // calculate and store new absolute brightness
   brightnessDelta = device_state.brightness;        // return absolute brightness
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onColor(const String &deviceId, byte &r, byte &g, byte &b) 
+bool onColor(const String &deviceId, byte &r, byte &g, byte &b)
 {
   (void) deviceId;
-  
+
   device_state.color.r = r;                         // store new red value
   device_state.color.g = g;                         // store new green value
   device_state.color.b = b;                         // store new blue value
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[WiFi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   // get a new Light device from SinricPro
   SinricProLight &myLight = SinricPro[LIGHT_ID];
@@ -183,22 +186,22 @@ void setupSinricPro()
   myLight.onColor(onColor);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
-void setup() 
+void setup()
 {
-#if (ESP8266)  
+#if (ESP8266)
   pinMode(RED_PIN,   OUTPUT);                       // set red-mosfet pin as output
   pinMode(GREEN_PIN, OUTPUT);                       // set green-mosfet pin as output
   pinMode(BLUE_PIN,  OUTPUT);                       // set blue-mosfet pin as output
@@ -207,7 +210,7 @@ void setup()
   ledcSetup(LED_CHANNEL_R, FREQUENCY, RESOLUTION_BITS);
   ledcSetup(LED_CHANNEL_G, FREQUENCY, RESOLUTION_BITS);
   ledcSetup(LED_CHANNEL_B, FREQUENCY, RESOLUTION_BITS);
-  
+
   // attach the channel to the pins to be controlled
   ledcAttachPin(RED_PIN,    LED_CHANNEL_R);
   ledcAttachPin(GREEN_PIN,  LED_CHANNEL_G);
@@ -215,9 +218,10 @@ void setup()
 #endif
 
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting RGB_LED_Stripe_5050 on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -225,7 +229,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();                               // handle SinricPro communication
 }

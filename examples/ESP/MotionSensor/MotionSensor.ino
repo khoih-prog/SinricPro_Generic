@@ -69,23 +69,23 @@ unsigned long lastChange = 0;
         HIGH = motion detected
         LOW  = motion not detected
 */
-void handleMotionsensor() 
+void handleMotionsensor()
 {
-  if (!myPowerState) 
+  if (!myPowerState)
     return;                            // if device switched off...do nothing
 
   unsigned long actualMillis = millis();
-  
-  if (actualMillis - lastChange < 250) 
+
+  if (actualMillis - lastChange < 250)
     return;          // debounce motionsensor state transitions (same as debouncing a pushbutton)
 
   bool actualMotionState = digitalRead(MOTIONSENSOR_PIN);   // read actual state of motion sensor
 
-  if (actualMotionState != lastMotionState) 
-  {         
+  if (actualMotionState != lastMotionState)
+  {
     // if state has changed
     Serial.printf("Motion %s\r\n", actualMotionState ? "detected" : "not detected");
-    
+
     lastMotionState = actualMotionState;              // update last known state
     lastChange = actualMillis;                        // update debounce time
     SinricProMotionsensor &myMotionsensor = SinricPro[MOTIONSENSOR_ID]; // get motion sensor device
@@ -102,33 +102,33 @@ void handleMotionsensor()
    @return true         request handled properly
    @return false        request can't be handled because some kind of error happened
 */
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.printf("Device %s turned %s (via SinricPro) \r\n", deviceId.c_str(), state ? "on" : "off");
   myPowerState = state;
-  
+
   return true; // request handled properly
 }
 
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add device to SinricPro
   SinricProMotionsensor& myMotionsensor = SinricPro[MOTIONSENSOR_ID];
@@ -137,25 +137,26 @@ void setupSinricPro()
   myMotionsensor.onPowerState(onPowerState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting MotionSensor on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -165,7 +166,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   handleMotionsensor();
   SinricPro.handle();

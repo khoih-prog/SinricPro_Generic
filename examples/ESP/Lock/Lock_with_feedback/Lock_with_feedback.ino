@@ -67,69 +67,71 @@
 
 bool lastLockState;
 
-bool onLockState(String deviceId, bool &lockState) 
+bool onLockState(String deviceId, bool &lockState)
 {
   Serial.printf("Device %s is %s\r\n", deviceId.c_str(), lockState ? "locked" : "unlocked");
   digitalWrite(LOCK_PIN, lockState);
-  
+
   return true;
 }
 
-void checkLockState() 
+void checkLockState()
 {
   bool currentLockState = digitalRead(LOCK_STATE_PIN);                                    // get current lock state
-  
-  if (currentLockState == lastLockState) 
+
+  if (currentLockState == lastLockState)
     return;                                                                               // do nothing if state didn't changed
-    
-  Serial.printf("Lock has been %s manually\r\n", currentLockState ? "locked" : "unlocked"); // print current lock state to serial
-  
+
+  Serial.printf("Lock has been %s manually\r\n",
+                currentLockState ? "locked" : "unlocked"); // print current lock state to serial
+
   lastLockState = currentLockState;                                                       // update last known lock state
   SinricProLock &myLock = SinricPro[LOCK_ID];                                             // get the LockDevice
   myLock.sendLockStateEvent(currentLockState);                                            // update LockState on Server
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProLock &myLock = SinricPro[LOCK_ID];
   myLock.onLockState(onLockState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Lock_with_feedback on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
 
@@ -140,7 +142,7 @@ void setup()
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
   checkLockState();

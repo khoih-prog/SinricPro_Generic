@@ -59,14 +59,14 @@
 
 // checkButtonpress
 // reads if BUTTON_PIN gets LOW and send Event
-void checkButtonPress() 
+void checkButtonPress()
 {
   static unsigned long lastBtnPress;
   unsigned long actualMillis = millis();
 
-  if (actualMillis - lastBtnPress > 500) 
+  if (actualMillis - lastBtnPress > 500)
   {
-    if (digitalRead(BUTTON_PIN) == LOW) 
+    if (digitalRead(BUTTON_PIN) == LOW)
     {
       Serial.println("Ding dong...");
       lastBtnPress = actualMillis;
@@ -81,57 +81,58 @@ void checkButtonPress()
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add doorbell device to SinricPro
   SinricPro.add<SinricProDoorbell>(DOORBELL_ID);
-  
+
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
   pinMode(BUTTON_PIN, INPUT_PULLUP); // BUTTIN_PIN as INPUT
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting doorbell on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   checkButtonPress();
   SinricPro.handle();

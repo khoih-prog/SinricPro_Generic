@@ -82,14 +82,14 @@ bool onPowerState(const String &deviceId, bool &state)
   Serial.printf("Device %s turned %s (via SinricPro) \r\n", deviceId.c_str(), state ? "on" : "off");
   myPowerState = state;
   digitalWrite(LED_PIN, myPowerState ? LOW : HIGH);
-  
+
   return true; // request handled properly
 }
 
 void handleButtonPress()
 {
   unsigned long actualMillis = millis(); // get actual millis() and keep it in variable actualMillis
-  
+
   if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)
   {
     // is button pressed (inverted logic! button pressed = LOW) and debounced?
@@ -102,8 +102,9 @@ void handleButtonPress()
     {
       myPowerState = true;
     }
-    
-    digitalWrite(LED_PIN, myPowerState ? LOW : HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
+
+    digitalWrite(LED_PIN, myPowerState ? LOW :
+                 HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
 
     // get Switch device back
     SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
@@ -120,14 +121,14 @@ void handleButtonPress()
 }
 
 // setup function for ETH connection
-void setupETH() 
+void setupETH()
 {
   Serial.print("[ETH]: Connecting");
-  
+
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();
 
-  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO, 
+  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO,
   //           eth_phy_type_t type=ETH_PHY_TYPE, eth_clock_mode_t clk_mode=ETH_CLK_MODE);
   //ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_TYPE, ETH_CLK_MODE);
   ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER);
@@ -137,7 +138,7 @@ void setupETH()
   ETH.config(myIP, myGW, mySN, myDNS);
 
   WT32_ETH01_waitForConnect();
-  
+
   Serial.print("[ETH]: IP-Address is ");
   Serial.println(ETH.localIP());
 }
@@ -172,14 +173,17 @@ void setup()
   pinMode(LED_PIN, OUTPUT);           // define LED GPIO as output
   digitalWrite(LED_PIN, HIGH);        // turn off LED on bootup
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-   
-  Serial.print(F("\nStart Switch on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+
+  Serial.print(F("\nStart Switch on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(SINRICPRO_VERSION_STR);
-  
+
   setupETH();
   setupSinricPro();
 }

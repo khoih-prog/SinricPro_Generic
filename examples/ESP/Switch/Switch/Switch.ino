@@ -77,14 +77,14 @@ bool onPowerState(const String &deviceId, bool &state)
   Serial.printf("Device %s turned %s (via SinricPro) \r\n", deviceId.c_str(), state ? "on" : "off");
   myPowerState = state;
   digitalWrite(LED_PIN, myPowerState ? LOW : HIGH);
-  
+
   return true; // request handled properly
 }
 
 void handleButtonPress()
 {
   unsigned long actualMillis = millis(); // get actual millis() and keep it in variable actualMillis
-  
+
   if (digitalRead(BUTTON_PIN) == LOW && actualMillis - lastBtnPress > 1000)
   {
     // is button pressed (inverted logic! button pressed = LOW) and debounced?
@@ -97,8 +97,9 @@ void handleButtonPress()
     {
       myPowerState = true;
     }
-    
-    digitalWrite(LED_PIN, myPowerState ? LOW : HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
+
+    digitalWrite(LED_PIN, myPowerState ? LOW :
+                 HIGH); // if myPowerState indicates device turned on: turn on led (builtin led uses inverted logic: LOW = LED ON / HIGH = LED OFF)
 
     // get Switch device back
     SinricProSwitch& mySwitch = SinricPro[SWITCH_ID];
@@ -115,17 +116,17 @@ void handleButtonPress()
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
@@ -160,12 +161,13 @@ void setup()
   pinMode(LED_PIN, OUTPUT);           // define LED GPIO as output
   digitalWrite(LED_PIN, HIGH);        // turn off LED on bootup
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Switch on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }

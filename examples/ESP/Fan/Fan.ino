@@ -8,7 +8,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
   Licensed under MIT license
  **********************************************************************************************************************************/
- 
+
 /*
    If you encounter any issues:
    - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
@@ -51,38 +51,38 @@
 
 // we use a struct to store all states and values for our fan
 // fanSpeed (1..3)
-struct 
+struct
 {
   bool powerState = false;
   int fanSpeed = 1;
 } device_state;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.printf("Fan turned %s\r\n", state ? "on" : "off");
   device_state.powerState = state;
-  
+
   return true; // request handled properly
 }
 
 // Fan rangeValue is from 1..3
-bool onRangeValue(const String &deviceId, int &rangeValue) 
+bool onRangeValue(const String &deviceId, int &rangeValue)
 {
   (void) deviceId;
-  
+
   device_state.fanSpeed = rangeValue;
   Serial.printf("Fan speed changed to %d\r\n", device_state.fanSpeed);
-  
+
   return true;
 }
 
 // Fan rangeValueDelta is from -3..+3
-bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta) 
+bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta)
 {
   (void) deviceId;
-  
+
   device_state.fanSpeed += rangeValueDelta;
   Serial.printf("Fan speed changed about %i to %d\r\n", rangeValueDelta, device_state.fanSpeed);
 
@@ -91,22 +91,22 @@ bool onAdjustRangeValue(const String &deviceId, int rangeValueDelta)
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProFanUS &myFan = SinricPro[FAN_ID];
 
@@ -116,33 +116,34 @@ void setupSinricPro()
   myFan.onAdjustRangeValue(onAdjustRangeValue);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Fan on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

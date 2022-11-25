@@ -63,60 +63,60 @@ bool powerState;
 int globalBrightness = 100;
 CRGB leds[NUM_LEDS];
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   powerState = state;
-  
-  if (state) 
+
+  if (state)
   {
     FastLED.setBrightness(map(globalBrightness, 0, 100, 0, 255));
-  } 
-  else 
+  }
+  else
   {
     FastLED.setBrightness(0);
   }
-  
+
   FastLED.show();
-  
+
   return true; // request handled properly
 }
 
-bool onBrightness(const String &deviceId, int &brightness) 
+bool onBrightness(const String &deviceId, int &brightness)
 {
   (void) deviceId;
-  
+
   globalBrightness = brightness;
   FastLED.setBrightness(map(brightness, 0, 100, 0, 255));
   FastLED.show();
-  
+
   return true;
 }
 
-bool onAdjustBrightness(const String &deviceId, int brightnessDelta) 
+bool onAdjustBrightness(const String &deviceId, int brightnessDelta)
 {
   (void) deviceId;
-  
+
   globalBrightness += brightnessDelta;
   brightnessDelta = globalBrightness;
   FastLED.setBrightness(map(globalBrightness, 0, 100, 0, 255));
   FastLED.show();
-  
+
   return true;
 }
 
-bool onColor(const String &deviceId, byte &r, byte &g, byte &b) 
+bool onColor(const String &deviceId, byte &r, byte &g, byte &b)
 {
   (void) deviceId;
-  
+
   fill_solid(leds, NUM_LEDS, CRGB(r, g, b));
   FastLED.show();
-  
+
   return true;
 }
 
-void setupFastLED() 
+void setupFastLED()
 {
   FastLED.addLeds<WS2812B, LED_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(map(globalBrightness, 0, 100, 0, 255));
@@ -125,22 +125,22 @@ void setupFastLED()
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[WiFi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   // get a new Light device from SinricPro
   SinricProLight &myLight = SinricPro[LIGHT_ID];
@@ -152,35 +152,36 @@ void setupSinricPro()
   myLight.onColor(onColor);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.restoreDeviceStates(true);
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Light_FastLED_WS2812 on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupFastLED();
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

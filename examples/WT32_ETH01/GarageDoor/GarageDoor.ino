@@ -9,17 +9,17 @@
   Licensed under MIT license
  **********************************************************************************************************************************/
 /*
- * Example for Garage Door device
- * 
- * If you encounter any issues:
- * - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
- * - ensure all dependent libraries are installed
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
- *   - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
- * - open serial monitor and check whats happening
- * - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
- * - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
- */
+   Example for Garage Door device
+
+   If you encounter any issues:
+   - check the readme.md at https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md
+   - ensure all dependent libraries are installed
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#arduinoide
+     - see https://github.com/sinricpro/esp8266-esp32-sdk/blob/master/README.md#dependencies
+   - open serial monitor and check whats happening
+   - check full user documentation at https://sinricpro.github.io/esp8266-esp32-sdk
+   - visit https://github.com/sinricpro/esp8266-esp32-sdk/issues and check for existing issues or open a new one
+*/
 
 #if !(defined(ESP32))
   #error This code is intended to run on the WT32 boards and ESP32 platform ! Please check your Tools->Board setting.
@@ -55,23 +55,23 @@ IPAddress mySN(255, 255, 255, 0);
 // Google DNS Server IP
 IPAddress myDNS(8, 8, 8, 8);
 
-bool onDoorState(const String& deviceId, bool &doorState) 
+bool onDoorState(const String& deviceId, bool &doorState)
 {
   (void) deviceId;
-  
-  Serial.printf("Garagedoor is %s now.\r\n", doorState?"closed":"open");
+
+  Serial.printf("Garagedoor is %s now.\r\n", doorState ? "closed" : "open");
   return true;
 }
 
 // setup function for ETH connection
-void setupETH() 
+void setupETH()
 {
   Serial.print("\n[ETH]: Connecting");
-  
+
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();
 
-  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO, 
+  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO,
   //           eth_phy_type_t type=ETH_PHY_TYPE, eth_clock_mode_t clk_mode=ETH_CLK_MODE);
   //ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_TYPE, ETH_CLK_MODE);
   ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER);
@@ -81,46 +81,49 @@ void setupETH()
   ETH.config(myIP, myGW, mySN, myDNS);
 
   WT32_ETH01_waitForConnect();
-  
+
   Serial.print("\n[ETH]: IP-Address is ");
   Serial.println(ETH.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProGarageDoor &myGarageDoor = SinricPro[GARAGEDOOR_ID];
   myGarageDoor.onDoorState(onDoorState);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
-  Serial.print(F("\nStart GarageDoor on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+
+  Serial.print(F("\nStart GarageDoor on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(SINRICPRO_VERSION_STR);
-  
+
   setupETH();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

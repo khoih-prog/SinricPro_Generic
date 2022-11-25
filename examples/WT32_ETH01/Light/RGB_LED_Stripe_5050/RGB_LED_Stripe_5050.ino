@@ -67,11 +67,11 @@ IPAddress mySN(255, 255, 255, 0);
 IPAddress myDNS(8, 8, 8, 8);
 
 // Stores current device state with following initial values:
-struct 
-{                                            
+struct
+{
   bool powerState = false;                          // initial state is off
   int brightness = 100;                             // initial brightness is set to 100
-  struct 
+  struct
   {
     byte r = 255;                                   // color
     byte g = 255;                                   // is set
@@ -80,20 +80,23 @@ struct
 } device_state;
 
 // setStripe: sets the mosfets values corresponding to values stored in device_state
-void setStripe() 
+void setStripe()
 {
-  int rValue = map(device_state.color.r * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate red value and map between 0 and 1023 for analogWrite
-  int gValue = map(device_state.color.g * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate green value and map between 0 and 1023 for analogWrite
-  int bValue = map(device_state.color.b * device_state.brightness, 0, 255 * 100, 0, 1023);  // calculate blue value and map between 0 and 1023 for analogWrite
+  int rValue = map(device_state.color.r * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate red value and map between 0 and 1023 for analogWrite
+  int gValue = map(device_state.color.g * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate green value and map between 0 and 1023 for analogWrite
+  int bValue = map(device_state.color.b * device_state.brightness, 0, 255 * 100, 0,
+                   1023);  // calculate blue value and map between 0 and 1023 for analogWrite
 
-  if (device_state.powerState == false) 
-  {           
+  if (device_state.powerState == false)
+  {
     // turn off?
     digitalWrite(RED_PIN,   LOW);                   // set
     digitalWrite(GREEN_PIN, LOW);                   // mosfets
     digitalWrite(BLUE_PIN,  LOW);                   // low
-  } 
-  else 
+  }
+  else
   {
     ledcWrite(LED_CHANNEL_R, rValue);               // write red value to pin
     ledcWrite(LED_CHANNEL_G, gValue);               // write green value to pin
@@ -101,58 +104,58 @@ void setStripe()
   }
 }
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   device_state.powerState = state;                  // store the new power state
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onBrightness(const String &deviceId, int &brightness) 
+bool onBrightness(const String &deviceId, int &brightness)
 {
   (void) deviceId;
-  
+
   device_state.brightness = brightness;             // store new brightness level
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onAdjustBrightness(const String &deviceId, int &brightnessDelta) 
+bool onAdjustBrightness(const String &deviceId, int &brightnessDelta)
 {
   (void) deviceId;
-  
+
   device_state.brightness += brightnessDelta;       // calculate and store new absolute brightness
   brightnessDelta = device_state.brightness;        // return absolute brightness
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
-bool onColor(const String &deviceId, byte &r, byte &g, byte &b) 
+bool onColor(const String &deviceId, byte &r, byte &g, byte &b)
 {
   (void) deviceId;
-  
+
   device_state.color.r = r;                         // store new red value
   device_state.color.g = g;                         // store new green value
   device_state.color.b = b;                         // store new blue value
   setStripe();                                      // update the mosfets
-  
+
   return true;
 }
 
 // setup function for ETH connection
-void setupETH() 
+void setupETH()
 {
   Serial.print("[ETH]: Connecting");
-  
+
   // To be called before ETH.begin()
   WT32_ETH01_onEvent();
 
-  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO, 
+  //bool begin(uint8_t phy_addr=ETH_PHY_ADDR, int power=ETH_PHY_POWER, int mdc=ETH_PHY_MDC, int mdio=ETH_PHY_MDIO,
   //           eth_phy_type_t type=ETH_PHY_TYPE, eth_clock_mode_t clk_mode=ETH_CLK_MODE);
   //ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_TYPE, ETH_CLK_MODE);
   ETH.begin(ETH_PHY_ADDR, ETH_PHY_POWER);
@@ -162,12 +165,12 @@ void setupETH()
   ETH.config(myIP, myGW, mySN, myDNS);
 
   WT32_ETH01_waitForConnect();
-  
+
   Serial.print("[ETH]: IP-Address is ");
   Serial.println(ETH.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   // get a new Light device from SinricPro
   SinricProLight &myLight = SinricPro[LIGHT_ID];
@@ -179,44 +182,47 @@ void setupSinricPro()
   myLight.onColor(onColor);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
-void setup() 
+void setup()
 {
   // configure LED PWM functionalitites
   ledcSetup(LED_CHANNEL_R, FREQUENCY, RESOLUTION_BITS);
   ledcSetup(LED_CHANNEL_G, FREQUENCY, RESOLUTION_BITS);
   ledcSetup(LED_CHANNEL_B, FREQUENCY, RESOLUTION_BITS);
-  
+
   // attach the channel to the pins to be controlled
   ledcAttachPin(RED_PIN,    LED_CHANNEL_R);
   ledcAttachPin(GREEN_PIN,  LED_CHANNEL_G);
   ledcAttachPin(BLUE_PIN,   LED_CHANNEL_B);
 
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
-  Serial.print(F("\nStart RGB_LED_Stripe_5050 on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+
+  Serial.print(F("\nStart RGB_LED_Stripe_5050 on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WEBSERVER_WT32_ETH01_VERSION);
   Serial.println(SINRICPRO_VERSION_STR);
-  
+
   setupETH();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();                               // handle SinricPro communication
 }

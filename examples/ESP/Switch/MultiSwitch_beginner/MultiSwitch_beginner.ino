@@ -56,57 +56,57 @@
 #define SWITCH_ID_3       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 #define SWITCH_ID_4       "YOUR-DEVICE-ID"    // Should look like "5dc1564130xxxxxxxxxxxxxx"
 
-bool onPowerState1(const String &deviceId, bool &state) 
+bool onPowerState1(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.printf("Device 1 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
-bool onPowerState2(const String &deviceId, bool &state) 
+bool onPowerState2(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.printf("Device 2 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
-bool onPowerState3(const String &deviceId, bool &state) 
+bool onPowerState3(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.printf("Device 3 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
-bool onPowerState4(const String &deviceId, bool &state) 
+bool onPowerState4(const String &deviceId, bool &state)
 {
   (void) deviceId;
-  
+
   Serial.printf("Device 4 turned %s\r\n", state ? "on" : "off");
   return true; // request handled properly
 }
 
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add devices and callbacks to SinricPro
   SinricProSwitch& mySwitch1 = SinricPro[SWITCH_ID_1];
@@ -122,33 +122,34 @@ void setupSinricPro()
   mySwitch4.onPowerState(onPowerState4);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting MultiSwitch_beginner on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

@@ -53,55 +53,56 @@
 float globalTemperature;
 bool globalPowerState;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.printf("Thermostat %s turned %s\r\n", deviceId.c_str(), state ? "on" : "off");
   globalPowerState = state;
-  
+
   return true; // request handled properly
 }
 
-bool onTargetTemperature(const String &deviceId, float &temperature) 
+bool onTargetTemperature(const String &deviceId, float &temperature)
 {
   Serial.printf("Thermostat %s set temperature to %f\r\n", deviceId.c_str(), temperature);
   globalTemperature = temperature;
-  
+
   return true;
 }
 
-bool onAdjustTargetTemperature(const String & deviceId, float &temperatureDelta) 
+bool onAdjustTargetTemperature(const String & deviceId, float &temperatureDelta)
 {
   globalTemperature += temperatureDelta;  // calculate absolut temperature
-  Serial.printf("Thermostat %s changed temperature about %f to %f", deviceId.c_str(), temperatureDelta, globalTemperature);
+  Serial.printf("Thermostat %s changed temperature about %f to %f", deviceId.c_str(), temperatureDelta,
+                globalTemperature);
   temperatureDelta = globalTemperature; // return absolut temperature
-  
+
   return true;
 }
 
-bool onThermostatMode(const String &deviceId, String &mode) 
+bool onThermostatMode(const String &deviceId, String &mode)
 {
   Serial.printf("Thermostat %s set to mode %s\r\n", deviceId.c_str(), mode.c_str());
-  
+
   return true;
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   SinricProThermostat &myThermostat = SinricPro[THERMOSTAT_ID];
   myThermostat.onPowerState(onPowerState);
@@ -110,33 +111,34 @@ void setupSinricPro()
   myThermostat.onThermostatMode(onThermostatMode);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Thermostat on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

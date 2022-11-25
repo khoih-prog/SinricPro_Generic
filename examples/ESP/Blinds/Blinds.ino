@@ -54,45 +54,45 @@
 int blindsPosition = 0;
 bool powerState = false;
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
   Serial.printf("Device %s power turned %s \r\n", deviceId.c_str(), state ? "on" : "off");
   powerState = state;
   return true; // request handled properly
 }
 
-bool onSetPosition(const String &deviceId, int &position) 
+bool onSetPosition(const String &deviceId, int &position)
 {
   Serial.printf("Device %s set position to %d\r\n", deviceId.c_str(), position);
   return true; // request handled properly
 }
 
-bool onAdjustPosition(const String &deviceId, int &positionDelta) 
+bool onAdjustPosition(const String &deviceId, int &positionDelta)
 {
   blindsPosition += positionDelta;
   Serial.printf("Device %s position changed about %i to %d\r\n", deviceId.c_str(), positionDelta, blindsPosition);
   positionDelta = blindsPosition; // calculate and return absolute position
-  
+
   return true; // request handled properly
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
-void setupSinricPro() 
+void setupSinricPro()
 {
   // get a new Blinds device from SinricPro
   SinricProBlinds &myBlinds = SinricPro[BLINDS_ID];
@@ -101,33 +101,34 @@ void setupSinricPro()
   myBlinds.onAdjustPosition(onAdjustPosition);
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting Blinds on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }

@@ -53,8 +53,8 @@
 #define BAUD_RATE         115200              // Change baudrate to your need
 
 #define DEVICES           4                   // define how much devices are in SWITCH_IDs array
-String SWITCH_IDs[DEVICES] = 
-{                
+String SWITCH_IDs[DEVICES] =
+{
   // define deviceIds in an array
   "YOUR_DEVICE_ID_1",
   "YOUR_DEVICE_ID_2",
@@ -62,75 +62,76 @@ String SWITCH_IDs[DEVICES] =
   "YOUR_DEVICE_ID_4"
 };
 
-bool onPowerState(const String &deviceId, bool &state) 
+bool onPowerState(const String &deviceId, bool &state)
 {
-  for (int i = 0; i < DEVICES; i++) 
-  {   
+  for (int i = 0; i < DEVICES; i++)
+  {
     // go through the devices
-    if (deviceId == SWITCH_IDs[i]) 
-    {    
+    if (deviceId == SWITCH_IDs[i])
+    {
       // if deviceId matches
       Serial.printf("Device number %i turned %s\r\n", i, state ? "on" : "off"); // print power state for device
     }
   }
-  
+
   return true; // request handled properly
 }
 
 // setup function for WiFi connection
-void setupWiFi() 
+void setupWiFi()
 {
   Serial.print("\n[Wifi]: Connecting");
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  while (WiFi.status() != WL_CONNECTED) 
+  while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(250);
   }
-  
+
   Serial.print("\n[WiFi]: IP-Address is ");
   Serial.println(WiFi.localIP());
 }
 
 // setup function for SinricPro
-void setupSinricPro() 
+void setupSinricPro()
 {
   // add devices to SinricPro and set callback function
-  for (int i = 0; i < DEVICES; i++) 
+  for (int i = 0; i < DEVICES; i++)
   {
     SinricProSwitch& mySwitch = SinricPro[SWITCH_IDs[i]];
     mySwitch.onPowerState(onPowerState);
   }
 
   // setup SinricPro
-  SinricPro.onConnected([]() 
+  SinricPro.onConnected([]()
   {
     Serial.println("Connected to SinricPro");
   });
-  
-  SinricPro.onDisconnected([]() 
+
+  SinricPro.onDisconnected([]()
   {
     Serial.println("Disconnected from SinricPro");
   });
-  
+
   SinricPro.begin(APP_KEY, APP_SECRET);
 }
 
 // main setup function
-void setup() 
+void setup()
 {
-  Serial.begin(BAUD_RATE); 
+  Serial.begin(BAUD_RATE);
+
   while (!Serial);
-  
+
   Serial.println("\nStarting MultiSwitch_intermediate on " + String(ARDUINO_BOARD));
   Serial.println("Version : " + String(SINRICPRO_VERSION_STR));
-  
+
   setupWiFi();
   setupSinricPro();
 }
 
-void loop() 
+void loop()
 {
   SinricPro.handle();
 }
