@@ -1118,13 +1118,13 @@ Syntax is
 
 #### 1. File [SAMD_WiFiNINA_Switch.ino](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino)
 
-https://github.com/khoih-prog/SinricPro_Generic/blob/9411cd6a5b6a0c4841074f7de9739798d0fe2ddd/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino#L21-L143
+https://github.com/khoih-prog/SinricPro_Generic/blob/c81c4f0210e5af667b97b7ce544eb8df79ba4594/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/SAMD_WiFiNINA_Switch.ino#L17-L148
 
 ---
 
 #### 2. File [defines.h](examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/defines.h)
 
-https://github.com/khoih-prog/SinricPro_Generic/blob/9411cd6a5b6a0c4841074f7de9739798d0fe2ddd/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/defines.h#L17-L294
+https://github.com/khoih-prog/SinricPro_Generic/blob/c81c4f0210e5af667b97b7ce544eb8df79ba4594/examples/Generic/Switch/SAMD_WiFiNINA/SAMD_WiFiNINA_Switch/defines.h#L17-L294
 
 ---
 ---
