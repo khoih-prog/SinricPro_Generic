@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -48,14 +48,14 @@ class SinricProLock :  public SinricProDevice
 {
   public:
     SinricProLock(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    String getProductType() 
+    String getProductType()
     {
-      return SinricProDevice::getProductType() + String("SMARTLOCK"); 
+      return SinricProDevice::getProductType() + String("SMARTLOCK");
     }
     //////
-    
+
     // callback
 
     /**
@@ -77,7 +77,8 @@ class SinricProLock :  public SinricProDevice
        }
        @endcode
      **/
-    typedef std::function<bool(const String&, bool&)> LockStateCallback; // void onLockState(const DeviceId &deviceId, bool& lockState);
+    typedef std::function<bool(const String&, bool&)>
+    LockStateCallback; // void onLockState(const DeviceId &deviceId, bool& lockState);
 
     void onLockState(LockStateCallback cb);
     void onPowerState() = delete;  // SinricProLock has no powerState
@@ -86,8 +87,9 @@ class SinricProLock :  public SinricProDevice
     bool sendLockStateEvent(bool state, String cause = "PHYSICAL_INTERACTION");
 
     // handle
-    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
-    
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
+                       JsonObject &response_value) override;
+
   private:
     LockStateCallback lockStateCallback;
 };
@@ -95,7 +97,7 @@ class SinricProLock :  public SinricProDevice
 SinricProLock::SinricProLock(const DeviceId &deviceId) : SinricProDevice(deviceId),
   lockStateCallback(nullptr) {}
 
-bool SinricProLock::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+bool SinricProLock::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
                                   JsonObject &response_value)
 {
   if (deviceId != this->deviceId)
@@ -111,6 +113,7 @@ bool SinricProLock::handleRequest(const DeviceId &deviceId, const char* action, 
     response_value["state"] = success ? lockState ? "LOCKED" : "UNLOCKED" : "JAMMED";
     return success;
   }
+
   return success;
 }
 

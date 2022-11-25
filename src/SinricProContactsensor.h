@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -40,15 +40,15 @@
    @class SinricProContactsensor
    @brief Device to report contact sensor events
  **/
-class SinricProContactsensor :  public SinricProDevice 
+class SinricProContactsensor :  public SinricProDevice
 {
   public:
     SinricProContactsensor(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    virtual String getProductType() 
-    { 
-      return SinricProDevice::getProductType() + String("CONTACT_SENSOR"); 
+    virtual String getProductType()
+    {
+      return SinricProDevice::getProductType() + String("CONTACT_SENSOR");
     }
     //////
 
@@ -68,7 +68,7 @@ SinricProContactsensor::SinricProContactsensor(const DeviceId &deviceId) : Sinri
    @return `true` event has been sent successfully
    @return `false` event has not been sent, maybe you sent to much events in a short distance of time
  **/
-bool SinricProContactsensor::sendContactEvent(bool state, String cause) 
+bool SinricProContactsensor::sendContactEvent(bool state, String cause)
 {
   DynamicJsonDocument eventMessage = prepareEvent(deviceId, "setContactState", cause.c_str());
   JsonObject event_value = eventMessage["payload"]["value"];

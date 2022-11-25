@@ -1,7 +1,7 @@
 /* code was modified by george spanos <spaniakos@gmail.com>
- * 16/12/14
- * 
- */
+   16/12/14
+
+*/
 
 #ifndef __AES_CONFIG_H__
 #define __AES_CONFIG_H__
@@ -15,7 +15,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <sys/time.h>
-  #include <unistd.h> 
+  #include <unistd.h>
 #else
   #include <Arduino.h>
 #endif

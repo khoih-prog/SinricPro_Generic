@@ -1,11 +1,11 @@
 /****************************************************************************************************************************
   SinricPro_Generic.h - Sinric Pro Library for boards
-  
+
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -47,7 +47,7 @@
     #undef max
     #define max(a,b) ((a) > (b) ? (a) : (b))
   #endif
-  
+
 #endif
 
 #include <vector>
@@ -67,18 +67,20 @@ void __throw_length_error( char const*e )
 #if 0 //defined(TEENSYDUINO)
 namespace std
 {
-  //To avoid Teensy linker issue wth STL library
-  unsigned __exidx_start;
-  unsigned __exidx_end;
+//To avoid Teensy linker issue wth STL library
+unsigned __exidx_start;
+unsigned __exidx_end;
 
-  // This is defined so that calling a std::function<void()> can compile when
-  // size optimization is enabled.
-  __attribute__((weak))
-  void __throw_bad_function_call()
-  {
-   Serial.println("Library Exception");
-   while (true) yield();
-  }
+// This is defined so that calling a std::function<void()> can compile when
+// size optimization is enabled.
+__attribute__((weak))
+void __throw_bad_function_call()
+{
+  Serial.println("Library Exception");
+
+  while (true)
+    yield();
+}
 }
 #endif
 

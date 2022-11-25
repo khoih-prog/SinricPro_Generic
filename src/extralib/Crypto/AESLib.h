@@ -7,11 +7,11 @@
 
 class AESLib
 {
-  public:    
+  public:
     void gen_iv(byte  *iv);
     String encrypt(String msg, byte key[], byte my_iv[]);
     //String decrypt(String msg, byte key[], byte my_iv[]);
-        
+
   private:
     uint8_t getrnd();
     AES_Crypto aes;

@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -47,11 +47,11 @@ class SinricProGarageDoor :  public SinricProDevice
 {
   public:
     SinricProGarageDoor(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    String getProductType() 
+    String getProductType()
     {
-      return SinricProDevice::getProductType() + String("GARAGE_DOOR"); 
+      return SinricProDevice::getProductType() + String("GARAGE_DOOR");
     }
     //////
 
@@ -78,8 +78,9 @@ class SinricProGarageDoor :  public SinricProDevice
     bool sendPowerStateEvent() = delete; // SinricProGarageDoor has no powerState
 
     // handle
-    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
-    
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
+                       JsonObject &response_value) override;
+
   private:
     DoorStateCallback doorStateCallback;
 };
@@ -89,7 +90,7 @@ SinricProGarageDoor::SinricProGarageDoor(const DeviceId &deviceId) : SinricProDe
 {
 }
 
-bool SinricProGarageDoor::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+bool SinricProGarageDoor::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
                                         JsonObject &response_value)
 {
   if (deviceId != this->deviceId)
@@ -123,6 +124,7 @@ bool SinricProGarageDoor::handleRequest(const DeviceId &deviceId, const char* ac
     response_value["mode"] = modeStr;
     return success;
   }
+
   return success;
 }
 

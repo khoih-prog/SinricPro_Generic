@@ -119,6 +119,7 @@ int base64_decode(char * output, char * input, int inputLen)
       output[decLen++] = a3[j];
     }
   }
+
   output[decLen] = '\0';
   return decLen;
 }

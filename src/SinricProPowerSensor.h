@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -44,21 +44,22 @@ class SinricProPowerSensor :  public SinricProDevice
 {
   public:
     SinricProPowerSensor(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    String getProductType() 
+    String getProductType()
     {
-      return SinricProDevice::getProductType() + String("POWER_SENSOR"); 
+      return SinricProDevice::getProductType() + String("POWER_SENSOR");
     }
     //////
-    
+
     // event
-    bool sendPowerSensorEvent(float voltage, float current, float power = -1.0f, float apparentPower = -1.0f, float reactivePower = -1.0f, float factor = -1.0f, String cause = "PERIODIC_POLL");
-    
+    bool sendPowerSensorEvent(float voltage, float current, float power = -1.0f, float apparentPower = -1.0f,
+                              float reactivePower = -1.0f, float factor = -1.0f, String cause = "PERIODIC_POLL");
+
   private:
     unsigned long startTime = 0;
     unsigned long lastPower = 0;
-    
+
   protected:
     float getWattHours(unsigned long currentTimestamp);
 };
@@ -78,7 +79,8 @@ SinricProPowerSensor::SinricProPowerSensor(const DeviceId &deviceId) : SinricPro
    @retval  true          event has been sent successfully
    @retval  false         event has not been sent, maybe you sent to much events in a short distance of time
  **/
-bool SinricProPowerSensor::sendPowerSensorEvent(float voltage, float current, float power, float apparentPower, float reactivePower, float factor, String cause)
+bool SinricProPowerSensor::sendPowerSensorEvent(float voltage, float current, float power, float apparentPower,
+                                                float reactivePower, float factor, String cause)
 {
   DynamicJsonDocument eventMessage = prepareEvent(deviceId, "powerUsage", cause.c_str());
   JsonObject event_value = eventMessage["payload"]["value"];
@@ -102,7 +104,7 @@ bool SinricProPowerSensor::sendPowerSensorEvent(float voltage, float current, fl
 
   startTime = currentTimestamp;
   lastPower = power;
-  
+
   return sendEvent(eventMessage);
 }
 

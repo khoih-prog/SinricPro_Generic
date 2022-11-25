@@ -152,36 +152,56 @@ static void copy_and_key (byte * d, byte * s, byte * k)
 
 static void shift_sub_rows (byte st [N_BLOCK])
 {
-  st [0] = s_box (st [0]) ; st [4]  = s_box (st [4]) ;
-  st [8] = s_box (st [8]) ; st [12] = s_box (st [12]) ;
+  st [0] = s_box (st [0]) ;
+  st [4]  = s_box (st [4]) ;
+  st [8] = s_box (st [8]) ;
+  st [12] = s_box (st [12]) ;
 
   byte tt = st [1] ;
-  st [1] = s_box (st [5]) ;  st [5]  = s_box (st [9]) ;
-  st [9] = s_box (st [13]) ; st [13] = s_box (tt) ;
+  st [1] = s_box (st [5]) ;
+  st [5]  = s_box (st [9]) ;
+  st [9] = s_box (st [13]) ;
+  st [13] = s_box (tt) ;
 
-  tt = st[2] ; st [2] = s_box (st [10]) ; st [10] = s_box (tt) ;
-  tt = st[6] ; st [6] = s_box (st [14]) ; st [14] = s_box (tt) ;
+  tt = st[2] ;
+  st [2] = s_box (st [10]) ;
+  st [10] = s_box (tt) ;
+  tt = st[6] ;
+  st [6] = s_box (st [14]) ;
+  st [14] = s_box (tt) ;
 
   tt = st[15] ;
-  st [15] = s_box (st [11]) ; st [11] = s_box (st [7]) ;
-  st [7]  = s_box (st [3]) ;  st [3]  = s_box (tt) ;
+  st [15] = s_box (st [11]) ;
+  st [11] = s_box (st [7]) ;
+  st [7]  = s_box (st [3]) ;
+  st [3]  = s_box (tt) ;
 }
 
 static void inv_shift_sub_rows (byte st[N_BLOCK])
 {
-  st [0] = is_box (st[0]) ; st [4] = is_box (st [4]);
-  st [8] = is_box (st[8]) ; st [12] = is_box (st [12]);
+  st [0] = is_box (st[0]) ;
+  st [4] = is_box (st [4]);
+  st [8] = is_box (st[8]) ;
+  st [12] = is_box (st [12]);
 
   byte tt = st[13] ;
-  st [13] = is_box (st [9]) ; st [9] = is_box (st [5]) ;
-  st [5]  = is_box (st [1]) ; st [1] = is_box (tt) ;
+  st [13] = is_box (st [9]) ;
+  st [9] = is_box (st [5]) ;
+  st [5]  = is_box (st [1]) ;
+  st [1] = is_box (tt) ;
 
-  tt = st [2] ; st [2] = is_box (st [10]) ; st [10] = is_box (tt) ;
-  tt = st [6] ; st [6] = is_box (st [14]) ; st [14] = is_box (tt) ;
+  tt = st [2] ;
+  st [2] = is_box (st [10]) ;
+  st [10] = is_box (tt) ;
+  tt = st [6] ;
+  st [6] = is_box (st [14]) ;
+  st [14] = is_box (tt) ;
 
   tt = st [3] ;
-  st [3]  = is_box (st [7])  ; st [7]  = is_box (st [11]) ;
-  st [11] = is_box (st [15]) ; st [15] = is_box (tt) ;
+  st [3]  = is_box (st [7])  ;
+  st [7]  = is_box (st [11]) ;
+  st [11] = is_box (st [15]) ;
+  st [15] = is_box (tt) ;
 }
 
 /* SUB COLUMNS PHASE */
@@ -191,12 +211,16 @@ static void mix_sub_columns (byte dt[N_BLOCK], byte st[N_BLOCK])
   byte j = 5 ;
   byte k = 10 ;
   byte l = 15 ;
+
   for (byte i = 0 ; i < N_BLOCK ; i += N_COL)
   {
     byte a = st [i] ;
-    byte b = st [j] ;  j = (j + N_COL) & 15 ;
-    byte c = st [k] ;  k = (k + N_COL) & 15 ;
-    byte d = st [l] ;  l = (l + N_COL) & 15 ;
+    byte b = st [j] ;
+    j = (j + N_COL) & 15 ;
+    byte c = st [k] ;
+    k = (k + N_COL) & 15 ;
+    byte d = st [l] ;
+    l = (l + N_COL) & 15 ;
     byte a1 = s_box (a), b1 = s_box (b), c1 = s_box (c), d1 = s_box (d) ;
     byte a2 = f2(a1),    b2 = f2(b1),    c2 = f2(c1),    d2 = f2(d1) ;
     dt[i]   = a2     ^  b2 ^ b1  ^  c1     ^  d1 ;
@@ -256,6 +280,7 @@ AES_Crypto::AES_Crypto()
 byte AES_Crypto::set_key (byte key [], int keylen)
 {
   byte hi ;
+
   switch (keylen)
   {
     case 16:
@@ -263,28 +288,34 @@ byte AES_Crypto::set_key (byte key [], int keylen)
       keylen = 16; // 10 rounds
       round = 10 ;
       break;
+
     case 24:
     case 192:
       keylen = 24; // 12 rounds
       round = 12 ;
       break;
+
     case 32:
     case 256:
       keylen = 32; // 14 rounds
       round = 14 ;
       break;
+
     default:
       round = 0;
       return FAILURE;
   }
+
   hi = (round + 1) << 4 ;
   copy_n_bytes (key_sched, key, keylen) ;
   byte t[4] ;
   byte next = keylen ;
+
   for (byte cc = keylen, rc = 1 ; cc < hi ; cc += N_COL)
   {
     for (byte i = 0 ; i < N_COL ; i++)
       t[i] = key_sched [cc - 4 + i] ;
+
     if (cc == next)
     {
       next += keylen ;
@@ -300,10 +331,13 @@ byte AES_Crypto::set_key (byte key [], int keylen)
       for (byte i = 0 ; i < 4 ; i++)
         t[i] = s_box (t[i]) ;
     }
+
     byte tt = cc - keylen ;
+
     for (byte i = 0 ; i < N_COL ; i++)
       key_sched [cc + i] = key_sched [tt + i] ^ t[i] ;
   }
+
   return SUCCESS ;
 }
 
@@ -313,6 +347,7 @@ void AES_Crypto::clean ()
 {
   for (byte i = 0 ; i < KEY_SCHEDULE_BYTES ; i++)
     key_sched [i] = 0 ;
+
   round = 0 ;
 }
 
@@ -329,6 +364,7 @@ void AES_Crypto::copy_n_bytes (byte * d, byte * s, byte nn)
     *d++ = *s++ ;
     nn -= 4 ;
   }
+
   while (nn--)
     *d++ = *s++ ;
 }
@@ -348,11 +384,13 @@ byte AES_Crypto::encrypt (byte plain [N_BLOCK], byte cipher [N_BLOCK])
       mix_sub_columns (s2, s1) ;
       copy_and_key (s1, s2, (byte*) (key_sched + r * N_BLOCK)) ;
     }
+
     shift_sub_rows (s1) ;
     copy_and_key (cipher, s1, (byte*) (key_sched + r * N_BLOCK)) ;
   }
   else
     return FAILURE ;
+
   return SUCCESS ;
 }
 
@@ -363,12 +401,15 @@ byte AES_Crypto::cbc_encrypt (byte * plain, byte * cipher, int n_block, byte iv 
   while (n_block--)
   {
     xor_block (iv, plain) ;
+
     if (encrypt (iv, iv) != SUCCESS)
       return FAILURE ;
+
     copy_n_bytes (cipher, iv, N_BLOCK) ;
     plain  += N_BLOCK ;
     cipher += N_BLOCK ;
   }
+
   return SUCCESS ;
 }
 
@@ -379,12 +420,15 @@ byte AES_Crypto::cbc_encrypt (byte * plain, byte * cipher, int n_block)
   while (n_block--)
   {
     xor_block (iv, plain) ;
+
     if (encrypt (iv, iv) != SUCCESS)
       return FAILURE ;
+
     copy_n_bytes (cipher, iv, N_BLOCK) ;
     plain  += N_BLOCK ;
     cipher += N_BLOCK ;
   }
+
   return SUCCESS ;
 }
 
@@ -404,10 +448,12 @@ byte AES_Crypto::decrypt (byte plain [N_BLOCK], byte cipher [N_BLOCK])
       copy_and_key (s2, s1, (byte*) (key_sched + r * N_BLOCK)) ;
       inv_mix_sub_columns (s1, s2) ;
     }
+
     copy_and_key (cipher, s1, (byte*) (key_sched)) ;
   }
   else
     return FAILURE ;
+
   return SUCCESS ;
 }
 
@@ -419,13 +465,16 @@ byte AES_Crypto::cbc_decrypt (byte * cipher, byte * plain, int n_block, byte iv 
   {
     byte tmp [N_BLOCK] ;
     copy_n_bytes (tmp, cipher, N_BLOCK) ;
+
     if (decrypt (cipher, plain) != SUCCESS)
       return FAILURE ;
+
     xor_block (plain, iv) ;
     copy_n_bytes (iv, tmp, N_BLOCK) ;
     plain  += N_BLOCK ;
     cipher += N_BLOCK;
   }
+
   return SUCCESS ;
 }
 
@@ -437,13 +486,16 @@ byte AES_Crypto::cbc_decrypt (byte * cipher, byte * plain, int n_block)
   {
     byte tmp [N_BLOCK] ;
     copy_n_bytes (tmp, cipher, N_BLOCK) ;
+
     if (decrypt (cipher, plain) != SUCCESS)
       return FAILURE ;
+
     xor_block (plain, iv) ;
     copy_n_bytes (iv, tmp, N_BLOCK) ;
     plain  += N_BLOCK ;
     cipher += N_BLOCK;
   }
+
   return SUCCESS ;
 }
 
@@ -502,6 +554,7 @@ void AES_Crypto::calc_size_n_pad(int p_size)
   {
     size = s_of_p +  (N_BLOCK - (s_of_p % N_BLOCK));
   }
+
   pad = size - s_of_p;
 }
 
@@ -510,6 +563,7 @@ void AES_Crypto::calc_size_n_pad(int p_size)
 void AES_Crypto::padPlaintext(void* in, byte* out)
 {
   memcpy(out, in, size);
+
   for (int i = size - pad; i < size; i++)
   {
     ;
@@ -561,6 +615,7 @@ void AES_Crypto::printArray(byte output[], bool p_pad)
       printf("%c", output[j * N_BLOCK + i]);
     }
   }
+
   printf("\n");
 }
 

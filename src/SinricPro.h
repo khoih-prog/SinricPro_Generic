@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -53,13 +53,15 @@ class SinricProClass : public SinricProInterface
     void begin(AppKey socketAuthToken, AppSecret signingKey, String serverURL = SINRICPRO_SERVER_URL);
     //void begin(String socketAuthToken, String signingKey, String serverURL = SINRICPRO_SERVER_URL);
 
-#if 0    
+#if 0
     // KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
-    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress, String serverURL = SINRICPRO_SERVER_URL);
-    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress, String serverURL = SINRICPRO_SERVER_URL);
+    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress,
+               String serverURL = SINRICPRO_SERVER_URL);
+    void begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress,
+               String serverURL = SINRICPRO_SERVER_URL);
     //////
 #endif
-    
+
     template <typename DeviceType>
     DeviceType& add(DeviceId deviceId);
 
@@ -178,7 +180,7 @@ class SinricProClass : public SinricProInterface
     DeviceType& getDeviceInstance(DeviceId deviceId);
 
     std::vector<SinricProDeviceInterface*> devices;
-    
+
     AppKey socketAuthToken;
     AppSecret signingKey;
     String serverURL;
@@ -192,10 +194,10 @@ class SinricProClass : public SinricProInterface
 
     bool _begin = false;
     String responseMessageStr = "";
-    
+
     // KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
     // Init with invalid value
-    IPAddress _deviceIP     = IPAddress(0,0,0,0);
+    IPAddress _deviceIP     = IPAddress(0, 0, 0, 0);
     String    _macAddress   = "00:00:00:00:00:00";
     //////
 };
@@ -205,10 +207,10 @@ SinricProDeviceInterface* SinricProClass::getDevice(DeviceId deviceId)
 {
   for (auto& device : devices)
   {
-    if (deviceId == device->getDeviceId()) 
+    if (deviceId == device->getDeviceId())
       return device;
   }
-  
+
   return nullptr;
 }
 
@@ -222,7 +224,7 @@ DeviceType& SinricProClass::getDeviceInstance(DeviceId deviceId)
 
   // KH, Check toString() equivalent
   SRP_LOGINFO1("Creating new device. No current DeviceId =", deviceId.toString());
-  
+
   DeviceType& tmp_deviceInstance = add<DeviceType>(deviceId);
 
   if (isConnected())
@@ -256,7 +258,7 @@ void SinricProClass::begin(AppKey socketAuthToken, AppSecret signingKey, String 
 
   SRP_LOGINFO1("begin(): App-Key =", socketAuthToken.toString());
   SRP_LOGINFO1("begin(): App-Secret =", signingKey.toString());
-  
+
   if (!socketAuthToken.isValid())
   {
     SRP_LOGERROR1("begin(): Invalid App-Key =", socketAuthToken.toString());
@@ -279,34 +281,36 @@ void SinricProClass::begin(AppKey socketAuthToken, AppSecret signingKey, String 
   this->signingKey = signingKey;
   this->serverURL = serverURL;
   _begin = true;
-  
+
   _udpListener.begin(&receiveQueue);
 }
 
 #if 0
 // KH, add from v2.5.1 to pass IP and mac to WebSockets Headers
-void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress, String serverURL = SINRICPRO_SERVER_URL)
+void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, byte* macAddress,
+                           String serverURL = SINRICPRO_SERVER_URL)
 {
   // Convert byte* macAddress to String. Store to _deviceIP and _macAddress.
   // Then call begin()
   char macAddressStr[18] = { 0 };
-  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
-            macAddress[3], macAddress[4], macAddress[5]);
-   
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2],
+          macAddress[3], macAddress[4], macAddress[5]);
+
   _deviceIP     = deviceIP;
   _macAddress   = String(macAddressStr);
-  
+
   this->begin();
 }
-    
-    
-void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress, String serverURL = SINRICPRO_SERVER_URL)
+
+
+void SinricProClass::begin(String socketAuthToken, String signingKey, IPAddress deviceIP, String macAddress,
+                           String serverURL = SINRICPRO_SERVER_URL)
 {
   // Store to _deviceIP and _macAddress.
   // Then call begin()
   _deviceIP     = deviceIP;
   _macAddress   = macAddress;
-  
+
   this->begin();
 }
 //////
@@ -316,7 +320,7 @@ template <typename DeviceType>
 DeviceType& SinricProClass::add(DeviceId deviceId)
 {
   DeviceType* newDevice = new DeviceType(deviceId);
-  
+
   if (DeviceId(deviceId).isValid())
   {
     SRP_LOGINFO1("add(): Adding DeviceId =", deviceId.toString());
@@ -329,9 +333,9 @@ DeviceType& SinricProClass::add(DeviceId deviceId)
   {
     SRP_LOGERROR1("add(): Invalid DeviceId =", deviceId.toString());
   }
-  
+
   devices.push_back(newDevice);
-  
+
   return *newDevice;
 }
 
@@ -384,7 +388,7 @@ void SinricProClass::handle()
       SRP_LOGERROR("-SinricPro is disabled! Check earlier log messages for details.");
       begin_error = true;
     }
-    
+
     return;
   }
 
@@ -411,13 +415,13 @@ DynamicJsonDocument SinricProClass::prepareRequest(DeviceId deviceId, const char
   payload["deviceId"]   = deviceId.toString();
   payload["replyToken"] = MessageID().getID();
   payload["type"]       = "request";
-  
+
   payload.createNestedObject("value");
-  
+
   return requestMessage;
 }
 
-void SinricProClass::handleResponse(DynamicJsonDocument& responseMessage) 
+void SinricProClass::handleResponse(DynamicJsonDocument& responseMessage)
 {
   SRP_LOGINFO("handleResponse():");
 
@@ -427,10 +431,10 @@ void SinricProClass::handleResponse(DynamicJsonDocument& responseMessage)
 #endif
 }
 
-void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interface_t Interface) 
+void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interface_t Interface)
 {
   SRP_LOGINFO("handleRequest(): handling request");
-  
+
 #ifndef NODEBUG_SINRIC
   serializeJsonPretty(requestMessage, SRP_DEBUG_OUTPUT);
   SRP_LOGINFO0("\n");
@@ -445,21 +449,21 @@ void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interfac
   JsonObject request_value  = requestMessage["payload"]["value"];
   JsonObject response_value = responseMessage["payload"]["value"];
 
-  for (auto& device : devices) 
+  for (auto& device : devices)
   {
     if (device->getDeviceId() == deviceId && success == false)
     {
       success = device->handleRequest(deviceId, action, request_value, response_value);
       responseMessage["payload"]["success"] = success;
-      
-      if (!success) 
+
+      if (!success)
       {
-        if (responseMessageStr.length() > 0) 
+        if (responseMessageStr.length() > 0)
         {
           responseMessage["payload"]["message"] = responseMessageStr;
           responseMessageStr = "";
-        } 
-        else 
+        }
+        else
         {
           responseMessage["payload"]["message"] = "Device returned an error while processing the request!";
         }
@@ -472,14 +476,14 @@ void SinricProClass::handleRequest(DynamicJsonDocument& requestMessage, interfac
   sendQueue.push(new SinricProMessage(Interface, responseString.c_str()));
 }
 
-void SinricProClass::handleReceiveQueue() 
+void SinricProClass::handleReceiveQueue()
 {
-  if (receiveQueue.size() == 0) 
+  if (receiveQueue.size() == 0)
     return;
 
   SRP_LOGINFO1("handleReceiveQueue(): Message(s) in receiveQueue =", receiveQueue.size());
-  
-  while (receiveQueue.size() > 0) 
+
+  while (receiveQueue.size() > 0)
   {
     SinricProMessage* rawMessage = receiveQueue.front();
     receiveQueue.pop();
@@ -489,113 +493,115 @@ void SinricProClass::handleReceiveQueue()
 
     bool sigMatch = false;
 
-    if (strncmp(rawMessage->getMessage(), "{\"timestamp\":", 13) == 0 && strlen(rawMessage->getMessage()) <= 26) 
+    if (strncmp(rawMessage->getMessage(), "{\"timestamp\":", 13) == 0 && strlen(rawMessage->getMessage()) <= 26)
     {
       sigMatch = true; // timestamp message has no signature...ignore sigMatch for this!
-    } 
-    else 
+    }
+    else
     {
       sigMatch = verifyMessage(signingKey.toString(), jsonMessage);
     }
 
     String messageType = jsonMessage["payload"]["type"];
 
-    if (sigMatch) 
-    { 
+    if (sigMatch)
+    {
       // signature is valid process message
       SRP_LOGINFO("handleReceiveQueue(): Valid Signature. Processing message...");
       extractTimestamp(jsonMessage);
-      
-      if (messageType == "response") 
+
+      if (messageType == "response")
         handleResponse(jsonMessage);
-        
-      if (messageType == "request") 
+
+      if (messageType == "request")
         handleRequest(jsonMessage, rawMessage->getInterface());
-    } 
-    else 
+    }
+    else
     {
       SRP_LOGERROR("handleReceiveQueue(): Invalid Signature! Sending messsage to [dev/null] ;=)");
     }
-    
+
     delete rawMessage;
   }
 }
 
-void SinricProClass::handleSendQueue() 
+void SinricProClass::handleSendQueue()
 {
-  if (!isConnected()) 
+  if (!isConnected())
     return;
-    
-  if (!baseTimestamp) 
+
+  if (!baseTimestamp)
     return;
-   
-  while (sendQueue.size() > 0) 
+
+  while (sendQueue.size() > 0)
   {
     SRP_LOGINFO1("handleSendQueue(): Sending Number of Message(s) in sendQueue =", sendQueue.size());
 
-    SinricProMessage* rawMessage = sendQueue.front(); 
+    SinricProMessage* rawMessage = sendQueue.front();
     sendQueue.pop();
 
     DynamicJsonDocument jsonMessage(1024);
     deserializeJson(jsonMessage, rawMessage->getMessage());
     jsonMessage["payload"]["createdAt"] = getTimestamp();
-    
+
     signMessage(signingKey.toString(), jsonMessage);
 
     String messageStr;
 
     serializeJson(jsonMessage, messageStr);
-    
+
 #ifndef NODEBUG_SINRIC
     serializeJsonPretty(jsonMessage, SRP_DEBUG_OUTPUT);
     Serial.println();
 #endif
 
-    switch (rawMessage->getInterface()) 
+    switch (rawMessage->getInterface())
     {
       case IF_WEBSOCKET:
-        SRP_LOGINFO("handleSendQueue: Sending to WebSocket"); 
-        _websocketListener.sendMessage(messageStr); 
+        SRP_LOGINFO("handleSendQueue: Sending to WebSocket");
+        _websocketListener.sendMessage(messageStr);
         break;
+
       case IF_UDP:
-        SRP_LOGINFO("handleSendQueue: Sending to UDP"); 
-        _udpListener.sendMessage(messageStr); 
+        SRP_LOGINFO("handleSendQueue: Sending to UDP");
+        _udpListener.sendMessage(messageStr);
         break;
+
       default:
         break;
     }
-    
+
     delete rawMessage;
-    
+
     SRP_LOGINFO("handleSendQueue(): Message sent.");
   }
 }
 
-void SinricProClass::connect() 
+void SinricProClass::connect()
 {
   String deviceList;
   int i = 0;
-  
-  for (auto& device : devices) 
+
+  for (auto& device : devices)
   {
     DeviceId deviceId = device->getDeviceId();
-    
-    if (deviceId.isValid()) 
+
+    if (deviceId.isValid())
     {
-      if (i > 0) 
+      if (i > 0)
         deviceList += ';';
-        
+
       deviceList += deviceId.toString();
       i++;
     }
   }
-  
-  if (i == 0) 
-  { 
+
+  if (i == 0)
+  {
     // no device have been added! -> do not connect!
     _begin = false;
     SRP_LOGERROR("ERROR! No valid devices. Please add first!");
-    
+
     return;
   }
 
@@ -603,16 +609,16 @@ void SinricProClass::connect()
 }
 
 
-void SinricProClass::stop() 
+void SinricProClass::stop()
 {
   _begin = false;
-  
+
   SRP_LOGERROR("stop()");
-  
+
   _websocketListener.stop();
 }
 
-bool SinricProClass::isConnected() 
+bool SinricProClass::isConnected()
 {
   return _websocketListener.isConnected();
 };
@@ -626,7 +632,7 @@ bool SinricProClass::isConnected()
    @section onConnected Example-Code
    @snippet callbacks.cpp onConnected
  **/
-void SinricProClass::onConnected(ConnectedCallbackHandler cb) 
+void SinricProClass::onConnected(ConnectedCallbackHandler cb)
 {
   _websocketListener.onConnected(cb);
 }
@@ -640,62 +646,62 @@ void SinricProClass::onConnected(ConnectedCallbackHandler cb)
    @section onDisconnected Example-Code
    @snippet callbacks.cpp onDisconnected
  **/
-void SinricProClass::onDisconnected(DisconnectedCallbackHandler cb) 
+void SinricProClass::onDisconnected(DisconnectedCallbackHandler cb)
 {
   _websocketListener.onDisconnected(cb);
 }
 
 
-void SinricProClass::reconnect() 
+void SinricProClass::reconnect()
 {
   SRP_LOGINFO("reconnect(): Disconnecting");
   stop();
-  
+
   SRP_LOGINFO("reconnect(): Connecting");
   connect();
 }
 
-void SinricProClass::extractTimestamp(JsonDocument &message) 
+void SinricProClass::extractTimestamp(JsonDocument &message)
 {
   unsigned long tempTimestamp = 0;
-  
+
   // extract timestamp from timestamp message right after websocket connection is established
   tempTimestamp = message["timestamp"] | 0;
-  
-  if (tempTimestamp) 
+
+  if (tempTimestamp)
   {
     baseTimestamp = tempTimestamp - (millis() / 1000);
     SRP_LOGINFO1("extractTimestamp(): Got Timestamp =", tempTimestamp);
-    
+
     return;
   }
 
   // extract timestamp from request message
   tempTimestamp = message["payload"]["createdAt"] | 0;
-  
-  if (tempTimestamp) 
+
+  if (tempTimestamp)
   {
     SRP_LOGINFO1("extractTimestamp(): Got Timestamp =", tempTimestamp);
     baseTimestamp = tempTimestamp - (millis() / 1000);
-    
+
     return;
   }
 }
 
 
-void SinricProClass::sendMessage(JsonDocument& jsonMessage) 
+void SinricProClass::sendMessage(JsonDocument& jsonMessage)
 {
-  if (!isConnected()) 
+  if (!isConnected())
   {
     SRP_LOGINFO("sendMessage(): Device is offline, message dropped");
-    
+
     return;
   }
-  
+
   SRP_LOGINFO("sendMessage(): pushing message into sendQueue");
-  
+
   String messageString;
-  
+
   serializeJson(jsonMessage, messageString);
   sendQueue.push(new SinricProMessage(IF_WEBSOCKET, messageString.c_str()));
 }
@@ -709,16 +715,16 @@ void SinricProClass::sendMessage(JsonDocument& jsonMessage)
 
    @param flag `true` = enabled \n `false`= disabled
  **/
-void SinricProClass::restoreDeviceStates(bool flag) 
+void SinricProClass::restoreDeviceStates(bool flag)
 {
   _websocketListener.setRestoreDeviceStates(flag);
 }
 
-DynamicJsonDocument SinricProClass::prepareResponse(JsonDocument& requestMessage) 
+DynamicJsonDocument SinricProClass::prepareResponse(JsonDocument& requestMessage)
 {
   DynamicJsonDocument responseMessage(1024);
   JsonObject header = responseMessage.createNestedObject("header");
-  
+
   header["payloadVersion"]    = 2;
   header["signatureVersion"]  = 1;
 
@@ -731,9 +737,9 @@ DynamicJsonDocument SinricProClass::prepareResponse(JsonDocument& requestMessage
   payload["replyToken"] = requestMessage["payload"]["replyToken"];
   payload["success"]    = false;
   payload["type"]       = "response";
-  
+
   payload.createNestedObject("value");
-  
+
   return responseMessage;
 }
 
@@ -742,12 +748,12 @@ DynamicJsonDocument SinricProClass::prepareEvent(DeviceId deviceId, const char* 
 {
   DynamicJsonDocument eventMessage(1024);
   JsonObject header = eventMessage.createNestedObject("header");
-  
+
   header["payloadVersion"]    = 2;
   header["signatureVersion"]  = 1;
 
   JsonObject payload = eventMessage.createNestedObject("payload");
-  
+
   payload["action"]         = action;
   payload["cause"].createNestedObject("type");
   payload["cause"]["type"]  = cause;
@@ -755,21 +761,21 @@ DynamicJsonDocument SinricProClass::prepareEvent(DeviceId deviceId, const char* 
   payload["deviceId"]       = deviceId.toString();
   payload["replyToken"]     = MessageID().getID();
   payload["type"]           = "event";
-  
+
   payload.createNestedObject("value");
-  
+
   return eventMessage;
 }
 
 #ifndef NOSINRIC_INSTANCE
-/**
-   @class SinricPro
-   @brief The main instance of SinricProClass
+  /**
+  @class SinricPro
+  @brief The main instance of SinricProClass
 
-   Handles communication between SinricPro Server and your device \n
-    @see SinricProClass
- **/
-SinricProClass SinricPro;
+  Handles communication between SinricPro Server and your device \n
+  @see SinricProClass
+  **/
+  SinricProClass SinricPro;
 #endif
 
 #endif    //_SINRIC_PRO_H_

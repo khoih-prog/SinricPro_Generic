@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -75,7 +75,8 @@ class SinricProDevice : public SinricProDeviceInterface
     typedef std::function<bool(const String&, bool&)> PowerStateCallback;
 
     // standard request handler
-    virtual bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value);
+    virtual bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
+                               JsonObject &response_value);
 
     // standard Callbacks
     virtual void onPowerState(PowerStateCallback cb);
@@ -92,13 +93,13 @@ class SinricProDevice : public SinricProDeviceInterface
     // From v2.5.1
     template <typename T> T limitValue(T value, T minValue, T maxValue);
     //////
-    
+
   private:
     SinricProInterface* eventSender;
     std::map<String, LeakyBucket_t> eventFilter;
 };
 
-SinricProDevice::SinricProDevice(const DeviceId &deviceId) : 
+SinricProDevice::SinricProDevice(const DeviceId &deviceId) :
   deviceId(deviceId),
   powerStateCallback(nullptr),
   eventSender(nullptr)
@@ -117,7 +118,7 @@ DeviceId SinricProDevice::getDeviceId()
   return deviceId;
 }
 
-bool SinricProDevice::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+bool SinricProDevice::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
                                     JsonObject &response_value)
 {
   if (deviceId != this->deviceId)
@@ -134,7 +135,7 @@ bool SinricProDevice::handleRequest(const DeviceId &deviceId, const char* action
     response_value["state"] = powerState ? "On" : "Off";
     return success;
   }
-  
+
   return success;
 }
 
@@ -143,30 +144,31 @@ DynamicJsonDocument SinricProDevice::prepareEvent(const DeviceId &deviceId, cons
   if (eventSender)
     return eventSender->prepareEvent(deviceId, action, cause);
 
-  SRP_LOGDEBUG3("SinricProDevice:prepareEvent(): Not configured correctly Device =", deviceId.toString(), ". Ignored event =", action);
-  
+  SRP_LOGDEBUG3("SinricProDevice:prepareEvent(): Not configured correctly Device =", deviceId.toString(),
+                ". Ignored event =", action);
+
   return DynamicJsonDocument(1024);
 }
 
 
 bool SinricProDevice::sendEvent(JsonDocument& event)
 {
-  if (!eventSender) 
+  if (!eventSender)
     return false;
-    
-  if (!eventSender->isConnected()) 
+
+  if (!eventSender->isConnected())
   {
     SRP_LOGDEBUG("SinricProDevice:sendEvent: Can't send Event. No connection to SinricPro server.");
     return false;
   }
-  
+
   String eventName = event["payload"]["action"] | ""; // get event name
 
   LeakyBucket_t bucket; // leaky bucket algorithm is used to prevent flooding the server
 
   // get leaky bucket for event from eventFilter
-  if (eventFilter.find(eventName) == eventFilter.end()) 
-  {  
+  if (eventFilter.find(eventName) == eventFilter.end())
+  {
     // if there is no bucket ...
     eventFilter[eventName] = bucket;                       // ...add a new bucket
   }
@@ -189,20 +191,22 @@ bool SinricProDevice::sendEvent(JsonDocument& event)
 
 unsigned long SinricProDevice::getTimestamp()
 {
-  if (eventSender) return eventSender->getTimestamp();
+  if (eventSender)
+    return eventSender->getTimestamp();
+
   return 0;
 }
 
 template <typename T> T SinricProDevice::limitValue(T value, T minValue, T maxValue)
 {
   T newValue = value;
-  
-  if (value > maxValue) 
+
+  if (value > maxValue)
     newValue = maxValue;
-    
-  if (value < minValue) 
+
+  if (value < minValue)
     newValue = minValue;
-    
+
   return newValue;
 }
 
@@ -236,9 +240,9 @@ bool SinricProDevice::sendPowerStateEvent(bool state, String cause)
 }
 
 // From v2.5.1
-String SinricProDevice::getProductType()  
+String SinricProDevice::getProductType()
 {
-  return String("sinric.device.type."); 
+  return String("sinric.device.type.");
 }
 //////
 

@@ -1,11 +1,11 @@
 /*********************************************************************************************************************************
   SinricProDebug.h - Sinric Pro Library for boards
-  
+
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -38,9 +38,9 @@
 #include <stdio.h>
 
 #ifdef SRP_DEBUG_PORT
-#define SRP_DEBUG_OUTPUT SRP_DEBUG_PORT
+  #define SRP_DEBUG_OUTPUT SRP_DEBUG_PORT
 #else
-#define SRP_DEBUG_OUTPUT Serial
+  #define SRP_DEBUG_OUTPUT Serial
 #endif
 
 // Change _SRP_LOGLEVEL_ to set tracing and logging verbosity
@@ -51,7 +51,7 @@
 // 4: DEBUG: errors, warnings, informational and debug
 
 #ifndef _SRP_LOGLEVEL_
-#define _SRP_LOGLEVEL_       0
+  #define _SRP_LOGLEVEL_       0
 #endif
 
 //////
@@ -89,17 +89,17 @@
 //////
 
 #ifndef NODEBUG_SINRIC
-#ifdef SRP_DEBUG_OUTPUT
-#define DEBUG_SINRIC(...) SRP_DEBUG_OUTPUT.printf( __VA_ARGS__ )
-#else
-//#define DEBUG_WEBSOCKETS(...) os_printf( __VA_ARGS__ )
-#endif
+  #ifdef SRP_DEBUG_OUTPUT
+    #define DEBUG_SINRIC(...) SRP_DEBUG_OUTPUT.printf( __VA_ARGS__ )
+  #else
+    //#define DEBUG_WEBSOCKETS(...) os_printf( __VA_ARGS__ )
+  #endif
 #endif
 
 
 #ifndef DEBUG_SINRIC
-#define DEBUG_SINRIC(...)
-#define NODEBUG_SINRIC
+  #define DEBUG_SINRIC(...)
+  #define NODEBUG_SINRIC
 #endif
 
 

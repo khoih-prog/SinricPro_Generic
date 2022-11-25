@@ -334,6 +334,7 @@ bool SHA256::matches(const byte *expected)
     if (expected[i] != theDigest[i])
       return false;
   }
+
 #if defined ESP8266
   ESP.wdtFeed();
 #endif
@@ -519,6 +520,7 @@ void AES_Crypto::encrypt(uint32_t *data)
     for (row = 0; row < 4; row++)
       data[row] = tmp[row] ^ *(k++);
   }
+
 #if defined ESP8266
   ESP.wdtFeed();
 #endif
@@ -578,6 +580,7 @@ void AES_Crypto::decrypt(uint32_t *data)
     for (row = 4; row > 0; row--)
       data[row - 1] = tmp[row - 1] ^ *(--k);
   }
+
 #if defined ESP8266
   ESP.wdtFeed();
 #endif
@@ -678,6 +681,7 @@ AES_Crypto::AES_Crypto(const uint8_t *key, const uint8_t *iv, AES_MODE mode, CIP
   {
     convertKey();
   }
+
 #if defined ESP8266
   ESP.wdtFeed();
 #endif
@@ -705,6 +709,7 @@ int AES_Crypto::calcSizeAndPad(int in_size)
 void AES_Crypto::padPlaintext(const uint8_t* in, uint8_t* out)
 {
   memcpy(out, in, _size);
+
   for (int i = _size - _pad_size; i < _size; i++)
   {
     out[i] = _arr_pad[_pad_size - 1];
@@ -716,6 +721,7 @@ bool AES_Crypto::checkPad(uint8_t* in, int lsize)
   if (in[lsize - 1] <= 0x0f)
   {
     int lpad = (int)in[lsize - 1];
+
     for (int i = lsize - 1; i >= lsize - lpad; i--)
     {
       if (_arr_pad[lpad - 1] != in[i])
@@ -728,6 +734,7 @@ bool AES_Crypto::checkPad(uint8_t* in, int lsize)
   {
     return true;
   }
+
   return true;
 }
 
@@ -838,6 +845,7 @@ void AES_Crypto::decryptCBC(const uint8_t *in, uint8_t *out, int length)
 
   for (i = 0; i < 4; i++)
     iv[i] = crypto_htonl(bufxor[i]);
+
   memcpy(_iv, iv, AES_IV_SIZE);
 #if defined ESP8266
   ESP.wdtFeed();
@@ -925,6 +933,7 @@ SHA256HMAC::SHA256HMAC(const byte *key, unsigned int keyLen)
   // sort out the key
   byte theKey[SHA256HMAC_BLOCKSIZE];
   memset(theKey, 0, SHA256HMAC_BLOCKSIZE);
+
   if (keyLen > SHA256HMAC_BLOCKSIZE)
   {
     // take a hash of the key
@@ -938,6 +947,7 @@ SHA256HMAC::SHA256HMAC(const byte *key, unsigned int keyLen)
     // bytes from key
     memcpy(theKey, key, keyLen);
   }
+
   // explicitly zero pads
   memset(_innerKey, 0, SHA256HMAC_BLOCKSIZE);
   memset(_outerKey, 0, SHA256HMAC_BLOCKSIZE);
@@ -975,6 +985,7 @@ bool SHA256HMAC::matches(const byte *expected)
     if (expected[i] != theDigest[i])
       return false;
   }
+
   return true;
 }
 

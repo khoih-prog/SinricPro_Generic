@@ -1,11 +1,11 @@
 /*********************************************************************************************************************************
   SinricProConfig.h - Sinric Pro Library for boards
-  
+
   Based on and modified from SinricPro libarary (https://github.com/sinricpro/)
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -30,20 +30,20 @@
   2.8.4   K Hoang      01/12/2021 Auto detect ESP32 core for LittleFS. Fix bug in examples for WT32_ETH01
   2.8.5   K Hoang      23/04/2022 Use Ethernet_Generic library as default. Add support to Portenta_H7, etc.
  **********************************************************************************************************************************/
- 
+
 #ifndef _SINRIC_PRO_CONFIG_H_
 #define _SINRIC_PRO_CONFIG_H_
-/* 
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!                                                 !!
- * !!             WARNING: DON'T TOUCH !              !!
- * !!             ======================              !!
- * !! PLEASE DO NOT MODIFY ANY OF THESE SETTINGS HERE !!
- * !!     THIS IS FOR INTERNAL CONFIGURATION ONLY     !!
- * !!   SINRIC PRO MIGHT NOT WORK IF YOU MODIFY THIS  !!
- * !!                                                 !!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
+/*
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   !!                                                 !!
+   !!             WARNING: DON'T TOUCH !              !!
+   !!             ======================              !!
+   !! PLEASE DO NOT MODIFY ANY OF THESE SETTINGS HERE !!
+   !!     THIS IS FOR INTERNAL CONFIGURATION ONLY     !!
+   !!   SINRIC PRO MIGHT NOT WORK IF YOU MODIFY THIS  !!
+   !!                                                 !!
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
 
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)

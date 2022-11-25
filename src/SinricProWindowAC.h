@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -51,14 +51,14 @@ class SinricProWindowAC :  public SinricProDevice
 {
   public:
     SinricProWindowAC(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    String getProductType() 
+    String getProductType()
     {
-      return SinricProDevice::getProductType() + String("AC_UNIT"); 
+      return SinricProDevice::getProductType() + String("AC_UNIT");
     }
     //////
-    
+
     // callback
 
     /**
@@ -154,8 +154,9 @@ class SinricProWindowAC :  public SinricProDevice
     bool sendThermostatModeEvent(String thermostatMode, String cause = "PHYSICAL_INTERACTION");
 
     // handle
-    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
-    
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
+                       JsonObject &response_value) override;
+
   private:
     SetRangeValueCallback rangeValueCallback;
     AdjustRangeValueCallback adjustRangeValueCallback;
@@ -173,7 +174,7 @@ SinricProWindowAC::SinricProWindowAC(const DeviceId &deviceId) : SinricProDevice
   thermostatModeCallback(nullptr)
 {}
 
-bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
                                       JsonObject &response_value)
 {
   if (deviceId != this->deviceId)
@@ -190,7 +191,7 @@ bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* acti
     int rangeValue = request_value["rangeValue"] | 0;
     success = rangeValueCallback(deviceId, rangeValue);
     response_value["rangeValue"] = rangeValue;
-    
+
     return success;
   }
 
@@ -199,7 +200,7 @@ bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* acti
     int rangeValueDelta = request_value["rangeValueDelta"] | 0;
     success = adjustRangeValueCallback(deviceId, rangeValueDelta);
     response_value["rangeValue"] = rangeValueDelta;
-    
+
     return success;
   }
 
@@ -218,7 +219,7 @@ bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* acti
 
     success = targetTemperatureCallback(deviceId, temperature);
     response_value["temperature"] = temperature;
-    
+
     return success;
   }
 
@@ -227,7 +228,7 @@ bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* acti
     float temperatureDelta = request_value["temperature"];
     success = adjustTargetTemperatureCallback(deviceId, temperatureDelta);
     response_value["temperature"] = temperatureDelta;
-    
+
     return success;
   }
 
@@ -236,7 +237,7 @@ bool SinricProWindowAC::handleRequest(const DeviceId &deviceId, const char* acti
     String thermostatMode = request_value["thermostatMode"] | "";
     success = thermostatModeCallback(deviceId, thermostatMode);
     response_value["thermostatMode"] = thermostatMode;
-    
+
     return success;
   }
 

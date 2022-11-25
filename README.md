@@ -1,4 +1,4 @@
-## SinricPro_Generic
+## SinricPro_Generic Library
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/SinricPro_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/SinricPro_Generic.svg)](https://github.com/khoih-prog/SinricPro_Generic/releases)
@@ -6,8 +6,11 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/SinricPro_Generic.svg)](http://github.com/khoih-prog/SinricPro_Generic/issues)
 
+
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-SinricPro_Generic/count.svg" title="SinricPro_Generic Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-SinricPro_Generic/count.svg" style="height: 30px;width: 200px;"></a>
 
 ---
 ---
@@ -40,6 +43,7 @@
   * [10. For RTL8720DN boards using AmebaD core](#10-for-rtl8720dn-boards-using-amebad-core)
   * [11. For SAMD21 and SAMD51 boards using ArduinoCore-fab-sam core](#11-For-SAMD21-and-SAMD51-boards-using-ArduinoCore-fab-sam-core)
   * [12. For Seeeduino RP2040 boards](#12-For-Seeeduino-RP2040-boards)
+  * [13. For Seeeduino nRF52840 boards](#13-For-Seeeduino-nRF52840-boards)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -126,36 +130,36 @@ Please check [**Full User Documentation**](https://sinricpro.github.io/esp8266-e
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+ 2. [`ESP32 Core 2.0.5+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
  3. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
- 4. [`Arduino AVR core 1.8.5+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 5. [`Teensy core v1.56+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards..
+ 4. [`Arduino AVR core 1.8.6+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
+ 5. [`Teensy core v1.57+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards..
  6. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  7. [`Arduino SAMD core 1.8.13+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 8. [`Adafruit SAMD core 1.7.10+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
- 9. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+ 8. [`Adafruit SAMD core 1.7.11+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 9. [`Seeeduino SAMD core 1.8.3+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
 10. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest) 
-11. [`Arduino Core for STM32 v2.2.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-12. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.0.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-13. [`Earle Philhower's arduino-pico core v1.13.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+11. [`Arduino Core for STM32 v2.3.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
+12. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+13. [`Earle Philhower's arduino-pico core v2.6.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 14. [`ArduinoJson v6.19.4+`](https://github.com/bblanchon/ArduinoJson). [![GitHub release](https://img.shields.io/github/release/bblanchon/ArduinoJson.svg)](https://github.com/bblanchon/ArduinoJson/releases/latest)
-15. [`WebSockets_Generic v2.15.0+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
+15. [`WebSockets_Generic v2.16.1+`](https://github.com/khoih-prog/WebSockets_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebSockets_Generic.svg?)](https://www.ardu-badge.com/SinricPro_Generic)
 
 16. For built-in LAN8742A Ethernet:
    - [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
    - [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest)
    
 17. For W5x00 Ethernet:
-   - [`Ethernet_Generic library v2.1.0+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5100S, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
+   - [`Ethernet_Generic library v2.7.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5100S, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
    
 18. For ENC28J60 Ethernet:
-   - [`EthernetENC library v2.0.2+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
-   - [`UIPEthernet library v2.0.11+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
+   - [`EthernetENC library v2.0.3+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
+   - [`UIPEthernet library v2.0.12+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
 
-19. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
-20. [`Seeed_Arduino_rpcWiFi library v1.0.5+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.4+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
+19. [`WiFiNINA_Generic library v1.8.15-1+`](https://github.com/khoih-prog/WiFiNINA_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic) if using WiFiNINA for boards such as Nano 33 IoT, nRF52, Teensy, etc.
+20. [`Seeed_Arduino_rpcWiFi library v1.0.6+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi) for WIO-Terminal or boards using **Realtek RTL8720DN WiFi**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcWiFi.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi/releases/latest). To be used with [`Seeed_Arduino_rpcUnified library v2.1.4+`](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified). [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Seeed_Arduino_rpcUnified.svg)](https://github.com/Seeed-Studio/Seeed_Arduino_rpcUnified/releases/latest).
 
-21. [`WebServer_WT32_ETH01 library v1.4.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
+21. [`WebServer_WT32_ETH01 library v1.5.1+`](https://github.com/khoih-prog/WebServer_WT32_ETH01) to use WT32_ETH01 (ESP32 + LAN8720). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WebServer_WT32_ETH01.svg?)](https://www.ardu-badge.com/WebServer_WT32_ETH01).
 
 ---
 ---
@@ -291,16 +295,16 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.9) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.9). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.11) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.11). 
 
-Supposing the Adafruit SAMD core version is 1.7.9. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.11. These files must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.h`
-- `~/.arduino15/packages/adafruit/hardware/samd/1.7.9/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/cores/arduino/Print.h`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/cores/arduino/Print.h`
@@ -308,17 +312,17 @@ This file must be copied into the directory:
 
 #### 6. For Seeeduino SAMD boards
  
- ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2). 
+ ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.3) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3). 
 
-Supposing the Seeeduino SAMD core version is 1.8.2. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.3. These files must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/platform.txt`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Arduino.h`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.h`
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.2/cores/arduino/Print.cpp`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Arduino.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Print.h`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/cores/arduino/Arduino.h`
@@ -329,18 +333,22 @@ This file must be copied into the directory:
 
 #### 7.1 For STM32 boards to use LAN8720
 
+For `Generic STM32F4 series` boards, such as `STM32F407VE`, using `LAN8720`, please use STM32 core `v2.2.0` as breaking core `v2.3.0` creates the compile error.
+
+---
+
 To use LAN8720 on some STM32 boards 
 
 - **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG)**
 - **Discovery (DISCO_F746NG)**
 - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
-you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system) to overwrite the old files.
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.3.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.3.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system) to overwrite the old files.
 
-Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 these files must be copied into the corresponding directory:
@@ -351,12 +359,12 @@ these files must be copied into the corresponding directory:
 
 #### 7.2 For STM32 boards to use Serial1
 
-**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.2.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.3.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.3.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
-Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 these files must be copied into the corresponding directory:
@@ -399,12 +407,12 @@ With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add
 
 #### 9. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -417,9 +425,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 3.0.0. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.4.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.0/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -430,25 +438,25 @@ This file must be copied into the directory:
 
 #### 10. For RTL8720DN boards using AmebaD core
  
- To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h). 
+ To avoid compile error relating to PROGMEM, you have to copy the file [Realtek AmebaD core pgmspace.h](Packages_Patches/realtek/hardware/AmebaD/3.1.4/cores/ambd/avr/pgmspace.h) into Realtek AmebaD directory (~/.arduino15/packages/realtek/hardware/AmebaD/3.1.4/cores/ambd/avr/pgmspace.h). 
 
-Supposing the Realtek AmebaD core version is 3.1.2. This file must be copied into the directory:
+Supposing the Realtek AmebaD core version is 3.1.4. This file must be copied into the directory:
 
-- `~/.arduino15/packages/realtek/hardware/AmebaD/3.1.2/cores/arduino/avr/pgmspace.h`
+- `~/.arduino15/packages/realtek/hardware/AmebaD/3.1.4/cores/ambd/avr/pgmspace.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
-- `~/.arduino15/packages/realtek/hardware/AmebaD/x.yy.zz/cores/arduino/avr/pgmspace.h`
+- `~/.arduino15/packages/realtek/hardware/AmebaD/x.yy.zz/cores/ambd/avr/pgmspace.h`
 
 
 #### 11. For SAMD21 and SAMD51 boards using ArduinoCore-fab-sam core
  
- To avoid compile error relating to SAMD21/SAMD51, you have to copy the file [ArduinoCore-fab-sam core pgmspace.h](Packages_Patches/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt) into `ArduinoCore-fab-sam` samd directory (~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt). 
+ To avoid compile error relating to SAMD21/SAMD51, you have to copy the file [ArduinoCore-fab-sam core pgmspace.h](Packages_Patches/Fab_SAM_Arduino/hardware/samd/1.9.0/boards.txt) into `ArduinoCore-fab-sam` samd directory (~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.9.0/boards.txt). 
 
-Supposing the `ArduinoCore-fab-sam` samd core version is 1.6.18-alpha2. This file must be copied into the directory:
+Supposing the `ArduinoCore-fab-sam` samd core version is 1.9.0. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.6.18-alpha2/boards.txt`
+- `~/.arduino15/packages/Fab_SAM_Arduino/hardware/samd/1.9.0/boards.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -460,16 +468,39 @@ This file must be copied into the directory:
  
  ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino RP2040 (XIAO RP2040, Wio RP2040 Mini) boards***, you have to copy the whole [Seeeduino RP2040 Packages_Patches](Packages_Patches/Seeeduino/hardware/rp2040/2.7.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2). 
 
-Supposing the Seeeduino SAMD core version is 2.7.2. This file must be copied into the directory:
+Supposing the Seeeduino RP2040 core version is 2.7.2. These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/boards.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/variants/Seeed_XIAO_RP2040/pins_arduino.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/boards.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/variants/Seeed_XIAO_RP2040/pins_arduino.h`
+
+
+---
+
+#### 13. For Seeeduino nRF52840 boards
+
+**To be able to compile and run on Xiao nRF52840 boards**, you have to copy the whole [nRF52 1.0.0](Packages_Patches/Seeeduino/hardware/nrf52/1.0.0) directory into Seeeduino nRF52 directory (~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0). 
+
+Supposing the Seeeduino nRF52 version is 1.0.0. These files must be copied into the directory:
+
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/platform.txt`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Print.h`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Print.cpp`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Udp.h`**
+
+Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
+These files must be copied into the directory:
+
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/platform.txt`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Print.h`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Print.cpp`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`**
+
 
 ---
 ---
@@ -618,10 +649,8 @@ To know the default CS/SS pins of not listed boards, check the related `variant.
   - SPI_SCK   = 76 ( pin 3 @ [ICSP connector](pics/ICSP_connector.jpg) )
   
 <p align="center">
-    <img src="https://github.com/khoih-prog/SinricPro_Generic/blob/master/pics/ICSP_connector.jpg">
+    <img src="https://github.com/khoih-prog/SinricPro_Generic/raw/master/pics/ICSP_connector.jpg">
 </p>
-  
-  
 
 ---
 ---
@@ -641,7 +670,6 @@ then select **one and only one** Ethernet library to use as follows:
 - Standard W5x00 Ethernet_Generic library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
 
 ```cpp
-
 // Only one if the following to be true
 #define USE_UIP_ETHERNET          false
 #define USE_ETHERNET_PORTENTA_H7  false
@@ -719,7 +747,7 @@ For example, EthernetLarge library
 
 - Only for Teensy 4.1, to use NativeEthernet library
 
-```
+```cpp
 #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
     #if defined(ARDUINO_TEENSY41)
@@ -738,7 +766,7 @@ For example, EthernetLarge library
 
 - Only for Teensy 4.1, to use another Ethernet library, for example Ethernet_Generic library
 
-```
+```cpp
 #if defined(__IMXRT1062__)
   // For Teensy 4.1/4.0
   #if defined(ARDUINO_TEENSY41)
@@ -765,7 +793,7 @@ For example, EthernetLarge library
 
 - Only for Teensy 4.1, to use QNEthernet library
 
-```
+```cpp
 #if ( defined(CORE_TEENSY) && defined(__IMXRT1062__) && defined(ARDUINO_TEENSY41) ) 
   // For Teensy 4.1
   #define BOARD_TYPE      "TEENSY 4.1"
@@ -843,7 +871,8 @@ These pins are tested OK with ESP8266 and W5x00
 #### 4. How to increase W5x00 TX/RX buffer
 
 - For **Ethernet_Generic** library only,  simply use as follows to have large buffer similar to EthernetLarge library
-```
+
+```cpp
 #define ETHERNET_LARGE_BUFFERS
 ```
 
@@ -874,7 +903,7 @@ Note that the buffer size must be larger than 256 bytes. See [Sending GZIP HTML 
 
 - For **Ethernet_Generic** library only, to use `SPI2` for ESP32
 
-```
+```cpp
 #define USING_SPI2                          true
 ```
 
@@ -891,7 +920,7 @@ SS:    5
 
 - For **Ethernet_Generic** library only, to use `SPI1` for RP2040 using [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
 
-```
+```cpp
 #define USING_SPI2                          true
 ```
 
@@ -1077,6 +1106,7 @@ Syntax is
 ```
 
 #### Example 2 (alternatively)
+
 ```C++
   SinricPro["YOUR-DOORBELL-ID-HERE"].as<SinricProDoorbell>().sendDoorbellEvent();
 ```
@@ -1105,7 +1135,7 @@ https://github.com/khoih-prog/SinricPro_Generic/blob/9411cd6a5b6a0c4841074f7de97
 
 This is the terminal output when running [SAMD_WiFiNINA_TV](examples/Generic/TV/SAMD_WiFiNINA_TV) on **NANO_33_IOT**
 
-```
+```cpp
 Starting SAMD_WiFiNINA_TV on SAMD NANO_33_IOT
 SinricPro_Generic (v2.8.5)
 
@@ -1140,7 +1170,7 @@ TV turned off
 This is the terminal output when running [SAMD_WiFiNINA_Light](examples/Generic/Light/SAMD_WiFiNINA_Light) on **NANO_33_IOT**
 
 
-```
+```cpp
 Starting SAMD_WiFiNINA_Light on SAMD NANO_33_IOT
 SinricPro_Generic (v2.8.5)
 
@@ -1174,7 +1204,7 @@ Device**** brightness level changed to 65
 This is the terminal output when running terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on **nRF52 NRF52840_ITSYBITSY** with W5500 Ethernet using "patched" Ethernet2 Library
 
 
-```
+```cpp
 Starting Generic_Ethernet_Blinds on NRF52840_ITSYBITSY
 SinricPro_Generic (v2.8.5)
 
@@ -1214,7 +1244,7 @@ Connected to SinricPro
 This is the terminal output when running terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on **Seeeduino SEEED_XIAO_M0** with W5500 Ethernet using "patched" Ethernet3 Library
 
 
-```
+```cpp
 Starting Generic_Ethernet_Blinds on SEEED_XIAO_M0
 SinricPro_Generic (v2.8.5)
 
@@ -1255,7 +1285,7 @@ Connected to SinricPro
 This is the terminal output when running terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on **Arduino SAMD_NANO_33_IOT** with WiFiNINA using "patched" `Arduino.h`
 
 
-```
+```cpp
 Starting SAMD_WiFiNINA_Blinds on SAMD_NANO_33_IOT
 SinricPro_Generic (v2.8.5)
 
@@ -1287,7 +1317,7 @@ Connected to SinricPro
 This is the terminal output when running terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Blinds/Generic_Ethernet_Blinds) on **Adafruit nRF52 NRF52840_FEATHER** with W5500 Ethernet using EthernetLarge Library with (_SRP_LOGLEVEL_ = 3)
 
 
-```
+```cpp
 Starting Generic_Ethernet_Blinds on NRF52840_FEATHER
 SinricPro_Generic (v2.8.5)
 
@@ -1383,7 +1413,7 @@ Device 123456789012345678901234 power turned off
 This is the terminal output when running terminal output when running [Generic_Ethernet_Blinds](examples/Generic/Speaker/Generic_Ethernet_Speaker) on **STM32F7 Nucleo-144 NUCLEO_F767ZI** with W5500 Ethernet using Ethernet2 Library with (_SRP_LOGLEVEL_ = 3)
 
 
-```
+```cpp
 Starting Generic_Ethernet_Speaker on NUCLEO_F767ZI
 SinricPro_Generic (v2.8.5)
 
@@ -1571,7 +1601,7 @@ Speaker turned on
 This is the terminal output when running terminal output when running [WIOT_MultiSwitch_LCD](examples/Generic/Switch/WIO_Terminal/WIOT_MultiSwitch_LCD) on **SeeedStudio SAMD51 WIO Terminal** with (_SRP_LOGLEVEL_ = 3)
 
 
-```
+```cpp
 Starting WIOT_MultiSwitch_LCD on WIO_TERMINAL
 SinricPro_Generic (v2.8.5)
 
@@ -1759,7 +1789,7 @@ and the LCD screenshots
 This is the terminal output when running terminal output when running [Generic_WiFiNINA_Blinds](examples/Generic/Blinds/Generic_WiFiNINA_Blinds) on **Arduino MBED NANO_RP2040_CONNECT**
 
 
-```
+```cpp
 Starting Generic_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
 SinricPro_Generic (v2.8.5)
 
@@ -1984,7 +2014,7 @@ Connected to SinricPro
 This is the terminal output when running terminal output when running [Generic_WiFiNINA_Blinds](examples/Generic/Blinds/RP2040_WiFiNINA_Blinds) on **Arduino MBED NANO_RP2040_CONNECT**
 
 
-```
+```cpp
 Starting RP2040_WiFiNINA_Blinds on MBED NANO_RP2040_CONNECT
 SinricPro_Generic (v2.8.5)
 
@@ -2114,7 +2144,7 @@ Device 123456789012345678901234 power turned off
 
 This is the terminal output when running terminal output when running [Blinds](examples/WT32_ETH01/Blinds) on **WT32-ETH01 with ETH_PHY_LAN8720**
 
-```
+```cpp
 Start Blinds on WT32-ETH01 with ETH_PHY_LAN8720
 WebServer_WT32_ETH01 v1.4.1
 SinricPro_Generic (v2.8.5)
@@ -2219,7 +2249,7 @@ Connected to SinricPro
 This is the terminal output when running terminal output when running [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on **RASPBERRY_PI_PICO** with [**WIZnet Ethernet HAT**](https://docs.wiznet.io/Product/Open-Source-Hardware/wiznet_ethernet_hat)
 
 
-```
+```cpp
 Starting Generic_Ethernet_Light on RASPBERRY_PI_PICO
 Version : SinricPro_Generic (v2.8.5)
 Setup color temperature lookup table
@@ -2375,7 +2405,7 @@ Device Device_ID turn off (via SinricPro)
 This is the terminal output when running terminal output when running [Generic_Ethernet_Light](examples/Generic/Light/Generic_Ethernet_Light) on **WT32-PORTENTA_H7_M7 with Portenta Ethernet**
 
 
-```
+```cpp
 Starting Generic_Ethernet_Light on PORTENTA_H7_M7
 Version : SinricPro_Generic (v2.8.5)
 Setup color temperature lookup table
@@ -2610,7 +2640,7 @@ Submit issues to: [**SinricPro_Generic issues**](https://github.com/khoih-prog/S
 14. Use [Ethernet_Generic](https://github.com/khoih-prog/Ethernet_Generic) library as default for W5x00 Ethernet.
 15. Add support to **Portenta_H7**
 16. Add support to WIZNet W5100S, such as  [**WIZnet Ethernet HAT**](https://docs.wiznet.io/Product/Open-Source-Hardware/wiznet_ethernet_hat) and [**W5100S-EVB-Pico**](https://docs.wiznet.io/Product/iEthernet/W5100S/w5100s-evb-pico)
-
+17. Add astyle using `allman` style. Restyle the library
 
 ---
 ---
@@ -2652,5 +2682,5 @@ If you want to contribute to this project:
 
 ### Copyright
 
-Copyright 2020- Boris Jaeger, Khoi Hoang
+Copyright (c) 2020- Boris Jaeger, Khoi Hoang
 

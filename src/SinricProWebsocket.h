@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -40,7 +40,7 @@
   #include <WiFi.h>
 #elif (SINRIC_PRO_USING_RTL8720DN)
   #warning Use SINRIC_PRO_USING_RTL8720DN rpcWiFi Library in SinricProWebSocket
-  #include <rpcWiFi.h>    
+  #include <rpcWiFi.h>
 #endif
 
 //KH
@@ -57,25 +57,25 @@
 #include "SinricProInterface.h"
 
 // New from v2.7.0
-class AdvWebSocketsClient : public WebSocketsClient 
+class AdvWebSocketsClient : public WebSocketsClient
 {
   public:
-    void onPong(std::function<void(uint32_t)> cb) 
-    { 
-      _rttCb = cb; 
-    }
-    
-  protected:
-    void messageReceived(WSclient_t * client, WSopcode_t opcode, uint8_t * payload, size_t length, bool fin) 
+    void onPong(std::function<void(uint32_t)> cb)
     {
-      if ((opcode == WSop_pong)&& (_rttCb)) 
+      _rttCb = cb;
+    }
+
+  protected:
+    void messageReceived(WSclient_t * client, WSopcode_t opcode, uint8_t * payload, size_t length, bool fin)
+    {
+      if ((opcode == WSop_pong) && (_rttCb))
       {
-        _rttCb(millis()-_client.lastPing);
+        _rttCb(millis() - _client.lastPing);
       }
-      
+
       WebSocketsClient::messageReceived(client, opcode, payload, length, fin);
     }
-    
+
   private:
     std::function<void(uint32_t)> _rttCb = nullptr;
 };
@@ -145,8 +145,8 @@ void websocketListener::setExtraHeaders()
   headers += "deviceids:" + deviceIds + "\r\n";
   headers += "restoredevicestates:" + String(restoreDeviceStates ? "true" : "false") + "\r\n";
 
-// From v2.5.1 to add mac and IP address at startup
-// To add for Ethernet / WiFiNINA, etc. Add SINRIC_PRO_USING_RTL8720DN from v2.7.4
+  // From v2.5.1 to add mac and IP address at startup
+  // To add for Ethernet / WiFiNINA, etc. Add SINRIC_PRO_USING_RTL8720DN from v2.7.4
 #if (ESP8266 || ESP32 || SINRIC_PRO_USING_RTL8720DN)
   headers += "ip:" + WiFi.localIP().toString() + "\r\n";
   headers += "mac:" + WiFi.macAddress() + "\r\n";
@@ -156,47 +156,47 @@ void websocketListener::setExtraHeaders()
   // Ethernet2, Ethernet3 and UIPthernet don't support Ethernet.MACAddress() => to be modified to use enhanced header
   // Use the Library Patches to fix the issue
   // Here we can use both _deviceIP and _macAddress
-  #warning Very good. Using IP and macAddress for WebSockets header
-  #warning If you have error here, Use the Library Patches to fix the issue
-  
+#warning Very good. Using IP and macAddress for WebSockets header
+#warning If you have error here, Use the Library Patches to fix the issue
+
   IPAddress localIP = Ethernet.localIP();
-  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "." 
-                   + String(localIP[3]) + + "\r\n";
-  
+  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "."
+             + String(localIP[3]) + + "\r\n";
+
   uint8_t macAddress[6];
   char macAddressStr[18] = { 0 };
-  
+
   Ethernet.MACAddress(macAddress);
-  
-  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
-            macAddress[3], macAddress[4], macAddress[5]);
-            
+
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2],
+          macAddress[3], macAddress[4], macAddress[5]);
+
   headers += "mac:" + String(macAddressStr) + "\r\n";
 
 #elif ( SINRIC_PRO_USING_WIFININA || WIFININA_USE_SAMD || WIFININA_USE_NRF528XX || WIFININA_USE_SAM_DUE || WIFININA_USE_STM32 )
-  #warning Very good. Using IP and macAddress for WebSockets header
-  #warning If you have error here, Use the Library Patches to fix the issue
-  
+#warning Very good. Using IP and macAddress for WebSockets header
+#warning If you have error here, Use the Library Patches to fix the issue
+
   IPAddress localIP = WiFi.localIP();
-  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "." 
-                   + String(localIP[3]) + + "\r\n";
-                   
+  headers += "ip:" + String(localIP[0]) + "." + String(localIP[1]) + "." + String(localIP[2]) + "."
+             + String(localIP[3]) + + "\r\n";
+
   uint8_t macAddress[6];
-  char macAddressStr[18] = { 0 };      
-  
+  char macAddressStr[18] = { 0 };
+
   WiFi.macAddress(macAddress);
-  
-  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], 
-            macAddress[3], macAddress[4], macAddress[5]);
-            
-  headers += "mac:" + String(macAddressStr) + "\r\n";           
-  
+
+  sprintf(macAddressStr, "%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2],
+          macAddress[3], macAddress[4], macAddress[5]);
+
+  headers += "mac:" + String(macAddressStr) + "\r\n";
+
 #else
-  #warning Using no IP and macAddress for WebSockets header
-  
+#warning Using no IP and macAddress for WebSockets header
+
 #endif
-//////
-  
+  //////
+
 #if (ESP8266)
   headers += "platform:ESP8266\r\n";
 #elif (ESP32)
@@ -204,26 +204,26 @@ void websocketListener::setExtraHeaders()
 #elif (SINRIC_PRO_USING_RTL8720DN)
   headers += "platform:WIO_Terminal_RTL8720DN\r\n";
 #elif defined(BOARD_NAME)
-  #warning Using BOARD_NAME for WebSockets header
+#warning Using BOARD_NAME for WebSockets header
   headers += "platform:";
   headers += BOARD_NAME;
   headers += "\r\n";
 #elif defined(BOARD_TYPE)
-  #warning Using BOARD_TYPE for WebSockets header
+#warning Using BOARD_TYPE for WebSockets header
   headers += "platform:";
   headers += BOARD_TYPE;
-  headers += "\r\n";  
+  headers += "\r\n";
 #endif
 
-// KH, from v2.5.1, using BOARD_NAME or BOARD_TYPE if defined
+  // KH, from v2.5.1, using BOARD_NAME or BOARD_TYPE if defined
 
 
   headers += "version:" + String(SINRICPRO_VERSION);
-  
+
   SRP_LOGINFO0("Websocket: headers:\n");
   SRP_LOGINFO0(headers);
   SRP_LOGINFO0("\n");
-  
+
   webSocket.setExtraHeaders(headers.c_str());
 }
 
@@ -245,12 +245,12 @@ void websocketListener::begin(String server, String socketAuthToken, String devi
   this->socketAuthToken = socketAuthToken;
   this->deviceIds = deviceIds;
 
-// Currently working only on ESP32
+  // Currently working only on ESP32
 #if (defined(WEBSOCKET_SSL) && WEBSOCKET_SSL)
-  #warning Using WEBSOCKET_SSL
+#warning Using WEBSOCKET_SSL
   SRP_LOGINFO1("Websocket: Connecting SSL to WebSocket Server: ", server);
 #else
-  #warning Not using WEBSOCKET_SSL
+#warning Not using WEBSOCKET_SSL
   SRP_LOGINFO1("Websocket: Connecting to WebSocket Server: ", server);
 #endif
 
@@ -268,11 +268,11 @@ void websocketListener::begin(String server, String socketAuthToken, String devi
   webSocket.enableHeartbeat(WEBSOCKET_PING_INTERVAL, WEBSOCKET_PING_TIMEOUT, WEBSOCKET_RETRY_COUNT);
 
 #if (defined(WEBSOCKET_SSL) && WEBSOCKET_SSL)
-  #if (SINRIC_PRO_USING_RTL8720DN)
-    webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
-  #else  
-    webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
-  #endif
+#if (SINRIC_PRO_USING_RTL8720DN)
+  webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
+#else
+  webSocket.beginSSL(server.c_str(), SINRICPRO_SERVER_SSL_PORT, "/");
+#endif
 #else
   webSocket.begin(server.c_str(), SINRICPRO_SERVER_PORT, "/"); // server address, port and URL
 #endif
@@ -302,17 +302,22 @@ void websocketListener::sendMessage(String &message)
 void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t length)
 {
   (void) length;
-  
+
   switch (type)
   {
     case WStype_DISCONNECTED:
       if (_isConnected)
       {
         SRP_LOGDEBUG("Websocket: disconnected");
-        if (_wsDisconnectedCb) _wsDisconnectedCb();
+
+        if (_wsDisconnectedCb)
+          _wsDisconnectedCb();
+
         _isConnected = false;
       }
+
       break;
+
     case WStype_CONNECTED:
       _isConnected = true;
       SRP_LOGDEBUG("Websocket: connected");
@@ -325,15 +330,19 @@ void websocketListener::webSocketEvent(WStype_t type, uint8_t * payload, size_t 
         restoreDeviceStates = false;
         setExtraHeaders();
       }
+
       break;
+
     case WStype_TEXT:
-      {
-        SinricProMessage* request = new SinricProMessage(IF_WEBSOCKET, (char*)payload);
-        SRP_LOGDEBUG("Websocket: receiving data");
-        receiveQueue->push(request);
-        break;
-      }
-    default: break;
+    {
+      SinricProMessage* request = new SinricProMessage(IF_WEBSOCKET, (char*)payload);
+      SRP_LOGDEBUG("Websocket: receiving data");
+      receiveQueue->push(request);
+      break;
+    }
+
+    default:
+      break;
   }
 }
 

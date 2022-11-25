@@ -5,7 +5,7 @@
   to support other boards such as SAMD21, SAMD51, Adafruit's nRF52 boards, Teensy, SAM DUE, STM32, etc.
 
   Built by Khoi Hoang https://github.com/khoih-prog/SinricPro_Generic
-  Licensed under MIT license 
+  Licensed under MIT license
 
   Copyright (c) 2019 Sinric. All rights reserved.
   Licensed under Creative Commons Attribution-Share Alike (CC BY-SA)
@@ -13,7 +13,7 @@
   This file is part of the Sinric Pro (https://github.com/sinricpro/)
 
   Version: 2.8.5
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   2.4.0   K Hoang      21/05/2020 Initial porting to support SAMD21, SAMD51 nRF52 boards, such as AdaFruit Itsy-Bitsy,
@@ -57,14 +57,14 @@ class SinricProTV :  public SinricProDevice
 {
   public:
     SinricProTV(const DeviceId &deviceId);
-    
+
     // From v2.5.1
-    String getProductType() 
+    String getProductType()
     {
-      return SinricProDevice::getProductType() + String("TV"); 
+      return SinricProDevice::getProductType() + String("TV");
     }
     //////
-    
+
     // callback
 
     /**
@@ -84,20 +84,20 @@ class SinricProTV :  public SinricProDevice
     typedef std::function<bool(const String&, int&)> SetVolumeCallback;
 
     /**
-     * @brief Callback definition for onAdjustVolume function
-     * 
-     * Gets called when device receive a `adjustVolume` request \n
-     * @param[in]   deviceId    String which contains the ID of device
-     * @param[in]   volumeDelta Integer with relative volume the device should change about (-100..100)
-     * @param[out]  volumeDelta Integer with absolute volume device has been set to
-     * @param[in]   volumeDefault Bool `false` if the user specified the amount by which to change the volume; otherwise `true`
-     * @return      the success of the request
-     * @retval      true        request handled properly
-     * @retval      false       request was not handled properly because of some error
-     * 
-     * @section AdjustVolumeCallback_TV Example-Code
-     * @snippet callbacks.cpp onAdjustVolume
-     **/      
+       @brief Callback definition for onAdjustVolume function
+
+       Gets called when device receive a `adjustVolume` request \n
+       @param[in]   deviceId    String which contains the ID of device
+       @param[in]   volumeDelta Integer with relative volume the device should change about (-100..100)
+       @param[out]  volumeDelta Integer with absolute volume device has been set to
+       @param[in]   volumeDefault Bool `false` if the user specified the amount by which to change the volume; otherwise `true`
+       @return      the success of the request
+       @retval      true        request handled properly
+       @retval      false       request was not handled properly because of some error
+
+       @section AdjustVolumeCallback_TV Example-Code
+       @snippet callbacks.cpp onAdjustVolume
+     **/
     typedef std::function<bool(const String&, int&, bool)> AdjustVolumeCallback;
 
     /**
@@ -211,10 +211,11 @@ class SinricProTV :  public SinricProDevice
     bool sendMediaControlEvent(String mediaControl, String cause = "PHYSICAL_INTERACTION");
     bool sendSelectInputEvent(String intput, String cause = "PHYSICAL_INTERACTION");
     bool sendChangeChannelEvent(String channelName, String cause = "PHYSICAL_INTERACTION");
-    
+
     // handle
-    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, JsonObject &response_value) override;
-    
+    bool handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
+                       JsonObject &response_value) override;
+
   private:
     SetVolumeCallback volumeCallback;
     AdjustVolumeCallback adjustVolumeCallback;
@@ -239,7 +240,7 @@ SinricProTV::SinricProTV(const DeviceId &deviceId) : SinricProDevice(deviceId),
 {
 }
 
-bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value, 
+bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, JsonObject &request_value,
                                 JsonObject &response_value)
 {
   if (deviceId != this->deviceId)
@@ -256,21 +257,21 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
     int volume = request_value["volume"];
     success = volumeCallback(deviceId, volume);
     response_value["volume"] = volume;
-    
+
     return success;
   }
 
   if (adjustVolumeCallback && actionString == "adjustVolume")
   {
     int volume = request_value["volume"];
-    
+
     // From v2.7.4
     bool volumeDefault = request_value["volumeDefault"] | false;
     success = adjustVolumeCallback(deviceId, volume, volumeDefault);
     //////
-    
+
     response_value["volume"] = volume;
-    
+
     return success;
   }
 
@@ -279,7 +280,7 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
     bool mute = request_value["mute"];
     success = muteCallback(deviceId, mute);
     response_value["mute"] = mute;
-    
+
     return success;
   }
 
@@ -288,7 +289,7 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
     String mediaControl = request_value["control"];
     success = mediaControlCallback(deviceId, mediaControl);
     response_value["control"] = mediaControl;
-    
+
     return success;
   }
 
@@ -297,7 +298,7 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
     String input = request_value["input"];
     success = selectInputCallback(deviceId, input);
     response_value["input"] = input;
-    
+
     return success;
   }
 
@@ -317,7 +318,7 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
       success = changeChannelNumberCallback(deviceId, channelNumber, channelName);
       response_value["channel"]["name"] = channelName;
     }
-    
+
     return success;
   }
 
@@ -327,7 +328,7 @@ bool SinricProTV::handleRequest(const DeviceId &deviceId, const char* action, Js
     String channelName;
     success = skipChannelsCallback(deviceId, channelCount, channelName);
     response_value["channel"]["name"] = channelName;
-    
+
     return success;
   }
 

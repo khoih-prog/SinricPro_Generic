@@ -15,7 +15,7 @@
 #include <Arduino.h>
 
 #if defined ESP8266
-#include <osapi.h>
+  #include <osapi.h>
 #endif
 
 #define SHA256_SIZE             32
@@ -39,13 +39,13 @@ class SHA256
        Update the hash with new data
     */
     void doUpdate(const byte *msg, unsigned int len);
-    
-    void doUpdate(const char *msg, unsigned int len) 
+
+    void doUpdate(const char *msg, unsigned int len)
     {
       doUpdate((byte*) msg, len);
     }
-    
-    void doUpdate(const char *msg) 
+
+    void doUpdate(const char *msg)
     {
       doUpdate((byte*) msg, strlen(msg));
     }
@@ -83,13 +83,13 @@ class SHA256HMAC
        Update the hash with new data
     */
     void doUpdate(const byte *msg, unsigned int len);
-    
-    void doUpdate(const char *msg, unsigned int len) 
+
+    void doUpdate(const char *msg, unsigned int len)
     {
       doUpdate((byte*) msg, len);
     }
-    
-    void doUpdate(const char *msg) 
+
+    void doUpdate(const char *msg)
     {
       doUpdate((byte*) msg, strlen(msg));
     }
@@ -102,7 +102,7 @@ class SHA256HMAC
        Compute the final hash and check it matches this given expected hash
     */
     bool matches(const byte *expected);
-    
+
   private:
     void blockXor(const byte *in, byte *out, byte val, byte len);
     SHA256 _hash;
@@ -121,7 +121,7 @@ class AES_Crypto
       AES_MODE_128,
       AES_MODE_256
     } AES_MODE;
-    
+
     typedef enum
     {
       CIPHER_ENCRYPT = 0x01,
